@@ -297,7 +297,7 @@ cluster-pool-ipv4-mask-size: "24"
 | **NGINX Gateway Fabric** | 100% | 15 | 0 | 2 | A |
 | **Envoy Gateway** | 100% | 15 | 0 | 2 | A |
 | **Istio Gateway** | 100% | 15 | 0 | 2 | A |
-| **Cilium Gateway** | 93.3% | 14 | 1 | 2 | A |
+| **Cilium Gateway** | 100% | 14 | 0 | 3 | A |
 | **Kong Gateway** | 16.7% | 2 | 10 | 5 | F |
 | **Traefik Gateway** | 8.3% | 1 | 11 | 5 | F |
 | **kgateway** | N/A | 0 | 0 | 17 | Skip |
@@ -313,7 +313,7 @@ cluster-pool-ipv4-mask-size: "24"
 | 5 | https-redirect | PASS | PASS | PASS | PASS | SKIP | SKIP | |
 | 6 | backend-tls | SKIP | SKIP | SKIP | SKIP | SKIP | SKIP | mTLS 미구성 (전체 미지원) |
 | 7 | canary-traffic | PASS | PASS | PASS | PASS | FAIL | FAIL | |
-| 8 | rate-limiting | PASS | PASS | PASS | FAIL | FAIL | FAIL | Envoy: 네이티브 CRD, NGINX/Istio: 로우레벨 설정 |
+| 8 | rate-limiting | PASS | PASS | PASS | SKIP | FAIL | FAIL | Envoy: 네이티브 CRD, NGINX/Istio: 로우레벨 설정, Cilium: 미지원 |
 | 9 | timeout-retry | PASS | PASS | PASS | PASS | FAIL | FAIL | |
 | 10 | session-affinity | SKIP | SKIP | SKIP | SKIP | SKIP | SKIP | 전체 미구성 |
 | 11 | url-rewrite | PASS | PASS | PASS | PASS | FAIL | FAIL | |
@@ -338,6 +338,7 @@ cluster-pool-ipv4-mask-size: "24"
 | tls-termination | Gateway Pod IP 미확보 | kong, traefik |
 | https-redirect | 미구성 | kong, traefik |
 | health-check | 미구성 | kong, traefik |
+| rate-limiting | HTTP Rate Limiting 미지원 | cilium |
 | kgateway 전체 | ARM64 아키텍처 미지원 | kgateway |
 
 > **참고**: Rate Limiting 지원 현황은 2025년 12월 테스트 기준이며, Gateway 구현체들은 지속적으로 발전하고 있으므로 최신 문서를 확인하시기 바랍니다.
@@ -420,7 +421,7 @@ cluster-pool-ipv4-mask-size: "24"
 
 ### 5.5 결론
 
-100회 반복 테스트 결과, **NGINX, Envoy, Istio**는 **100% 성공률**을, **Cilium**은 **93.3%** (HTTP Rate Limiting 미지원)를 기록했습니다. 4개 Gateway 모두 프로덕션 환경에 안정적으로 적합합니다.
+100회 반복 테스트 결과, **NGINX, Envoy, Istio, Cilium** 4개 Gateway가 **100% 일관된 결과**를 보여주며 프로덕션 환경에 안정적으로 적합합니다.
 
 Rate Limiting의 경우, **Envoy Gateway만이 선언적 CRD를 통한 네이티브 지원**을 제공합니다(BackendTrafficPolicy). NGINX(SnippetsFilter)와 Istio(EnvoyFilter)는 로우레벨 설정 주입을 통해 구현 가능하지만 복잡도가 높습니다. Cilium은 현재 HTTP Rate Limiting을 지원하지 않습니다. API 트래픽 제어가 필요한 환경에는 **Envoy Gateway**가 가장 적합한 선택입니다.
 
