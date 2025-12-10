@@ -297,7 +297,7 @@ cluster-pool-ipv4-mask-size: "24"
 | **NGINX Gateway Fabric** | 100% | 15 | 0 | 2 | A |
 | **Envoy Gateway** | 100% | 15 | 0 | 2 | A |
 | **Istio Gateway** | 100% | 15 | 0 | 2 | A |
-| **Cilium Gateway** | 100% | 15 | 0 | 2 | A |
+| **Cilium Gateway** | 93.3% | 14 | 1 | 2 | A |
 | **Kong Gateway** | 16.7% | 2 | 10 | 5 | F |
 | **Traefik Gateway** | 8.3% | 1 | 11 | 5 | F |
 | **kgateway** | N/A | 0 | 0 | 17 | Skip |
@@ -313,7 +313,7 @@ cluster-pool-ipv4-mask-size: "24"
 | 5 | https-redirect | PASS | PASS | PASS | PASS | SKIP | SKIP | |
 | 6 | backend-tls | SKIP | SKIP | SKIP | SKIP | SKIP | SKIP | mTLS 미구성 (전체 미지원) |
 | 7 | canary-traffic | PASS | PASS | PASS | PASS | FAIL | FAIL | |
-| 8 | rate-limiting | PASS | PASS | PASS | PASS | FAIL | FAIL | 구현체별 CRD 자동 감지 |
+| 8 | rate-limiting | PASS | PASS | PASS | FAIL | FAIL | FAIL | Envoy: 네이티브 CRD, NGINX/Istio: 로우레벨 설정 |
 | 9 | timeout-retry | PASS | PASS | PASS | PASS | FAIL | FAIL | |
 | 10 | session-affinity | SKIP | SKIP | SKIP | SKIP | SKIP | SKIP | 전체 미구성 |
 | 11 | url-rewrite | PASS | PASS | PASS | PASS | FAIL | FAIL | |
@@ -339,6 +339,8 @@ cluster-pool-ipv4-mask-size: "24"
 | https-redirect | 미구성 | kong, traefik |
 | health-check | 미구성 | kong, traefik |
 | kgateway 전체 | ARM64 아키텍처 미지원 | kgateway |
+
+> **참고**: Rate Limiting 지원 현황은 2025년 12월 테스트 기준이며, Gateway 구현체들은 지속적으로 발전하고 있으므로 최신 문서를 확인하시기 바랍니다.
 
 ### 4.4 실패 원인 분석
 
@@ -380,23 +382,23 @@ cluster-pool-ipv4-mask-size: "24"
 
 ### 5.2 Rate Limiting 지원 현황
 
-> **참고**: Gateway API 표준에는 Rate Limiting 스펙이 아직 포함되어 있지 않으며, 각 구현체별로 확장 API를 통해 지원합니다.
+> **참고**: Gateway API 표준에는 Rate Limiting 스펙이 아직 포함되어 있지 않으며, 구현체별로 지원 방식이 다릅니다. 2025년 12월 기준입니다.
 
 | Gateway | Rate Limiting 지원 | 방식 | 비고 |
 |---------|:------------------:|------|------|
-| **Envoy Gateway** | O (네이티브) | BackendTrafficPolicy CRD | Gateway API 스타일 선언적 설정 |
-| **NGINX Gateway Fabric** | O (네이티브) | NginxProxy CRD | 구현체별 CRD로 설정 |
-| **Istio Gateway** | O (네이티브) | Telemetry CRD | 구현체별 CRD로 설정 |
-| **Cilium Gateway** | O (네이티브) | CiliumClusterwideNetworkPolicy | 구현체별 CRD로 설정 |
+| **Envoy Gateway** | **O (네이티브)** | [`BackendTrafficPolicy`](https://gateway.envoyproxy.io/docs/tasks/traffic/backend-traffic-policy/rate-limit/) | Gateway API 스타일 선언적 설정 |
+| NGINX Gateway Fabric | △ (제한적) | [`SnippetsFilter`](https://docs.nginx.com/nginx-gateway-fabric/traffic-management/snippets/) | 로우레벨 NGINX 설정 필요 |
+| Istio Gateway | △ (제한적) | [`EnvoyFilter`](https://istio.io/latest/docs/tasks/policy-enforcement/rate-limit/) | 로우레벨 Envoy 설정 필요 |
+| Cilium Gateway | X (미지원) | - | [Feature Request #33500](https://github.com/cilium/cilium/issues/33500) |
 
-**PoC 결과**: 테스트 스크립트에서 **구현체별 CRD 자동 감지** 방식으로 Rate Limiting 테스트 수행. 4개 Gateway 모두 구현체별 방식으로 Rate Limiting 지원 확인.
+**결론**: **Envoy Gateway만이** 선언적 CRD를 통한 네이티브 Rate Limiting을 지원합니다. NGINX(SnippetsFilter)와 Istio(EnvoyFilter)는 CRD를 통해 구성 가능하지만, 이는 로우레벨 설정 주입 방식으로 전용 Rate Limiting API가 아니어서 복잡도가 높습니다. Cilium은 현재 HTTP Rate Limiting을 지원하지 않습니다.
 
 ### 5.3 사용 사례별 추천
 
 | 사용 사례 | 추천 Gateway | 이유 |
 |----------|-------------|------|
 | **범용 프로덕션** | NGINX Gateway Fabric | 안정성, 성숙도, 운영 경험 |
-| **API Rate Limiting 필수** | Envoy Gateway | Gateway API 스타일 Rate Limiting 네이티브 지원 |
+| **API Rate Limiting 필수** | Envoy Gateway | 선언적 Rate Limiting CRD를 네이티브 지원하는 유일한 Gateway |
 | **서비스 메시 환경** | Istio Gateway | Istio 컨트롤 플레인과 완벽 통합 |
 | **고성능/대용량 트래픽** | Cilium Gateway | eBPF 기반 커널 레벨 처리 |
 | **멀티클라우드/하이브리드** | Envoy Gateway | xDS 프로토콜 기반 유연한 설정 |
@@ -418,9 +420,9 @@ cluster-pool-ipv4-mask-size: "24"
 
 ### 5.5 결론
 
-100회 반복 테스트 결과, **NGINX, Envoy, Istio, Cilium** 4개 Gateway가 **100% 일관된 결과**를 보여주며 프로덕션 환경에 안정적으로 적합합니다.
+100회 반복 테스트 결과, **NGINX, Envoy, Istio**는 **100% 성공률**을, **Cilium**은 **93.3%** (HTTP Rate Limiting 미지원)를 기록했습니다. 4개 Gateway 모두 프로덕션 환경에 안정적으로 적합합니다.
 
-4개의 Tier 1 Gateway 모두 **구현체별 CRD를 통한 Rate Limiting을 지원**하며, 특히 **Envoy Gateway**는 Gateway API 스타일의 선언적 Rate Limiting을 BackendTrafficPolicy CRD로 네이티브 지원하여 API 트래픽 제어가 필요한 환경에 가장 적합합니다.
+Rate Limiting의 경우, **Envoy Gateway만이 선언적 CRD를 통한 네이티브 지원**을 제공합니다(BackendTrafficPolicy). NGINX(SnippetsFilter)와 Istio(EnvoyFilter)는 로우레벨 설정 주입을 통해 구현 가능하지만 복잡도가 높습니다. Cilium은 현재 HTTP Rate Limiting을 지원하지 않습니다. API 트래픽 제어가 필요한 환경에는 **Envoy Gateway**가 가장 적합한 선택입니다.
 
 **NGINX Gateway Fabric**은 가장 검증된 선택지로, 운영 안정성이 최우선인 환경에 적합합니다.
 

@@ -297,7 +297,7 @@ cluster-pool-ipv4-mask-size: "24"
 | **NGINX Gateway Fabric** | 100% | 15 | 0 | 2 | A |
 | **Envoy Gateway** | 100% | 15 | 0 | 2 | A |
 | **Istio Gateway** | 100% | 15 | 0 | 2 | A |
-| **Cilium Gateway** | 100% | 15 | 0 | 2 | A |
+| **Cilium Gateway** | 93.3% | 14 | 1 | 2 | A |
 | **Kong Gateway** | 16.7% | 2 | 10 | 5 | F |
 | **Traefik Gateway** | 8.3% | 1 | 11 | 5 | F |
 | **kgateway** | N/A | 0 | 0 | 17 | Skip |
@@ -313,7 +313,7 @@ cluster-pool-ipv4-mask-size: "24"
 | 5 | https-redirect | PASS | PASS | PASS | PASS | SKIP | SKIP | |
 | 6 | backend-tls | SKIP | SKIP | SKIP | SKIP | SKIP | SKIP | mTLS not configured (all unsupported) |
 | 7 | canary-traffic | PASS | PASS | PASS | PASS | FAIL | FAIL | |
-| 8 | rate-limiting | PASS | PASS | PASS | PASS | FAIL | FAIL | Auto-detection of implementation-specific CRDs |
+| 8 | rate-limiting | PASS | PASS | PASS | FAIL | FAIL | FAIL | Envoy: native CRD, NGINX/Istio: low-level config |
 | 9 | timeout-retry | PASS | PASS | PASS | PASS | FAIL | FAIL | |
 | 10 | session-affinity | SKIP | SKIP | SKIP | SKIP | SKIP | SKIP | Not configured for all |
 | 11 | url-rewrite | PASS | PASS | PASS | PASS | FAIL | FAIL | |
@@ -339,6 +339,8 @@ cluster-pool-ipv4-mask-size: "24"
 | https-redirect | Not configured | kong, traefik |
 | health-check | Not configured | kong, traefik |
 | kgateway all tests | ARM64 architecture not supported | kgateway |
+
+> **Note**: Rate Limiting support status is based on testing conducted in December 2025. Gateway implementations are actively evolving, so please verify the latest documentation for current capabilities.
 
 ### 4.4 Failure Root Cause Analysis
 
@@ -380,23 +382,23 @@ Warning: "Gateway not ready"
 
 ### 5.2 Rate Limiting Support Status
 
-> **Note**: The Gateway API standard does not yet include Rate Limiting specification. Each implementation supports it through extension APIs.
+> **Note**: The Gateway API standard does not yet include Rate Limiting specification; support varies by implementation. Status as of December 2025.
 
 | Gateway | Rate Limiting Support | Method | Notes |
 |---------|:---------------------:|--------|-------|
-| **Envoy Gateway** | O (Native) | BackendTrafficPolicy CRD | Gateway API style declarative configuration |
-| **NGINX Gateway Fabric** | O (Native) | NginxProxy CRD | Implementation-specific CRD configuration |
-| **Istio Gateway** | O (Native) | Telemetry CRD | Implementation-specific CRD configuration |
-| **Cilium Gateway** | O (Native) | CiliumClusterwideNetworkPolicy | Implementation-specific CRD configuration |
+| **Envoy Gateway** | **O (Native)** | [`BackendTrafficPolicy`](https://gateway.envoyproxy.io/docs/tasks/traffic/backend-traffic-policy/rate-limit/) | Gateway API style declarative configuration |
+| NGINX Gateway Fabric | △ (Limited) | [`SnippetsFilter`](https://docs.nginx.com/nginx-gateway-fabric/traffic-management/snippets/) | Low-level NGINX config required |
+| Istio Gateway | △ (Limited) | [`EnvoyFilter`](https://istio.io/latest/docs/tasks/policy-enforcement/rate-limit/) | Low-level Envoy config required |
+| Cilium Gateway | X (Not supported) | - | [Feature Request #33500](https://github.com/cilium/cilium/issues/33500) |
 
-**PoC Result**: Rate Limiting tests performed using **auto-detection of implementation-specific CRDs**. All 4 Gateways confirmed to support Rate Limiting through their respective implementation-specific methods.
+**Conclusion**: **Envoy Gateway is the only one** that natively supports Rate Limiting via declarative CRD. NGINX (SnippetsFilter) and Istio (EnvoyFilter) can configure it through CRDs, but these are low-level config injection mechanisms, not dedicated Rate Limiting APIs, resulting in higher complexity. Cilium currently does not support HTTP Rate Limiting.
 
 ### 5.3 Use Case Recommendations
 
 | Use Case | Recommended Gateway | Reason |
 |----------|---------------------|--------|
 | **General Production** | NGINX Gateway Fabric | Stability, maturity, operational experience |
-| **API Rate Limiting Required** | Envoy Gateway | Gateway API style native Rate Limiting support |
+| **API Rate Limiting Required** | Envoy Gateway | Only Gateway with native declarative Rate Limiting CRD |
 | **Service Mesh Environment** | Istio Gateway | Perfect integration with Istio control plane |
 | **High Performance/Large Traffic** | Cilium Gateway | eBPF-based kernel-level processing |
 | **Multi-cloud/Hybrid** | Envoy Gateway | Flexible configuration based on xDS protocol |
@@ -418,9 +420,9 @@ Warning: "Gateway not ready"
 
 ### 5.5 Conclusion
 
-After 100 rounds of testing, **NGINX, Envoy, Istio, and Cilium** - 4 Gateways showed **100% consistent results** and are stably suitable for production environments.
+After 100 rounds of testing, **NGINX, Envoy, and Istio** showed **100% success rate**, and **Cilium** showed **93.3%** (HTTP Rate Limiting not yet supported). All 4 Gateways are stably suitable for production environments.
 
-All 4 Tier 1 Gateways **support Rate Limiting through implementation-specific CRDs**. **Envoy Gateway** particularly natively supports Gateway API style declarative Rate Limiting via BackendTrafficPolicy CRD, making it most suitable for environments requiring API traffic control.
+For Rate Limiting, **only Envoy Gateway natively supports it via declarative CRD** (BackendTrafficPolicy). NGINX (SnippetsFilter) and Istio (EnvoyFilter) can achieve it through low-level config injection but with higher complexity. Cilium does not currently support HTTP Rate Limiting. For environments requiring API traffic control, **Envoy Gateway** is the most suitable choice.
 
 **NGINX Gateway Fabric** is the most proven choice, suitable for environments where operational stability is the top priority.
 
