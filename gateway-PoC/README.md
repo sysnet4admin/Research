@@ -169,7 +169,8 @@ cluster-pool-ipv4-mask-size: "24"
 | **Selection Reason** | Official Gateway API implementation of the most widely used web server/reverse proxy |
 | **Advantages** | Proven stability, extensive documentation, large community support |
 | **Features** | Combines NGINX's high-performance processing with Gateway API |
-| **Official Support** | F5 Networks (NGINX Inc.) official support |
+| **Project Status** | F5 Open Source |
+| **License** | Apache 2.0 |
 | **Tested Version** | v2.2.1 (Released 2025-11-18) |
 
 ### 2.2 Envoy Gateway
@@ -179,7 +180,8 @@ cluster-pool-ipv4-mask-size: "24"
 | **Selection Reason** | Gateway API implementation based on CNCF Graduated project Envoy Proxy |
 | **Advantages** | Excellent extensibility, native Rate Limiting support, observability |
 | **Features** | xDS protocol-based dynamic configuration, rich filter chain |
-| **Official Support** | Envoy Gateway Project (CNCF) |
+| **Project Status** | Envoy Graduated(2018) project |
+| **License** | Apache 2.0 |
 | **Tested Version** | v1.6.0 (Released 2025-11-11) |
 
 ### 2.3 Istio Gateway
@@ -189,7 +191,8 @@ cluster-pool-ipv4-mask-size: "24"
 | **Selection Reason** | Gateway API support from Istio, the de facto standard for service mesh |
 | **Advantages** | Automated mTLS, traffic management, service mesh integration |
 | **Features** | Envoy-based but integrated with Istio control plane |
-| **Official Support** | Istio Project (CNCF) |
+| **Project Status** | Istio Graduated(2024) project |
+| **License** | Apache 2.0 |
 | **Tested Version** | v1.28.0 (Released 2025-11-05) |
 
 ### 2.4 Cilium Gateway
@@ -199,7 +202,8 @@ cluster-pool-ipv4-mask-size: "24"
 | **Selection Reason** | Gateway API implementation of eBPF-based high-performance networking |
 | **Advantages** | High performance with kernel-level processing, network policy integration |
 | **Features** | Efficient packet processing using eBPF, L3/L4/L7 integration |
-| **Official Support** | Isovalent / Cilium Project (CNCF) |
+| **Project Status** | Cilium Graduated(2023) project |
+| **License** | Apache 2.0 |
 | **Tested Version** | v1.18.4 (Released 2025-11-12) |
 
 ### 2.5 Kong Gateway
@@ -209,7 +213,8 @@ cluster-pool-ipv4-mask-size: "24"
 | **Selection Reason** | Market leader in enterprise API Gateway |
 | **Advantages** | Rich plugin ecosystem, enterprise support |
 | **Features** | Built-in API management, authentication/authorization, traffic control |
-| **Official Support** | Kong Inc. |
+| **Project Status** | Kong Inc. Open Source |
+| **License** | Apache 2.0 |
 | **Tested Version** | v3.9 (Ingress Controller v3.5, Released 2025-07-17) |
 | **Version Note** | KIC v3.5.3 has compatibility issues with Kong Gateway v3.9, causing config sync failures. Recommend staying on v3.5 |
 
@@ -220,7 +225,8 @@ cluster-pool-ipv4-mask-size: "24"
 | **Selection Reason** | Reverse proxy specialized for cloud-native environments |
 | **Advantages** | Automatic service discovery, Let's Encrypt integration |
 | **Features** | Simplified configuration, various backend support |
-| **Official Support** | Traefik Labs |
+| **Project Status** | Traefik Labs Open Source |
+| **License** | MIT |
 | **Tested Version** | v3.6.2 (Helm Chart v37.4.0, Released 2025-11-18) |
 
 ### 2.7 kgateway (Solo.io)
@@ -230,6 +236,8 @@ cluster-pool-ipv4-mask-size: "24"
 | **Selection Reason** | Kubernetes-native API Gateway based on Envoy |
 | **Advantages** | GraphQL support, Envoy filter extensibility |
 | **Features** | Based on Solo.io's Gloo Edge technology |
+| **Project Status** | CNCF Sandbox(2025) |
+| **License** | Apache 2.0 |
 | **Limitation** | ARM64 architecture not supported (AMD64 only) |
 | **Tested Version** | v2.1.1 (Released 2025-11-18, Not tested - ARM64 not supported) |
 
