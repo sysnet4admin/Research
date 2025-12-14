@@ -169,7 +169,8 @@ cluster-pool-ipv4-mask-size: "24"
 | **선정 이유** | 가장 널리 사용되는 웹 서버/리버스 프록시의 공식 Gateway API 구현체 |
 | **장점** | 검증된 안정성, 풍부한 문서, 대규모 커뮤니티 지원 |
 | **특징** | NGINX의 고성능 처리 능력을 Gateway API와 결합 |
-| **공식 지원** | F5 Networks (NGINX Inc.) 공식 지원 |
+| **프로젝트 상태** | F5 오픈소스 |
+| **라이선스** | Apache 2.0 |
 | **테스트 버전** | v2.2.1 (2025-11-18 공개) |
 
 ### 2.2 Envoy Gateway
@@ -179,7 +180,8 @@ cluster-pool-ipv4-mask-size: "24"
 | **선정 이유** | CNCF Graduated 프로젝트인 Envoy Proxy 기반의 Gateway API 구현체 |
 | **장점** | 뛰어난 확장성, Rate Limiting 네이티브 지원, 관측성 |
 | **특징** | xDS 프로토콜 기반 동적 설정, 풍부한 필터 체인 |
-| **공식 지원** | Envoy Gateway 프로젝트 (CNCF) |
+| **프로젝트 상태** | Envoy 졸업(2018) 프로젝트 산하 |
+| **라이선스** | Apache 2.0 |
 | **테스트 버전** | v1.6.0 (2025-11-11 공개) |
 
 ### 2.3 Istio Gateway
@@ -189,7 +191,8 @@ cluster-pool-ipv4-mask-size: "24"
 | **선정 이유** | 서비스 메시의 사실상 표준인 Istio의 Gateway API 지원 |
 | **장점** | mTLS 자동화, 트래픽 관리, 서비스 메시 통합 |
 | **특징** | Envoy 기반이지만 Istio 컨트롤 플레인과 통합 |
-| **공식 지원** | Istio 프로젝트 (CNCF) |
+| **프로젝트 상태** | Istio 졸업(2024) 프로젝트 산하 |
+| **라이선스** | Apache 2.0 |
 | **테스트 버전** | v1.28.0 (2025-11-05 공개) |
 
 ### 2.4 Cilium Gateway
@@ -199,7 +202,8 @@ cluster-pool-ipv4-mask-size: "24"
 | **선정 이유** | eBPF 기반 고성능 네트워킹의 Gateway API 구현체 |
 | **장점** | 커널 레벨 처리로 높은 성능, 네트워크 정책 통합 |
 | **특징** | eBPF를 활용한 효율적인 패킷 처리, L3/L4/L7 통합 |
-| **공식 지원** | Isovalent / Cilium 프로젝트 (CNCF) |
+| **프로젝트 상태** | Cilium 졸업(2023) 프로젝트 산하 |
+| **라이선스** | Apache 2.0 |
 | **테스트 버전** | v1.18.4 (2025-11-12 공개) |
 
 ### 2.5 Kong Gateway
@@ -209,7 +213,8 @@ cluster-pool-ipv4-mask-size: "24"
 | **선정 이유** | 엔터프라이즈 API Gateway 시장의 선두 주자 |
 | **장점** | 풍부한 플러그인 생태계, 엔터프라이즈 지원 |
 | **특징** | API 관리, 인증/인가, 트래픽 제어 기능 내장 |
-| **공식 지원** | Kong Inc. |
+| **프로젝트 상태** | Kong Inc. 오픈소스 |
+| **라이선스** | Apache 2.0 |
 | **테스트 버전** | v3.9 (Ingress Controller v3.5, 2025-07-17 공개) |
 | **버전 제약** | KIC v3.5.3은 Kong Gateway v3.9와 호환성 문제로 설정 동기화 실패. v3.5 유지 권장 |
 
@@ -220,7 +225,8 @@ cluster-pool-ipv4-mask-size: "24"
 | **선정 이유** | 클라우드 네이티브 환경에 특화된 리버스 프록시 |
 | **장점** | 자동 서비스 디스커버리, Let's Encrypt 통합 |
 | **특징** | 설정 간소화, 다양한 백엔드 지원 |
-| **공식 지원** | Traefik Labs |
+| **프로젝트 상태** | Traefik Labs 오픈소스 |
+| **라이선스** | MIT |
 | **테스트 버전** | v3.6.2 (Helm Chart v37.4.0, 2025-11-18 공개) |
 
 ### 2.7 kgateway (Solo.io)
@@ -230,6 +236,8 @@ cluster-pool-ipv4-mask-size: "24"
 | **선정 이유** | Envoy 기반의 Kubernetes 네이티브 API Gateway |
 | **장점** | GraphQL 지원, Envoy 필터 확장성 |
 | **특징** | Solo.io의 Gloo Edge 기술 기반 |
+| **프로젝트 상태** | CNCF Sandbox(2025) |
+| **라이선스** | Apache 2.0 |
 | **제약** | ARM64 아키텍처 미지원 (AMD64 전용) |
 | **테스트 버전** | v2.1.1 (2025-11-18 공개, 테스트 미수행 - ARM64 미지원) |
 
