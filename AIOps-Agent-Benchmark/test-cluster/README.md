@@ -13,17 +13,17 @@ Provisioning logic originally adapted from [sysnet4admin/_Lecture_k8s_learning.k
 | Kubernetes | v1.35.4 |
 | Containerd | 2.2.2 (Ubuntu 24.04 Noble) |
 | CNI | Calico |
-| Load balancer | MetalLB (L2 mode, pool `192.168.1.11-99`) |
+| Load balancer | MetalLB (L2 mode, pool `192.168.1.161-199`) |
 | Gateway | NGINX Gateway Fabric v2.3.0 |
 | Storage | CSI NFS + default StorageClass |
 | Metrics | metrics-server v0.8.0 |
 
 | Node | vCPU | RAM | Private IP |
 |---|---|---|---|
-| cp-k8s | 2 | 4 GB | 192.168.1.10 |
-| w1-k8s | 2 | 4 GB | 192.168.1.101 |
-| w2-k8s | 2 | 4 GB | 192.168.1.102 |
-| w3-k8s | 2 | 4 GB | 192.168.1.103 |
+| cp-k8s | 2 | 4 GB | 192.168.1.150 |
+| w1-k8s | 2 | 4 GB | 192.168.1.151 |
+| w2-k8s | 2 | 4 GB | 192.168.1.152 |
+| w3-k8s | 2 | 4 GB | 192.168.1.153 |
 
 Total host footprint: 8 vCPU, 16 GB RAM.
 

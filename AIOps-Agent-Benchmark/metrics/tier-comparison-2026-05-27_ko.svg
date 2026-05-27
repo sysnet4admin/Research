@@ -1,0 +1,495 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2064" height="1052">
+<defs><style>text{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}</style></defs>
+<rect width="2064" height="1052" fill="#f0f2f5"/>
+<rect x="0" y="0" width="2064" height="64" fill="#1a237e"/>
+<text x="28" y="38" font-size="19" font-weight="700" fill="white">AIOps Agent Benchmark: Tier Comparison (9 Agents)</text>
+<text x="28" y="55" font-size="11" fill="rgba(255,255,255,0.75)">🟠 Claude   🔵 Gemini   🟢 Codex     진함=Flagship   중간=Efficient   연함=Lite</text>
+<rect x="28" y="76" width="640" height="554" fill="white" rx="8"/>
+<text x="348" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#1a237e">처리속도 vs Ops_Score</text>
+<line x1="44" y1="102" x2="652" y2="102" stroke="#c5cae9" stroke-width="1.5"/>
+<g transform="translate(28,110)">
+<rect width="640" height="520" fill="#fafafa" rx="8"/>
+<defs><clipPath id="plot1"><rect x="70" y="45" width="530" height="395"/></clipPath></defs>
+<line x1="70" y1="440" x2="600" y2="440" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="64" y="444" text-anchor="end" font-size="9" fill="#aaa">55</text>
+<line x1="70" y1="341" x2="600" y2="341" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="64" y="345" text-anchor="end" font-size="9" fill="#aaa">60</text>
+<line x1="70" y1="242" x2="600" y2="242" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="64" y="246" text-anchor="end" font-size="9" fill="#aaa">66</text>
+<line x1="70" y1="145" x2="600" y2="145" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="64" y="149" text-anchor="end" font-size="9" fill="#aaa">71</text>
+<line x1="70" y1="46" x2="600" y2="46" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="64" y="50" text-anchor="end" font-size="9" fill="#aaa">76</text>
+<line x1="70" y1="440" x2="70" y2="444" stroke="#bbb" stroke-width="1"/>
+<text x="70" y="456" text-anchor="middle" font-size="8" fill="#aaa">0.24</text>
+<line x1="208" y1="440" x2="208" y2="444" stroke="#bbb" stroke-width="1"/>
+<text x="208" y="456" text-anchor="middle" font-size="8" fill="#aaa">0.35</text>
+<line x1="345" y1="440" x2="345" y2="444" stroke="#bbb" stroke-width="1"/>
+<text x="345" y="456" text-anchor="middle" font-size="8" fill="#aaa">0.46</text>
+<line x1="483" y1="440" x2="483" y2="444" stroke="#bbb" stroke-width="1"/>
+<text x="483" y="456" text-anchor="middle" font-size="8" fill="#aaa">0.57</text>
+<line x1="620" y1="440" x2="620" y2="444" stroke="#bbb" stroke-width="1"/>
+<text x="620" y="456" text-anchor="middle" font-size="8" fill="#aaa">0.68</text>
+<line x1="70" y1="440" x2="600" y2="440" stroke="#bbb" stroke-width="1.5"/>
+<line x1="70" y1="45" x2="70" y2="440" stroke="#bbb" stroke-width="1.5"/>
+<text x="335" y="470" text-anchor="middle" font-size="10" fill="#666">처리 효율 (← 느림 / 빠름 →)</text>
+<text x="40" y="242" text-anchor="middle" font-size="10" fill="#666" transform="rotate(-90,40,242)">Ops_Score (100점)</text>
+<!-- 4분면 구분선: x=290 (eff≈0.42), y=215 (ops≈67.0) -->
+<line x1="290" y1="45" x2="290" y2="440" stroke="#aaa" stroke-width="1.2" stroke-dasharray="6,4"/>
+<line x1="70" y1="215" x2="600" y2="215" stroke="#aaa" stroke-width="1.2" stroke-dasharray="6,4"/>
+<!-- 사분면 레이블 -->
+<text x="448" y="64" text-anchor="middle" font-size="11" font-weight="700" fill="#1a237e" opacity="0.6">Production Ready</text>
+<text x="180" y="64" text-anchor="middle" font-size="11" font-weight="700" fill="#555" opacity="0.6">Capable</text>
+<text x="448" y="435" text-anchor="middle" font-size="11" font-weight="700" fill="#555" opacity="0.6">Potential</text>
+<text x="180" y="435" text-anchor="middle" font-size="11" font-weight="700" fill="#555" opacity="0.6">Limited</text>
+<circle cx="539" cy="245" r="12" fill="#4285F4" fill-opacity="0.3" stroke="white" stroke-width="1.5"/>
+<text x="539" y="249" text-anchor="middle" font-size="8" fill="white" font-weight="700">65.4</text>
+<text x="539" y="225" text-anchor="middle" font-size="9" font-weight="600" fill="#333">G-2.5 Lite</text>
+<circle cx="187" cy="279" r="12" fill="#10A37F" fill-opacity="0.3" stroke="white" stroke-width="1.5"/>
+<text x="187" y="283" text-anchor="middle" font-size="8" fill="white" font-weight="700">63.6</text>
+<text x="172" y="299" text-anchor="end" font-size="9" font-weight="600" fill="#333">GPT-mini</text>
+<circle cx="226" cy="259" r="12" fill="#D97706" fill-opacity="0.3" stroke="white" stroke-width="1.5"/>
+<text x="226" y="263" text-anchor="middle" font-size="8" fill="white" font-weight="700">64.7</text>
+<text x="226" y="239" text-anchor="middle" font-size="9" font-weight="600" fill="#333">Haiku 4.5</text>
+<circle cx="395" cy="187" r="12" fill="#4285F4" fill-opacity="0.6" stroke="white" stroke-width="1.5"/>
+<text x="395" y="191" text-anchor="middle" font-size="8" fill="white" font-weight="700">68.6</text>
+<text x="395" y="167" text-anchor="middle" font-size="9" font-weight="600" fill="#333">G-2.5 Flash</text>
+<circle cx="131" cy="339" r="12" fill="#10A37F" fill-opacity="0.6" stroke="white" stroke-width="1.5"/>
+<text x="131" y="343" text-anchor="middle" font-size="8" fill="white" font-weight="700">60.3</text>
+<text x="131" y="319" text-anchor="middle" font-size="9" font-weight="600" fill="#333">GPT-5.4</text>
+<circle cx="354" cy="100" r="12" fill="#D97706" fill-opacity="0.6" stroke="white" stroke-width="1.5"/>
+<text x="354" y="104" text-anchor="middle" font-size="8" fill="white" font-weight="700">73.3</text>
+<text x="354" y="80" text-anchor="middle" font-size="9" font-weight="600" fill="#333">Sonnet 4.6</text>
+<circle cx="453" cy="385" r="12" fill="#4285F4" fill-opacity="0.9" stroke="white" stroke-width="1.5"/>
+<text x="453" y="389" text-anchor="middle" font-size="8" fill="white" font-weight="700">57.8</text>
+<text x="453" y="365" text-anchor="middle" font-size="9" font-weight="600" fill="#333">G-2.5 Pro</text>
+<circle cx="198" cy="277" r="12" fill="#10A37F" fill-opacity="0.9" stroke="white" stroke-width="1.5"/>
+<text x="198" y="281" text-anchor="middle" font-size="8" fill="white" font-weight="700">63.7</text>
+<text x="213" y="299" text-anchor="start" font-size="9" font-weight="600" fill="#333">GPT-5.5</text>
+<circle cx="323" cy="149" r="12" fill="#D97706" fill-opacity="0.9" stroke="white" stroke-width="1.5"/>
+<text x="323" y="153" text-anchor="middle" font-size="8" fill="white" font-weight="700">70.6</text>
+<text x="323" y="129" text-anchor="middle" font-size="9" font-weight="600" fill="#333">Opus 4.7</text>
+</g>
+<rect x="692" y="76" width="660" height="554" fill="white" rx="8"/>
+<text x="1022" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#1a237e">Tier별 Ops_Score</text>
+<line x1="708" y1="102" x2="1336" y2="102" stroke="#c5cae9" stroke-width="1.5"/>
+<g transform="translate(692,110)">
+<rect width="660" height="520" fill="#fafafa" rx="8"/>
+<line x1="100" y1="362" x2="600" y2="362" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="92" y="366" text-anchor="end" font-size="9" fill="#aaa">20</text>
+<line x1="100" y1="284" x2="600" y2="284" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="92" y="288" text-anchor="end" font-size="9" fill="#aaa">40</text>
+<line x1="100" y1="206" x2="600" y2="206" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="92" y="210" text-anchor="end" font-size="9" fill="#aaa">60</text>
+<line x1="100" y1="128" x2="600" y2="128" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="92" y="132" text-anchor="end" font-size="9" fill="#aaa">80</text>
+<line x1="100" y1="50" x2="600" y2="50" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="92" y="54" text-anchor="end" font-size="9" fill="#aaa">100</text>
+<line x1="100" y1="40" x2="100" y2="440" stroke="#ccc" stroke-width="1.5"/>
+<line x1="100" y1="440" x2="600" y2="440" stroke="#bbb" stroke-width="1.5"/>
+<text x="70" y="245" text-anchor="middle" font-size="10" fill="#666" transform="rotate(-90,70,245)">Ops_Score (100점)</text>
+<text x="170" y="464" text-anchor="middle" font-size="12" font-weight="600" fill="#444">Lite</text>
+<line x1="170" y1="440" x2="170" y2="446" stroke="#ccc" stroke-width="1.5"/>
+<text x="340" y="464" text-anchor="middle" font-size="12" font-weight="600" fill="#444">Efficient</text>
+<line x1="340" y1="440" x2="340" y2="446" stroke="#ccc" stroke-width="1.5"/>
+<text x="510" y="464" text-anchor="middle" font-size="12" font-weight="600" fill="#444">Flagship</text>
+<line x1="510" y1="440" x2="510" y2="446" stroke="#ccc" stroke-width="1.5"/>
+<line x1="144" y1="185" x2="314" y2="172" stroke="#4285F4" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5"/>
+<line x1="314" y1="172" x2="484" y2="215" stroke="#4285F4" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5"/>
+<line x1="170" y1="192" x2="340" y2="205" stroke="#10A37F" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5"/>
+<line x1="340" y1="205" x2="510" y2="192" stroke="#10A37F" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5"/>
+<line x1="196" y1="188" x2="366" y2="154" stroke="#D97706" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5"/>
+<line x1="366" y1="154" x2="536" y2="165" stroke="#D97706" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5"/>
+<circle cx="144" cy="185" r="13" fill="#4285F4" fill-opacity="0.3" stroke="white" stroke-width="2"/>
+<line x1="144" y1="171" x2="144" y2="171" stroke="#4285F4" stroke-width="0.8" opacity="0.5"/>
+<text x="144" y="163" text-anchor="middle" font-size="9" font-weight="600" fill="#333">G-2.5 Lite</text>
+<text x="144" y="189" text-anchor="middle" font-size="8" fill="white" font-weight="700">65.4</text>
+<circle cx="170" cy="192" r="13" fill="#10A37F" fill-opacity="0.3" stroke="white" stroke-width="2"/>
+<line x1="170" y1="178" x2="170" y2="139" stroke="#10A37F" stroke-width="0.8" opacity="0.5"/>
+<text x="170" y="131" text-anchor="middle" font-size="9" font-weight="600" fill="#333">GPT-mini</text>
+<text x="170" y="196" text-anchor="middle" font-size="8" fill="white" font-weight="700">63.6</text>
+<circle cx="196" cy="188" r="13" fill="#D97706" fill-opacity="0.3" stroke="white" stroke-width="2"/>
+<line x1="196" y1="174" x2="196" y2="155" stroke="#D97706" stroke-width="0.8" opacity="0.5"/>
+<text x="196" y="147" text-anchor="middle" font-size="9" font-weight="600" fill="#333">Haiku 4.5</text>
+<text x="196" y="192" text-anchor="middle" font-size="8" fill="white" font-weight="700">64.7</text>
+<circle cx="314" cy="172" r="13" fill="#4285F4" fill-opacity="0.6" stroke="white" stroke-width="2"/>
+<line x1="314" y1="158" x2="314" y2="158" stroke="#4285F4" stroke-width="0.8" opacity="0.5"/>
+<text x="314" y="150" text-anchor="middle" font-size="9" font-weight="600" fill="#333">G-2.5 Flash</text>
+<text x="314" y="176" text-anchor="middle" font-size="8" fill="white" font-weight="700">68.6</text>
+<circle cx="340" cy="205" r="13" fill="#10A37F" fill-opacity="0.6" stroke="white" stroke-width="2"/>
+<line x1="340" y1="191" x2="340" y2="191" stroke="#10A37F" stroke-width="0.8" opacity="0.5"/>
+<text x="340" y="183" text-anchor="middle" font-size="9" font-weight="600" fill="#333">GPT-5.4</text>
+<text x="340" y="209" text-anchor="middle" font-size="8" fill="white" font-weight="700">60.3</text>
+<circle cx="366" cy="154" r="13" fill="#D97706" fill-opacity="0.6" stroke="white" stroke-width="2"/>
+<line x1="366" y1="140" x2="366" y2="140" stroke="#D97706" stroke-width="0.8" opacity="0.5"/>
+<text x="366" y="132" text-anchor="middle" font-size="9" font-weight="600" fill="#333">Sonnet 4.6</text>
+<text x="366" y="158" text-anchor="middle" font-size="8" fill="white" font-weight="700">73.3</text>
+<circle cx="484" cy="215" r="13" fill="#4285F4" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<line x1="484" y1="201" x2="484" y2="201" stroke="#4285F4" stroke-width="0.8" opacity="0.5"/>
+<text x="484" y="193" text-anchor="middle" font-size="9" font-weight="600" fill="#333">G-2.5 Pro</text>
+<text x="484" y="219" text-anchor="middle" font-size="8" fill="white" font-weight="700">57.8</text>
+<circle cx="510" cy="192" r="13" fill="#10A37F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<line x1="510" y1="178" x2="510" y2="178" stroke="#10A37F" stroke-width="0.8" opacity="0.5"/>
+<text x="510" y="170" text-anchor="middle" font-size="9" font-weight="600" fill="#333">GPT-5.5</text>
+<text x="510" y="196" text-anchor="middle" font-size="8" fill="white" font-weight="700">63.7</text>
+<circle cx="536" cy="165" r="13" fill="#D97706" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<line x1="536" y1="151" x2="536" y2="151" stroke="#D97706" stroke-width="0.8" opacity="0.5"/>
+<text x="536" y="143" text-anchor="middle" font-size="9" font-weight="600" fill="#333">Opus 4.7</text>
+<text x="536" y="169" text-anchor="middle" font-size="8" fill="white" font-weight="700">70.6</text>
+</g>
+<rect x="1376" y="76" width="660" height="554" fill="white" rx="8"/>
+<text x="1706" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#1a237e">브랜드별 Ops_Score</text>
+<line x1="1392" y1="102" x2="2020" y2="102" stroke="#c5cae9" stroke-width="1.5"/>
+<g transform="translate(1376,110)">
+<rect width="660" height="520" fill="#fafafa" rx="8"/>
+<line x1="100" y1="362" x2="620" y2="362" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="92" y="366" text-anchor="end" font-size="9" fill="#aaa">20</text>
+<line x1="100" y1="284" x2="620" y2="284" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="92" y="288" text-anchor="end" font-size="9" fill="#aaa">40</text>
+<line x1="100" y1="206" x2="620" y2="206" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="92" y="210" text-anchor="end" font-size="9" fill="#aaa">60</text>
+<line x1="100" y1="128" x2="620" y2="128" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="92" y="132" text-anchor="end" font-size="9" fill="#aaa">80</text>
+<line x1="100" y1="50" x2="620" y2="50" stroke="#e8e8e8" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="92" y="54" text-anchor="end" font-size="9" fill="#aaa">100</text>
+<line x1="100" y1="440" x2="620" y2="440" stroke="#bbb" stroke-width="1.5"/>
+<line x1="100" y1="50" x2="100" y2="440" stroke="#bbb" stroke-width="1.5"/>
+<text x="70" y="245" text-anchor="middle" font-size="10" fill="#666" transform="rotate(-90,70,245)">Ops_Score (100점)</text>
+<text x="190" y="464" text-anchor="middle" font-size="13" font-weight="700" fill="#333">Gemini</text>
+<line x1="190" y1="440" x2="190" y2="446" stroke="#ccc" stroke-width="1.5"/>
+<text x="340" y="464" text-anchor="middle" font-size="13" font-weight="700" fill="#333">Codex</text>
+<line x1="340" y1="440" x2="340" y2="446" stroke="#ccc" stroke-width="1.5"/>
+<text x="490" y="464" text-anchor="middle" font-size="13" font-weight="700" fill="#333">Claude</text>
+<line x1="490" y1="440" x2="490" y2="446" stroke="#ccc" stroke-width="1.5"/>
+<line x1="164" y1="185" x2="190" y2="172" stroke="#4285F4" stroke-width="2" stroke-dasharray="5,3" opacity="0.6"/>
+<line x1="190" y1="172" x2="216" y2="215" stroke="#4285F4" stroke-width="2" stroke-dasharray="5,3" opacity="0.6"/>
+<line x1="314" y1="192" x2="340" y2="205" stroke="#10A37F" stroke-width="2" stroke-dasharray="5,3" opacity="0.6"/>
+<line x1="340" y1="205" x2="366" y2="192" stroke="#10A37F" stroke-width="2" stroke-dasharray="5,3" opacity="0.6"/>
+<line x1="464" y1="188" x2="490" y2="154" stroke="#D97706" stroke-width="2" stroke-dasharray="5,3" opacity="0.6"/>
+<line x1="490" y1="154" x2="516" y2="165" stroke="#D97706" stroke-width="2" stroke-dasharray="5,3" opacity="0.6"/>
+<circle cx="164" cy="185" r="13" fill="#4285F4" fill-opacity="0.3" stroke="white" stroke-width="2"/>
+<line x1="164" y1="171" x2="164" y2="142" stroke="#4285F4" stroke-width="0.8" opacity="0.5"/>
+<text x="164" y="134" text-anchor="middle" font-size="9" font-weight="600" fill="#333">G-2.5 Lite</text>
+<text x="164" y="189" text-anchor="middle" font-size="8" fill="white" font-weight="700">65.4</text>
+<circle cx="190" cy="172" r="13" fill="#4285F4" fill-opacity="0.6" stroke="white" stroke-width="2"/>
+<line x1="190" y1="158" x2="190" y2="158" stroke="#4285F4" stroke-width="0.8" opacity="0.5"/>
+<text x="190" y="150" text-anchor="middle" font-size="9" font-weight="600" fill="#333">G-2.5 Flash</text>
+<text x="190" y="176" text-anchor="middle" font-size="8" fill="white" font-weight="700">68.6</text>
+<circle cx="216" cy="215" r="13" fill="#4285F4" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<line x1="216" y1="201" x2="216" y2="201" stroke="#4285F4" stroke-width="0.8" opacity="0.5"/>
+<text x="216" y="193" text-anchor="middle" font-size="9" font-weight="600" fill="#333">G-2.5 Pro</text>
+<text x="216" y="219" text-anchor="middle" font-size="8" fill="white" font-weight="700">57.8</text>
+<circle cx="314" cy="192" r="13" fill="#10A37F" fill-opacity="0.3" stroke="white" stroke-width="2"/>
+<line x1="314" y1="178" x2="314" y2="162" stroke="#10A37F" stroke-width="0.8" opacity="0.5"/>
+<text x="314" y="154" text-anchor="middle" font-size="9" font-weight="600" fill="#333">GPT-mini</text>
+<text x="314" y="196" text-anchor="middle" font-size="8" fill="white" font-weight="700">63.6</text>
+<circle cx="340" cy="205" r="13" fill="#10A37F" fill-opacity="0.6" stroke="white" stroke-width="2"/>
+<line x1="340" y1="191" x2="340" y2="146" stroke="#10A37F" stroke-width="0.8" opacity="0.5"/>
+<text x="340" y="138" text-anchor="middle" font-size="9" font-weight="600" fill="#333">GPT-5.4</text>
+<text x="340" y="209" text-anchor="middle" font-size="8" fill="white" font-weight="700">60.3</text>
+<circle cx="366" cy="192" r="13" fill="#10A37F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<line x1="366" y1="178" x2="366" y2="178" stroke="#10A37F" stroke-width="0.8" opacity="0.5"/>
+<text x="366" y="170" text-anchor="middle" font-size="9" font-weight="600" fill="#333">GPT-5.5</text>
+<text x="366" y="196" text-anchor="middle" font-size="8" fill="white" font-weight="700">63.7</text>
+<circle cx="464" cy="188" r="13" fill="#D97706" fill-opacity="0.3" stroke="white" stroke-width="2"/>
+<line x1="464" y1="174" x2="464" y2="174" stroke="#D97706" stroke-width="0.8" opacity="0.5"/>
+<text x="464" y="166" text-anchor="middle" font-size="9" font-weight="600" fill="#333">Haiku 4.5</text>
+<text x="464" y="192" text-anchor="middle" font-size="8" fill="white" font-weight="700">64.7</text>
+<circle cx="490" cy="154" r="13" fill="#D97706" fill-opacity="0.6" stroke="white" stroke-width="2"/>
+<line x1="490" y1="140" x2="490" y2="140" stroke="#D97706" stroke-width="0.8" opacity="0.5"/>
+<text x="490" y="132" text-anchor="middle" font-size="9" font-weight="600" fill="#333">Sonnet 4.6</text>
+<text x="490" y="158" text-anchor="middle" font-size="8" fill="white" font-weight="700">73.3</text>
+<circle cx="516" cy="165" r="13" fill="#D97706" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<line x1="516" y1="151" x2="516" y2="124" stroke="#D97706" stroke-width="0.8" opacity="0.5"/>
+<text x="516" y="116" text-anchor="middle" font-size="9" font-weight="600" fill="#333">Opus 4.7</text>
+<text x="516" y="169" text-anchor="middle" font-size="8" fill="white" font-weight="700">70.6</text>
+</g>
+<text x="28" y="654" font-size="13" font-weight="700" fill="#1a237e">시나리오별 Ops_Score</text>
+<line x1="28" y1="658" x2="248" y2="658" stroke="#c5cae9" stroke-width="2"/>
+<rect x="28" y="666" width="2008" height="338" fill="white" rx="6"/>
+<rect x="28" y="666" width="2008" height="26" fill="#dde3f8"/>
+<text x="35" y="684" text-anchor="start" font-size="11" font-weight="600" fill="#333">시나리오</text>
+<rect x="258" y="666" width="591" height="26" fill="#ccd6f6"/>
+<text x="553" y="684" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Lite</text>
+<rect x="849" y="666" width="591" height="26" fill="#b8c8f4"/>
+<text x="1144" y="684" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Efficient</text>
+<rect x="1440" y="666" width="596" height="26" fill="#9eb4f0"/>
+<text x="1738" y="684" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Flagship</text>
+<rect x="28" y="692" width="2008" height="26" fill="#f0f2ff"/>
+<text x="35" y="710" text-anchor="start" font-size="11" font-weight="600" fill="#444">시나리오</text>
+<text x="230" y="710" text-anchor="middle" font-size="11" font-weight="600" fill="#444">난이도</text>
+<rect x="258" y="692" width="197" height="26" fill="rgba(66,133,244,0.28)"/>
+<text x="356" y="710" text-anchor="middle" font-size="11" font-weight="600" fill="#222">G-2.5 Lite</text>
+<rect x="455" y="692" width="197" height="26" fill="rgba(16,163,127,0.28)"/>
+<text x="553" y="710" text-anchor="middle" font-size="11" font-weight="600" fill="#222">GPT-mini</text>
+<rect x="652" y="692" width="197" height="26" fill="rgba(217,119,6,0.28)"/>
+<text x="750" y="710" text-anchor="middle" font-size="11" font-weight="600" fill="#222">Haiku 4.5</text>
+<rect x="849" y="692" width="197" height="26" fill="rgba(66,133,244,0.52)"/>
+<text x="947" y="710" text-anchor="middle" font-size="11" font-weight="600" fill="#222">G-2.5 Flash</text>
+<rect x="1046" y="692" width="197" height="26" fill="rgba(16,163,127,0.52)"/>
+<text x="1144" y="710" text-anchor="middle" font-size="11" font-weight="600" fill="#222">GPT-5.4</text>
+<rect x="1243" y="692" width="197" height="26" fill="rgba(217,119,6,0.52)"/>
+<text x="1341" y="710" text-anchor="middle" font-size="11" font-weight="600" fill="#222">Sonnet 4.6</text>
+<rect x="1440" y="692" width="197" height="26" fill="rgba(66,133,244,0.85)"/>
+<text x="1538" y="710" text-anchor="middle" font-size="11" font-weight="600" fill="#222">G-2.5 Pro</text>
+<rect x="1637" y="692" width="197" height="26" fill="rgba(16,163,127,0.85)"/>
+<text x="1735" y="710" text-anchor="middle" font-size="11" font-weight="600" fill="#222">GPT-5.5</text>
+<rect x="1834" y="692" width="202" height="26" fill="rgba(217,119,6,0.85)"/>
+<text x="1935" y="710" text-anchor="middle" font-size="11" font-weight="600" fill="#222">Opus 4.7</text>
+<rect x="28" y="718" width="2008" height="26" fill="#fff"/>
+<text x="35" y="736" text-anchor="start" font-size="11" font-weight="400" fill="#222">001-crashloop</text>
+<text x="230" y="736" text-anchor="middle" font-size="10" font-weight="400" fill="#888">★</text>
+<rect x="258" y="718" width="197" height="26" fill="hsl(98,70%,85%)"/>
+<text x="356" y="736" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.82</text>
+<rect x="455" y="718" width="197" height="26" fill="hsl(78,70%,85%)"/>
+<text x="553" y="736" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.66</text>
+<rect x="652" y="718" width="197" height="26" fill="hsl(78,70%,85%)"/>
+<text x="750" y="736" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.66</text>
+<rect x="849" y="718" width="197" height="26" fill="hsl(91,70%,85%)"/>
+<text x="947" y="736" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.77</text>
+<rect x="1046" y="718" width="197" height="26" fill="hsl(75,70%,85%)"/>
+<text x="1144" y="736" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.63</text>
+<rect x="1243" y="718" width="197" height="26" fill="hsl(92,70%,85%)"/>
+<text x="1341" y="736" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.77</text>
+<rect x="1440" y="718" width="197" height="26" fill="hsl(93,70%,85%)"/>
+<text x="1538" y="736" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.78</text>
+<rect x="1637" y="718" width="197" height="26" fill="hsl(84,70%,85%)"/>
+<text x="1735" y="736" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.71</text>
+<rect x="1834" y="718" width="202" height="26" fill="hsl(88,70%,85%)"/>
+<text x="1935" y="736" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.74</text>
+<rect x="28" y="744" width="2008" height="26" fill="#f7f8fc"/>
+<text x="35" y="762" text-anchor="start" font-size="11" font-weight="400" fill="#222">002-service</text>
+<text x="230" y="762" text-anchor="middle" font-size="10" font-weight="400" fill="#888">★</text>
+<rect x="258" y="744" width="197" height="26" fill="hsl(102,70%,85%)"/>
+<text x="356" y="762" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.85</text>
+<rect x="455" y="744" width="197" height="26" fill="hsl(90,70%,85%)"/>
+<text x="553" y="762" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.75</text>
+<rect x="652" y="744" width="197" height="26" fill="hsl(78,70%,85%)"/>
+<text x="750" y="762" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.66</text>
+<rect x="849" y="744" width="197" height="26" fill="hsl(86,70%,85%)"/>
+<text x="947" y="762" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.72</text>
+<rect x="1046" y="744" width="197" height="26" fill="hsl(83,70%,85%)"/>
+<text x="1144" y="762" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.70</text>
+<rect x="1243" y="744" width="197" height="26" fill="hsl(86,70%,85%)"/>
+<text x="1341" y="762" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.72</text>
+<rect x="1440" y="744" width="197" height="26" fill="hsl(87,70%,85%)"/>
+<text x="1538" y="762" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.73</text>
+<rect x="1637" y="744" width="197" height="26" fill="hsl(80,70%,85%)"/>
+<text x="1735" y="762" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.67</text>
+<rect x="1834" y="744" width="202" height="26" fill="hsl(78,70%,85%)"/>
+<text x="1935" y="762" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.66</text>
+<rect x="28" y="770" width="2008" height="26" fill="#fff"/>
+<text x="35" y="788" text-anchor="start" font-size="11" font-weight="400" fill="#222">003-oom</text>
+<text x="230" y="788" text-anchor="middle" font-size="10" font-weight="400" fill="#888">★★</text>
+<rect x="258" y="770" width="197" height="26" fill="hsl(80,70%,85%)"/>
+<text x="356" y="788" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.67</text>
+<rect x="455" y="770" width="197" height="26" fill="hsl(69,70%,85%)"/>
+<text x="553" y="788" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.58</text>
+<rect x="652" y="770" width="197" height="26" fill="hsl(91,70%,85%)"/>
+<text x="750" y="788" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.77</text>
+<rect x="849" y="770" width="197" height="26" fill="hsl(98,70%,85%)"/>
+<text x="947" y="788" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.82</text>
+<rect x="1046" y="770" width="197" height="26" fill="hsl(65,70%,85%)"/>
+<text x="1144" y="788" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.54</text>
+<rect x="1243" y="770" width="197" height="26" fill="hsl(96,70%,85%)"/>
+<text x="1341" y="788" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.81</text>
+<rect x="1440" y="770" width="197" height="26" fill="hsl(97,70%,85%)"/>
+<text x="1538" y="788" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.81</text>
+<rect x="1637" y="770" width="197" height="26" fill="hsl(79,70%,85%)"/>
+<text x="1735" y="788" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.66</text>
+<rect x="1834" y="770" width="202" height="26" fill="hsl(89,70%,85%)"/>
+<text x="1935" y="788" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.75</text>
+<rect x="28" y="796" width="2008" height="26" fill="#f7f8fc"/>
+<text x="35" y="814" text-anchor="start" font-size="11" font-weight="400" fill="#222">004-readiness</text>
+<text x="230" y="814" text-anchor="middle" font-size="10" font-weight="400" fill="#888">★★</text>
+<rect x="258" y="796" width="197" height="26" fill="hsl(80,70%,85%)"/>
+<text x="356" y="814" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.67</text>
+<rect x="455" y="796" width="197" height="26" fill="hsl(79,70%,85%)"/>
+<text x="553" y="814" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.66</text>
+<rect x="652" y="796" width="197" height="26" fill="hsl(85,70%,85%)"/>
+<text x="750" y="814" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.71</text>
+<rect x="849" y="796" width="197" height="26" fill="hsl(83,70%,85%)"/>
+<text x="947" y="814" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.70</text>
+<rect x="1046" y="796" width="197" height="26" fill="hsl(61,70%,85%)"/>
+<text x="1144" y="814" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.51</text>
+<rect x="1243" y="796" width="197" height="26" fill="hsl(94,70%,85%)"/>
+<text x="1341" y="814" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.79</text>
+<rect x="1440" y="796" width="197" height="26" fill="hsl(82,70%,85%)"/>
+<text x="1538" y="814" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.68</text>
+<rect x="1637" y="796" width="197" height="26" fill="hsl(75,70%,85%)"/>
+<text x="1735" y="814" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.63</text>
+<rect x="1834" y="796" width="202" height="26" fill="hsl(84,70%,85%)"/>
+<text x="1935" y="814" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.70</text>
+<rect x="28" y="822" width="2008" height="26" fill="#fff"/>
+<text x="35" y="840" text-anchor="start" font-size="11" font-weight="400" fill="#222">005-pvc</text>
+<text x="230" y="840" text-anchor="middle" font-size="10" font-weight="400" fill="#888">★★★</text>
+<rect x="258" y="822" width="197" height="26" fill="hsl(86,70%,85%)"/>
+<text x="356" y="840" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.72</text>
+<rect x="455" y="822" width="197" height="26" fill="hsl(85,70%,85%)"/>
+<text x="553" y="840" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.71</text>
+<rect x="652" y="822" width="197" height="26" fill="hsl(66,70%,85%)"/>
+<text x="750" y="840" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.55</text>
+<rect x="849" y="822" width="197" height="26" fill="hsl(68,70%,85%)"/>
+<text x="947" y="840" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.57</text>
+<rect x="1046" y="822" width="197" height="26" fill="hsl(83,70%,85%)"/>
+<text x="1144" y="840" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.69</text>
+<rect x="1243" y="822" width="197" height="26" fill="hsl(83,70%,85%)"/>
+<text x="1341" y="840" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.69</text>
+<rect x="1440" y="822" width="197" height="26" fill="hsl(75,70%,85%)"/>
+<text x="1538" y="840" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.63</text>
+<rect x="1637" y="822" width="197" height="26" fill="hsl(78,70%,85%)"/>
+<text x="1735" y="840" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.65</text>
+<rect x="1834" y="822" width="202" height="26" fill="hsl(80,70%,85%)"/>
+<text x="1935" y="840" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.67</text>
+<rect x="28" y="848" width="2008" height="26" fill="#f7f8fc"/>
+<text x="35" y="866" text-anchor="start" font-size="11" font-weight="400" fill="#222">006-hpa</text>
+<text x="230" y="866" text-anchor="middle" font-size="10" font-weight="400" fill="#888">★★★</text>
+<rect x="258" y="848" width="197" height="26" fill="hsl(58,70%,85%)"/>
+<text x="356" y="866" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.49</text>
+<rect x="455" y="848" width="197" height="26" fill="hsl(63,70%,85%)"/>
+<text x="553" y="866" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.53</text>
+<rect x="652" y="848" width="197" height="26" fill="hsl(75,70%,85%)"/>
+<text x="750" y="866" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.63</text>
+<rect x="849" y="848" width="197" height="26" fill="hsl(56,70%,85%)"/>
+<text x="947" y="866" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.47</text>
+<rect x="1046" y="848" width="197" height="26" fill="hsl(72,70%,85%)"/>
+<text x="1144" y="866" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.60</text>
+<rect x="1243" y="848" width="197" height="26" fill="hsl(78,70%,85%)"/>
+<text x="1341" y="866" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.65</text>
+<rect x="1440" y="848" width="197" height="26" fill="hsl(28,70%,85%)"/>
+<text x="1538" y="866" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.24</text>
+<rect x="1637" y="848" width="197" height="26" fill="hsl(81,70%,85%)"/>
+<text x="1735" y="866" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.68</text>
+<rect x="1834" y="848" width="202" height="26" fill="hsl(74,70%,85%)"/>
+<text x="1935" y="866" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.62</text>
+<rect x="28" y="874" width="2008" height="26" fill="#fff"/>
+<text x="35" y="892" text-anchor="start" font-size="11" font-weight="400" fill="#222">007-evict</text>
+<text x="230" y="892" text-anchor="middle" font-size="10" font-weight="400" fill="#888">★★★★</text>
+<rect x="258" y="874" width="197" height="26" fill="hsl(85,70%,85%)"/>
+<text x="356" y="892" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.71</text>
+<rect x="455" y="874" width="197" height="26" fill="hsl(79,70%,85%)"/>
+<text x="553" y="892" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.66</text>
+<rect x="652" y="874" width="197" height="26" fill="hsl(79,70%,85%)"/>
+<text x="750" y="892" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.66</text>
+<rect x="849" y="874" width="197" height="26" fill="hsl(85,70%,85%)"/>
+<text x="947" y="892" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.71</text>
+<rect x="1046" y="874" width="197" height="26" fill="hsl(80,70%,85%)"/>
+<text x="1144" y="892" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.67</text>
+<rect x="1243" y="874" width="197" height="26" fill="hsl(78,70%,85%)"/>
+<text x="1341" y="892" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.65</text>
+<rect x="1440" y="874" width="197" height="26" fill="hsl(54,70%,85%)"/>
+<text x="1538" y="892" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.45</text>
+<rect x="1637" y="874" width="197" height="26" fill="hsl(73,70%,85%)"/>
+<text x="1735" y="892" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.62</text>
+<rect x="1834" y="874" width="202" height="26" fill="hsl(93,70%,85%)"/>
+<text x="1935" y="892" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.78</text>
+<rect x="28" y="900" width="2008" height="26" fill="#f7f8fc"/>
+<text x="35" y="918" text-anchor="start" font-size="11" font-weight="400" fill="#222">008-throttle</text>
+<text x="230" y="918" text-anchor="middle" font-size="10" font-weight="400" fill="#888">★★★★</text>
+<rect x="258" y="900" width="197" height="26" fill="hsl(61,70%,85%)"/>
+<text x="356" y="918" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.52</text>
+<rect x="455" y="900" width="197" height="26" fill="hsl(72,70%,85%)"/>
+<text x="553" y="918" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.60</text>
+<rect x="652" y="900" width="197" height="26" fill="hsl(65,70%,85%)"/>
+<text x="750" y="918" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.54</text>
+<rect x="849" y="900" width="197" height="26" fill="hsl(90,70%,85%)"/>
+<text x="947" y="918" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.75</text>
+<rect x="1046" y="900" width="197" height="26" fill="hsl(66,70%,85%)"/>
+<text x="1144" y="918" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.55</text>
+<rect x="1243" y="900" width="197" height="26" fill="hsl(91,70%,85%)"/>
+<text x="1341" y="918" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.76</text>
+<rect x="1440" y="900" width="197" height="26" fill="hsl(51,70%,85%)"/>
+<text x="1538" y="918" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.43</text>
+<rect x="1637" y="900" width="197" height="26" fill="hsl(67,70%,85%)"/>
+<text x="1735" y="918" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.57</text>
+<rect x="1834" y="900" width="202" height="26" fill="hsl(76,70%,85%)"/>
+<text x="1935" y="918" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.64</text>
+<rect x="28" y="926" width="2008" height="26" fill="#fff"/>
+<text x="35" y="944" text-anchor="start" font-size="11" font-weight="400" fill="#222">009-ext-dep</text>
+<text x="230" y="944" text-anchor="middle" font-size="10" font-weight="400" fill="#888">★★★★★</text>
+<rect x="258" y="926" width="197" height="26" fill="hsl(91,70%,85%)"/>
+<text x="356" y="944" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.76</text>
+<rect x="455" y="926" width="197" height="26" fill="hsl(68,70%,85%)"/>
+<text x="553" y="944" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.57</text>
+<rect x="652" y="926" width="197" height="26" fill="hsl(78,70%,85%)"/>
+<text x="750" y="944" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.66</text>
+<rect x="849" y="926" width="197" height="26" fill="hsl(92,70%,85%)"/>
+<text x="947" y="944" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.77</text>
+<rect x="1046" y="926" width="197" height="26" fill="hsl(56,70%,85%)"/>
+<text x="1144" y="944" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.47</text>
+<rect x="1243" y="926" width="197" height="26" fill="hsl(91,70%,85%)"/>
+<text x="1341" y="944" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.76</text>
+<rect x="1440" y="926" width="197" height="26" fill="hsl(61,70%,85%)"/>
+<text x="1538" y="944" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.52</text>
+<rect x="1637" y="926" width="197" height="26" fill="hsl(82,70%,85%)"/>
+<text x="1735" y="944" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.68</text>
+<rect x="1834" y="926" width="202" height="26" fill="hsl(81,70%,85%)"/>
+<text x="1935" y="944" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.68</text>
+<rect x="28" y="952" width="2008" height="26" fill="#f7f8fc"/>
+<text x="35" y="970" text-anchor="start" font-size="11" font-weight="400" fill="#222">010-chaos</text>
+<text x="230" y="970" text-anchor="middle" font-size="10" font-weight="400" fill="#888">★★★★★</text>
+<rect x="258" y="952" width="197" height="26" fill="hsl(39,70%,85%)"/>
+<text x="356" y="970" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.33</text>
+<rect x="455" y="952" width="197" height="26" fill="hsl(75,70%,85%)"/>
+<text x="553" y="970" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.63</text>
+<rect x="652" y="952" width="197" height="26" fill="hsl(76,70%,85%)"/>
+<text x="750" y="970" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.64</text>
+<rect x="849" y="952" width="197" height="26" fill="hsl(69,70%,85%)"/>
+<text x="947" y="970" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.58</text>
+<rect x="1046" y="952" width="197" height="26" fill="hsl(79,70%,85%)"/>
+<text x="1144" y="970" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.67</text>
+<rect x="1243" y="952" width="197" height="26" fill="hsl(86,70%,85%)"/>
+<text x="1341" y="970" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.72</text>
+<rect x="1440" y="952" width="197" height="26" fill="hsl(60,70%,85%)"/>
+<text x="1538" y="970" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.51</text>
+<rect x="1637" y="952" width="197" height="26" fill="hsl(59,70%,85%)"/>
+<text x="1735" y="970" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.50</text>
+<rect x="1834" y="952" width="202" height="26" fill="hsl(99,70%,85%)"/>
+<text x="1935" y="970" text-anchor="middle" font-size="11" font-weight="400" fill="#222">0.83</text>
+<rect x="28" y="978" width="2008" height="26" fill="#e8f5e9"/>
+<text x="35" y="996" text-anchor="start" font-size="11" font-weight="700" fill="#1b5e20">평균 Ops_Score</text>
+<rect x="258" y="978" width="197" height="26" fill="hsl(78,80%,80%)"/>
+<text x="356" y="996" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">0.654</text>
+<rect x="455" y="978" width="197" height="26" fill="hsl(76,80%,80%)"/>
+<text x="553" y="996" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">0.636</text>
+<rect x="652" y="978" width="197" height="26" fill="hsl(77,80%,80%)"/>
+<text x="750" y="996" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">0.647</text>
+<rect x="849" y="978" width="197" height="26" fill="hsl(82,80%,80%)"/>
+<text x="947" y="996" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">0.686</text>
+<rect x="1046" y="978" width="197" height="26" fill="hsl(72,80%,80%)"/>
+<text x="1144" y="996" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">0.603</text>
+<rect x="1243" y="978" width="197" height="26" fill="hsl(87,80%,80%)"/>
+<text x="1341" y="996" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">0.733</text>
+<rect x="1440" y="978" width="197" height="26" fill="hsl(69,80%,80%)"/>
+<text x="1538" y="996" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">0.578</text>
+<rect x="1637" y="978" width="197" height="26" fill="hsl(76,80%,80%)"/>
+<text x="1735" y="996" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">0.637</text>
+<rect x="1834" y="978" width="202" height="26" fill="hsl(84,80%,80%)"/>
+<text x="1935" y="996" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">0.706</text>
+<line x1="203" y1="666" x2="203" y2="1004" stroke="#e0e0e0" stroke-width="0.6"/>
+<line x1="258" y1="666" x2="258" y2="1004" stroke="#e0e0e0" stroke-width="0.6"/>
+<line x1="455" y1="666" x2="455" y2="1004" stroke="#e0e0e0" stroke-width="0.6"/>
+<line x1="652" y1="666" x2="652" y2="1004" stroke="#e0e0e0" stroke-width="0.6"/>
+<line x1="849" y1="666" x2="849" y2="1004" stroke="#e0e0e0" stroke-width="0.6"/>
+<line x1="1046" y1="666" x2="1046" y2="1004" stroke="#e0e0e0" stroke-width="0.6"/>
+<line x1="1243" y1="666" x2="1243" y2="1004" stroke="#e0e0e0" stroke-width="0.6"/>
+<line x1="1440" y1="666" x2="1440" y2="1004" stroke="#e0e0e0" stroke-width="0.6"/>
+<line x1="1637" y1="666" x2="1637" y2="1004" stroke="#e0e0e0" stroke-width="0.6"/>
+<line x1="1834" y1="666" x2="1834" y2="1004" stroke="#e0e0e0" stroke-width="0.6"/>
+<line x1="28" y1="666" x2="2036" y2="666" stroke="#e0e0e0" stroke-width="0.5"/>
+<line x1="28" y1="692" x2="2036" y2="692" stroke="#e0e0e0" stroke-width="0.5"/>
+<line x1="28" y1="718" x2="2036" y2="718" stroke="#e0e0e0" stroke-width="0.5"/>
+<line x1="28" y1="744" x2="2036" y2="744" stroke="#e0e0e0" stroke-width="0.5"/>
+<line x1="28" y1="770" x2="2036" y2="770" stroke="#e0e0e0" stroke-width="0.5"/>
+<line x1="28" y1="796" x2="2036" y2="796" stroke="#e0e0e0" stroke-width="0.5"/>
+<line x1="28" y1="822" x2="2036" y2="822" stroke="#e0e0e0" stroke-width="0.5"/>
+<line x1="28" y1="848" x2="2036" y2="848" stroke="#e0e0e0" stroke-width="0.5"/>
+<line x1="28" y1="874" x2="2036" y2="874" stroke="#e0e0e0" stroke-width="0.5"/>
+<line x1="28" y1="900" x2="2036" y2="900" stroke="#e0e0e0" stroke-width="0.5"/>
+<line x1="28" y1="926" x2="2036" y2="926" stroke="#e0e0e0" stroke-width="0.5"/>
+<line x1="28" y1="952" x2="2036" y2="952" stroke="#e0e0e0" stroke-width="0.5"/>
+<line x1="28" y1="978" x2="2036" y2="978" stroke="#e0e0e0" stroke-width="0.5"/>
+<line x1="28" y1="1004" x2="2036" y2="1004" stroke="#e0e0e0" stroke-width="0.5"/>
+<rect x="28" y="666" width="2008" height="338" fill="none" stroke="#c5cae9" stroke-width="1" rx="6"/>
+<text x="28" y="1024" font-size="10" fill="#888">Ops_Score = Q×S × (0.55 + 0.45 × Efficiency)     색상: 높을수록 녹색     복수 iter 평균값     인프라 실패(OAuth/rate-limit) 제외</text>
+</svg>

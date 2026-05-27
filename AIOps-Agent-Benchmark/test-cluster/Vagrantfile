@@ -5,8 +5,8 @@
 # max number of worker nodes
 N = 3
 # each of components to install
-k8s_V    = '1.35.4-1.1'                   # Kubernetes
-ctrd_V   = '2.2.2-1~ubuntu.24.04~noble'  # Containerd
+k8s_V    = '1.36.0-1.1'                   # Kubernetes
+ctrd_V   = '2.2.3-1~ubuntu.24.04~noble'  # Containerd
 ## /configuration variables ##
 
 Vagrant.configure("2") do |config|
@@ -24,8 +24,8 @@ Vagrant.configure("2") do |config|
         vb.customize ["modifyvm", :id, "--groups", "/AIOps-Agent-Benchmark"]
       end
       cfg.vm.host_name = "cp-k8s"
-      cfg.vm.network "private_network", ip: "192.168.1.10"
-      cfg.vm.network "forwarded_port", guest: 22, host: 60010, auto_correct: true, id: "ssh"
+      cfg.vm.network "private_network", ip: "192.168.1.150"
+      cfg.vm.network "forwarded_port", guest: 22, host: 60150, auto_correct: true, id: "ssh"
       cfg.vm.synced_folder "../data", "/vagrant", disabled: true
       cfg.vm.provision "shell", path: "k8s_env_build.sh", args: [ N, k8s_V[0..3] ]
       cfg.vm.provision "shell", path: "k8s_pkg_cfg.sh", args: [ k8s_V, ctrd_V, "CP"]
@@ -47,8 +47,8 @@ Vagrant.configure("2") do |config|
         vb.customize ["modifyvm", :id, "--groups", "/AIOps-Agent-Benchmark"]
       end
       cfg.vm.host_name = "w#{i}-k8s"
-      cfg.vm.network "private_network", ip: "192.168.1.10#{i}"
-      cfg.vm.network "forwarded_port", guest: 22, host: "6010#{i}", auto_correct: true, id: "ssh"
+      cfg.vm.network "private_network", ip: "192.168.1.15#{i}"
+      cfg.vm.network "forwarded_port", guest: 22, host: "6015#{i}", auto_correct: true, id: "ssh"
       cfg.vm.synced_folder "../data", "/vagrant", disabled: true
       cfg.vm.provision "shell", path: "k8s_env_build.sh", args: [ N, k8s_V[0..3] ]
       cfg.vm.provision "shell", path: "k8s_pkg_cfg.sh", args: [ k8s_V, ctrd_V, "W" ]

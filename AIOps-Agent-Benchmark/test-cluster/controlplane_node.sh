@@ -2,7 +2,7 @@
 
 # init kubernetes (w/ containerd)
 kubeadm init --token 123456.1234567890123456 --token-ttl 0 \
-             --pod-network-cidr=172.16.0.0/16 --apiserver-advertise-address=192.168.1.10 \
+             --pod-network-cidr=172.16.0.0/16 --apiserver-advertise-address=192.168.1.150 \
              --cri-socket=unix:///run/containerd/containerd.sock
 
 # config for master node only 

@@ -35,6 +35,6 @@ modprobe br_netfilter
 
 # local small dns & vagrant cannot parse and delivery shell code.
 echo "127.0.0.1 localhost" > /etc/hosts # localhost name will use by calico-node
-echo "192.168.1.10 cp-k8s" >> /etc/hosts
-for (( i=1; i<=$1; i++  )); do echo "192.168.1.10$i w$i-k8s" >> /etc/hosts; done
+echo "192.168.1.150 cp-k8s" >> /etc/hosts
+for (( i=1; i<=$1; i++  )); do echo "192.168.1.15$i w$i-k8s" >> /etc/hosts; done
 
