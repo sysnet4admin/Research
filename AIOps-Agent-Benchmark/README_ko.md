@@ -12,7 +12,7 @@
 
 ## 결과 (평균 Ops_Score)
 
-![Tier Comparison](metrics/tier-comparison-2026-05-27_ko.svg)
+![Tier Comparison](metrics/tier-comparison/2026-05-27-charts/main_ko.svg)
 
 | 티어 | 에이전트 | Ops_Score | Q×S | 효율 | Pass |
 |---|---|---|---|---|---|

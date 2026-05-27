@@ -3,3 +3,8 @@
 
 # Vagrant local state (machine IDs, bundler cache, loader stubs)
 .vagrant/
+
+# Python build artifacts
+__pycache__/
+*.pyc
+*.pyo

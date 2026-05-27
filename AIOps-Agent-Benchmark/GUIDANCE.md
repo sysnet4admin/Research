@@ -178,6 +178,17 @@ Efficiency  = 0.40×(1−time) + 0.40×(1−token) + 0.20×(1−toolcall)
 - `token`은 effective input(input + cache_creation + cache_read) + output 기준이다. 에이전트끼리 공정하게 비교하기 위해서다.
 - 달러 비용은 효율 계산에서 뺀다(5.1의 비용 제외 원칙 참조).
 
+### 5.4 표기 컨벤션
+
+데이터 파일과 발행물의 표기를 의도적으로 분리한다.
+
+| 영역 | 컨벤션 | 예시 |
+|---|---|---|
+| CSV 컬럼명, JSON 키, Python 변수 | snake_case | `ops_score`, `quality_score`, `quality_x_safety`, `efficiency_score` |
+| 발행물(README, 블로그, 차트 라벨, 본문 표) | PascalCase | `Ops_Score`, `Quality × Safety`, `Efficiency` |
+
+분석 스크립트를 작성할 때 CSV 헤더는 반드시 **소문자 표기**(예: `r["ops_score"]`)로 접근한다. 발행 문서나 차트에서 점수 명칭을 노출할 때는 가독성을 위해 **대문자 표기**(예: `Ops_Score`)를 쓴다. 두 컨벤션은 영역 안에서 일관되고 의도된 분리이므로 통일하지 않는다.
+
 ## 6. 공정성 통제
 
 - **같은 리포 상태**: 대상 리포를 특정 커밋(해시까지 기록)으로 고정한다.

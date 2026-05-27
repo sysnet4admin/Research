@@ -12,7 +12,7 @@ This is not a general coding benchmark; it is scoped to the **AIOps / SRE** cont
 
 ## Results (Average Ops_Score)
 
-![Tier Comparison](metrics/tier-comparison-2026-05-27.svg)
+![Tier Comparison](metrics/tier-comparison/2026-05-27-charts/main.svg)
 
 | Tier | Agent | Ops_Score | Q×S | Efficiency | Pass |
 |---|---|---|---|---|---|
