@@ -7,8 +7,9 @@
 공식 스펙(Support: Core/Extended × Channel: standard/experimental)에 정렬한 **라이브 실측**과, 공식 conformance가 보지 않는 **품질/비기능 지표**를 함께 본다.
 
 ## 산출물
-- [`README_tables_ko.md`](README_tables_ko.md) 상세 표 (요약, 항목별, canary 품질, experimental, 벤더 매트릭스, 비기능, auth, 플레이크). GitHub에서 바로 렌더된다.
-- [`report_ko.html`](report_ko.html) 같은 내용의 인터랙티브 버전. 브라우저로 열거나 raw.githack.com으로 렌더해 본다.
+- [`README_tables_ko.md`](README_tables_ko.md) 상세 표 (요약, 항목별, canary 품질, experimental, 벤더 매트릭스, 비기능, auth, 플레이크). GitHub에서 바로 렌더되며, 여기서는 이게 정본이다.
+
+> 파이프라인은 블로그 글용으로 스타일링된 단일 페이지 `report_ko.html`(인터랙티브)도 생성하지만, GitHub은 데이터를 마크다운으로 제공하고 HTML은 소스로만 보여주므로 여기엔 커밋하지 않는다. 재생성은 `scripts/finalize.sh`.
 
 ## 이 뷰가 공식 conformance suite와 다른 점
 공식 conformance는 벤더가 자가제출하는 **이진 PASS/FAIL**이고 표준+실험 채널 기능만 본다. 이 뷰는:

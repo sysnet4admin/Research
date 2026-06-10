@@ -5,12 +5,14 @@ results/aggregated-v3-fresh.json
 results/aggregated-ops.json
 results/aggregated-kong-expr.json
 results/aggregated-kgw-ba.json
-# 레거시 단일뷰 렌더(미사용)만 무시
+# 역할 분리: GitHub은 마크다운 정본만 보유, HTML 렌더는 블로그/로컬 전용.
+# README_tables{,_ko}.md = GitHub 마크다운 렌더(정본, 커밋 대상).
+# report{,_ko}.html = 블로그/로컬용 인터랙티브(파이프라인이 생성하나 커밋 안 함,
+#   GitHub은 HTML을 소스로만 보여줘 의미 없음). 재생성: scripts/finalize.sh.
 metrics/report.html
 metrics/README_tables.md
-# 뷰별 렌더(metrics/*/README_tables.md, report.html)는 발행 산출물이라 커밋 대상.
-# README_tables.md = GitHub 마크다운 렌더(정문), report.html = 블로그용 인터랙티브
-# (raw.githack.com 렌더). 재생성: scripts/finalize.sh. 손으로 쓴 README.md도 커밋 대상.
+metrics/*/report.html
+metrics/*/report_ko.html
 # results/rounds/round-*.json 는 실제 측정 산출이므로 커밋 대상(여기 무시 안 함)
 # 합성 검증 데이터(_gen_synthetic.py)는 실제 라운드와 분리, 커밋 제외
 results/_synthetic/

@@ -7,8 +7,9 @@ Question: **I run ingress-nginx. What carries over, and what breaks, if I move t
 > The official Gateway API recommendation is to "pick a conformant-certified implementation." But even with conformant certification, the actual supported feature breadth ranges from 6 to 13. Comparing that gap is what this view does.
 
 ## Outputs
-- [`README_tables.md`](README_tables.md): the migration checklist (4 difficulty grades, 26 items, per-implementation coverage). Rendered directly on GitHub.
-- [`report.html`](report.html): the same content as an interactive version. Open it in a browser or render it via raw.githack.com.
+- [`README_tables.md`](README_tables.md): the migration checklist (4 difficulty grades, 26 items, per-implementation coverage), rendered directly on GitHub. This is the canonical output here.
+
+> The pipeline also generates a styled single-page `report.html` (interactive) for the blog write-up. It is not committed here, since GitHub serves the data as Markdown and shows HTML only as source. Regenerate with `scripts/finalize.sh`.
 
 ## Why now (context)
 - **ingress-nginx retirement confirmed** (announced 2025-11-11): maintenance ends March 2026, no security patches after that. The successor controller InGate was abandoned. The maintainers' recommendation is "migrate to the Gateway API".

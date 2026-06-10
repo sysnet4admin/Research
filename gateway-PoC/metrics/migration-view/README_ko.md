@@ -7,8 +7,9 @@
 > Gateway API 공식 권고는 "conformant 인증을 받은 구현체를 고르라"는 것이다. 하지만 conformant 인증을 받아도 실제 지원하는 기능 폭은 6개에서 13개까지 갈린다. 그 차이를 비교하는 것이 이 뷰다.
 
 ## 산출물
-- [`README_tables_ko.md`](README_tables_ko.md) 마이그레이션 점검표 (난이도 4등급, 26항목, 구현체별 커버리지). GitHub에서 바로 렌더된다.
-- [`report_ko.html`](report_ko.html) 같은 내용의 인터랙티브 버전. 브라우저로 열거나 raw.githack.com으로 렌더해 본다.
+- [`README_tables_ko.md`](README_tables_ko.md) 마이그레이션 점검표 (난이도 4등급, 26항목, 구현체별 커버리지). GitHub에서 바로 렌더되며, 여기서는 이게 정본이다.
+
+> 파이프라인은 블로그 글용으로 스타일링된 단일 페이지 `report_ko.html`(인터랙티브)도 생성하지만, GitHub은 데이터를 마크다운으로 제공하고 HTML은 소스로만 보여주므로 여기엔 커밋하지 않는다. 재생성은 `scripts/finalize.sh`.
 
 ## 왜 지금인가 (맥락)
 - **ingress-nginx 은퇴 확정** (2025-11-11 발표): 2026년 3월 유지보수 중단, 이후 보안 패치 없음. 후속 컨트롤러 InGate는 무산. 메인테이너 권고는 "Gateway API로 마이그레이션".

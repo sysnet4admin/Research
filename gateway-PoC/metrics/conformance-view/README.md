@@ -7,8 +7,9 @@ Question: **how faithfully does each implementation realize the Gateway API spec
 It looks at both the **live measurement** aligned to the official spec (Support: Core/Extended × Channel: standard/experimental) and the **quality/non-functional metrics** that official conformance does not see.
 
 ## Outputs
-- [`README_tables.md`](README_tables.md): the detailed tables (summary, per-item, canary quality, experimental, vendor matrix, non-functional, auth, flake). Rendered directly on GitHub.
-- [`report.html`](report.html): the same content as an interactive version. Open it in a browser or render it via raw.githack.com.
+- [`README_tables.md`](README_tables.md): the detailed tables (summary, per-item, canary quality, experimental, vendor matrix, non-functional, auth, flake), rendered directly on GitHub. This is the canonical output here.
+
+> The pipeline also generates a styled single-page `report.html` (interactive) for the blog write-up. It is not committed here, since GitHub serves the data as Markdown and shows HTML only as source. Regenerate with `scripts/finalize.sh`.
 
 ## How this view differs from the official conformance suite
 Official conformance is a vendor-self-submitted **binary PASS/FAIL** and only looks at standard + experimental channel features. This view:
