@@ -451,7 +451,7 @@ TXT = {
         "m_title": "Gateway API PoC 출발점 뷰 (ingress-nginx → Gateway API {gwv} 마이그레이션)",
         "m_lens": "> **이 뷰의 차별점**: 공식 conformance(선언 PASS/FAIL), ingress2gateway(기계 변환 여부)와 달리, "
             "라이브 클러스터 **실측** + conformance 범위 밖 **구현체 기능**(rate-limit, auth, body-size) + "
-            "conformant 내부의 **기능폭 격차**를 한 잣대로 가로비교한다. 엄밀성(스펙) 뷰는 "
+            "conformant 내부의 **기능폭 격차**를 같은 잣대로 나란히 비교한다. 엄밀성(스펙) 뷰는 "
             "`../conformance-view/` 참조.",
         "m_basis": "> **측정 기준: Gateway API {gwv}** (2026-06 측정 시점, ingress2gateway {i2gw}). "
             "난이도 등급은 이 버전 기준이다. **v1.5(2026-04-21 릴리스) 신규 기능**(mTLS 클라이언트 등)은 "

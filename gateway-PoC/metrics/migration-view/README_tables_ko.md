@@ -2,7 +2,7 @@
 
 > **Gateway API 공식 권고는 'conformant 인증을 받은 구현체를 고르라'는 것이다. 하지만 conformant 인증을 받아도 실제 지원하는 기능 폭은 6개에서 13개까지 갈린다. 그 차이를 비교하는 것이 이 뷰다.**
 
-> **이 뷰의 차별점**: 공식 conformance(선언 PASS/FAIL), ingress2gateway(기계 변환 여부)와 달리, 라이브 클러스터 **실측** + conformance 범위 밖 **구현체 기능**(rate-limit, auth, body-size) + conformant 내부의 **기능폭 격차**를 한 잣대로 가로비교한다. 엄밀성(스펙) 뷰는 `../conformance-view/` 참조.
+> **이 뷰의 차별점**: 공식 conformance(선언 PASS/FAIL), ingress2gateway(기계 변환 여부)와 달리, 라이브 클러스터 **실측** + conformance 범위 밖 **구현체 기능**(rate-limit, auth, body-size) + conformant 내부의 **기능폭 격차**를 같은 잣대로 나란히 비교한다. 엄밀성(스펙) 뷰는 `../conformance-view/` 참조.
 
 > **측정 기준: Gateway API v1.4** (2026-06 측정 시점, ingress2gateway 1.1.0). 난이도 등급은 이 버전 기준이다. **v1.5(2026-04-21 릴리스) 신규 기능**(mTLS 클라이언트 등)은 v1.4 측정 범위 밖이라 `TBD(v1.5)`로 표기하고 차기 재베이스라인 대상이다(재베이스라인은 Cilium 1.20 stable, 7월 말 예정 이후). 반면 **CORS, 외부 인증, TLSRoute는 v1.4 experimental 채널에서 이미 7종 실측**했으며, v1.5에서 표준 채널로 승격되면 🟡→🟢으로 올라갈 수 있다. 셀 값 출처는 엄밀성 뷰의 실측과 동일(같은 측정 데이터).
 

@@ -17,7 +17,7 @@
 - **ingress2gateway 1.0** (2026-03-20): 30개 넘는 어노테이션을 자동 변환하고, 변환 불가 항목은 경고한다. 이 도구가 사실상 "마이그레이션 자동화 경계선"을 그어준다.
 - **"Before You Migrate"** (2026-02-27): regex 의미 차이(prefix 매치, 대소문자 처리), 스니펫, 외부 인증, mTLS 같은 실제 함정을 메인테이너가 직접 정리.
 
-## 난이도 4등급 (점검표의 척추)
+## 난이도 4등급 (점검표의 뼈대)
 - 🟢 **표준 마이그레이션**: Core/Extended-std, ingress2gateway 자동 변환, 표준 채널(메인테이너 표현으로 "Ingress만큼 안정"). 대체로 그대로 전환.
 - 🟡 **주의 마이그레이션**: 실험 채널이거나 의미가 달라 검증 필수. CORS, 외부 인증, mTLS 클라이언트, TLSRoute는 v1.4 실험 채널이며 v1.5에서 Standard 승격 예정.
 - 🟠 **벤더 종속**: 표준 API 없음, 벤더 CRD로만 제공해서 락인(lock-in)이 재발한다. rate-limit, body-size, JWT가 여기.
@@ -25,7 +25,7 @@
 
 ## 이 뷰가 공식 자산과 다른 점
 - 공식 **conformance suite**는 "스펙 준수 이진 PASS/FAIL"만, **ingress2gateway**는 "기계적 변환 여부"만, **마이그레이션 가이드**는 고수준이다.
-- 이 뷰는 라이브 **실측**(선언이 아니라)에, conformance 범위 밖 **벤더 기능**(rate-limit, auth, body-size)과 conformant 구현체 안에서의 **기능 폭 격차**를 한 잣대로 가로비교한다. 예: CORS 어노테이션은 변환되지만 실측하면 7종 중 3종만 통과한다.
+- 이 뷰는 라이브 **실측**(선언이 아니라)에, conformance 범위 밖 **벤더 기능**(rate-limit, auth, body-size)과 conformant 구현체 안에서의 **기능 폭 격차**를 같은 잣대로 나란히 비교한다. 예: CORS 어노테이션은 변환되지만 실측하면 7종 중 3종만 통과한다.
 
 ## 출처(1차)와 한계
 - 출처: ingress-nginx 은퇴 발표(2025-11-11), "Before You Migrate"(2026-02-27), ingress2gateway 1.0(2026-03-20), IngressNightmare CVE-2025-1974, Reddit "Gateway API for Ingress-NGINX, a Maintainer's Perspective"(robertjscott).

@@ -480,7 +480,7 @@ tests:
 # 차별점(공식 자산과 중복 아님): conformance suite는 "스펙 준수 이진 PASS/FAIL"만,
 # ingress2gateway는 "기계적 변환 여부"만, 마이그레이션 가이드는 고수준. 우리는 라이브
 # 실측(선언 아님) + conformance 범위 밖 구현체기능(rate-limit/auth/body-size) + conformant
-# 내부의 기능폭 격차를 한 잣대로 가로비교한다.
+# 내부의 기능폭 격차를 같은 잣대로 나란히 비교한다.
 #
 # 출처(1차):
 #  - ingress-nginx 은퇴 발표(2025-11-11 kubernetes.io), "Before You Migrate"(2026-02-27)
@@ -488,7 +488,7 @@ tests:
 #  - IngressNightmare CVE-2025-1974(snippet/annotation→raw nginx 주입이 은퇴 동인)
 #  - Reddit "Gateway API for Ingress-NGINX, a Maintainer's Perspective"(robertjscott, GW API 메인테이너)
 #
-# tier 정의(난이도 4등급, 출발점 뷰의 척추):
+# tier 정의(난이도 4등급, 출발점 뷰의 뼈대):
 #  standard = Core/Extended-std, i2gw 자동변환, 표준채널(메인테이너: "Ingress만큼 안정"). "그냥 넘어감"
 #  caution  = 실험채널이거나 의미가 달라 검증 필수("Before You Migrate" 함정). v1.5에서 다수 승격 예정
 #  vendor   = 표준 API 없음, 구현체 CRD로만 → 락인 재발(hennexl: "결국 impl-specific")
