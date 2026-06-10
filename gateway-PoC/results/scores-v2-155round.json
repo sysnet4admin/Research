@@ -1,0 +1,575 @@
+{
+  "gateway_api_version": "v1.4",
+  "rounds": 155,
+  "supported_threshold": 1.0,
+  "implementations": {
+    "nginx": {
+      "version": "2.4.2",
+      "core_conformant": true,
+      "core_failed": [],
+      "canary_quality": {
+        "v1_total": 6156,
+        "v2_total": 1594,
+        "samples": 7750,
+        "v1_ratio": 0.7943,
+        "target_ratio": 0.8,
+        "within_2sigma": true,
+        "rounds_sampled": 155,
+        "per_round_v1_mean": 39.72,
+        "per_round_v1_min": 32,
+        "per_round_v1_max": 48,
+        "per_round_excursions": 5
+      },
+      "extended_breadth": {
+        "supported": 4,
+        "total": 5,
+        "ratio": 0.8,
+        "supported_features": [
+          "https-redirect",
+          "url-rewrite",
+          "backend-tls",
+          "grpc-routing"
+        ],
+        "unsupported_features": [
+          "timeout"
+        ]
+      },
+      "experimental": {
+        "retry": "no-data",
+        "session-affinity": "unsupported"
+      },
+      "impl_matrix": {
+        "rate-limiting": {
+          "state": "pass",
+          "matrix": {
+            "matrix_value": "low-level-config",
+            "rate_limited": 0
+          }
+        },
+        "health-check": {
+          "state": "no-data",
+          "matrix": {
+            "todo": "live: 벤더 health/failover"
+          }
+        },
+        "load-test": {
+          "state": "pass",
+          "matrix": {
+            "success": 20,
+            "total": 20
+          }
+        },
+        "failover-recovery": {
+          "state": "no-data",
+          "matrix": {
+            "todo": "live: gateway pod 재시작 후 정상화"
+          }
+        },
+        "config-robustness": {
+          "state": "pass",
+          "matrix": {}
+        }
+      },
+      "flaky_tests": [
+        "canary-traffic"
+      ],
+      "data_errors": {
+        "retry": {
+          "not-configured": 155
+        },
+        "health-check": {
+          "not-configured": 155
+        },
+        "failover-recovery": {
+          "not-configured": 155
+        }
+      }
+    },
+    "envoy": {
+      "version": "v1.7.3",
+      "core_conformant": true,
+      "core_failed": [],
+      "canary_quality": {
+        "v1_total": 6200,
+        "v2_total": 1550,
+        "samples": 7750,
+        "v1_ratio": 0.8,
+        "target_ratio": 0.8,
+        "within_2sigma": true,
+        "rounds_sampled": 155,
+        "per_round_v1_mean": 40.0,
+        "per_round_v1_min": 39,
+        "per_round_v1_max": 41,
+        "per_round_excursions": 0
+      },
+      "extended_breadth": {
+        "supported": 5,
+        "total": 5,
+        "ratio": 1.0,
+        "supported_features": [
+          "https-redirect",
+          "url-rewrite",
+          "timeout",
+          "backend-tls",
+          "grpc-routing"
+        ],
+        "unsupported_features": []
+      },
+      "experimental": {
+        "retry": "no-data",
+        "session-affinity": "pass"
+      },
+      "impl_matrix": {
+        "rate-limiting": {
+          "state": "pass",
+          "matrix": {
+            "matrix_value": "unsupported",
+            "rate_limited": 0
+          }
+        },
+        "health-check": {
+          "state": "no-data",
+          "matrix": {
+            "todo": "live: 벤더 health/failover"
+          }
+        },
+        "load-test": {
+          "state": "pass",
+          "matrix": {
+            "success": 20,
+            "total": 20
+          }
+        },
+        "failover-recovery": {
+          "state": "no-data",
+          "matrix": {
+            "todo": "live: gateway pod 재시작 후 정상화"
+          }
+        },
+        "config-robustness": {
+          "state": "pass",
+          "matrix": {}
+        }
+      },
+      "flaky_tests": [],
+      "data_errors": {
+        "retry": {
+          "not-configured": 155
+        },
+        "health-check": {
+          "not-configured": 155
+        },
+        "failover-recovery": {
+          "not-configured": 155
+        }
+      }
+    },
+    "istio": {
+      "version": "1.30.0",
+      "core_conformant": true,
+      "core_failed": [],
+      "canary_quality": {
+        "v1_total": 6197,
+        "v2_total": 1553,
+        "samples": 7750,
+        "v1_ratio": 0.7996,
+        "target_ratio": 0.8,
+        "within_2sigma": true,
+        "rounds_sampled": 155,
+        "per_round_v1_mean": 39.98,
+        "per_round_v1_min": 32,
+        "per_round_v1_max": 47,
+        "per_round_excursions": 4
+      },
+      "extended_breadth": {
+        "supported": 5,
+        "total": 5,
+        "ratio": 1.0,
+        "supported_features": [
+          "https-redirect",
+          "url-rewrite",
+          "timeout",
+          "backend-tls",
+          "grpc-routing"
+        ],
+        "unsupported_features": []
+      },
+      "experimental": {
+        "retry": "no-data",
+        "session-affinity": "unsupported"
+      },
+      "impl_matrix": {
+        "rate-limiting": {
+          "state": "pass",
+          "matrix": {
+            "matrix_value": "low-level-config",
+            "rate_limited": 0
+          }
+        },
+        "health-check": {
+          "state": "no-data",
+          "matrix": {
+            "todo": "live: 벤더 health/failover"
+          }
+        },
+        "load-test": {
+          "state": "pass",
+          "matrix": {
+            "success": 20,
+            "total": 20
+          }
+        },
+        "failover-recovery": {
+          "state": "no-data",
+          "matrix": {
+            "todo": "live: gateway pod 재시작 후 정상화"
+          }
+        },
+        "config-robustness": {
+          "state": "pass",
+          "matrix": {}
+        }
+      },
+      "flaky_tests": [
+        "canary-traffic"
+      ],
+      "data_errors": {
+        "retry": {
+          "not-configured": 155
+        },
+        "health-check": {
+          "not-configured": 155
+        },
+        "failover-recovery": {
+          "not-configured": 155
+        }
+      }
+    },
+    "cilium": {
+      "version": "1.19.4",
+      "core_conformant": true,
+      "core_failed": [],
+      "canary_quality": {
+        "v1_total": 6179,
+        "v2_total": 1571,
+        "samples": 7750,
+        "v1_ratio": 0.7973,
+        "target_ratio": 0.8,
+        "within_2sigma": true,
+        "rounds_sampled": 155,
+        "per_round_v1_mean": 39.86,
+        "per_round_v1_min": 31,
+        "per_round_v1_max": 47,
+        "per_round_excursions": 3
+      },
+      "extended_breadth": {
+        "supported": 4,
+        "total": 5,
+        "ratio": 0.8,
+        "supported_features": [
+          "https-redirect",
+          "url-rewrite",
+          "timeout",
+          "grpc-routing"
+        ],
+        "unsupported_features": [
+          "backend-tls"
+        ]
+      },
+      "experimental": {
+        "retry": "no-data",
+        "session-affinity": "unsupported"
+      },
+      "impl_matrix": {
+        "rate-limiting": {
+          "state": "pass",
+          "matrix": {
+            "matrix_value": "unsupported",
+            "rate_limited": 0
+          }
+        },
+        "health-check": {
+          "state": "no-data",
+          "matrix": {
+            "todo": "live: 벤더 health/failover"
+          }
+        },
+        "load-test": {
+          "state": "pass",
+          "matrix": {
+            "success": 20,
+            "total": 20
+          }
+        },
+        "failover-recovery": {
+          "state": "no-data",
+          "matrix": {
+            "todo": "live: gateway pod 재시작 후 정상화"
+          }
+        },
+        "config-robustness": {
+          "state": "pass",
+          "matrix": {}
+        }
+      },
+      "flaky_tests": [
+        "canary-traffic"
+      ],
+      "data_errors": {
+        "retry": {
+          "not-configured": 155
+        },
+        "health-check": {
+          "not-configured": 155
+        },
+        "failover-recovery": {
+          "not-configured": 155
+        }
+      }
+    },
+    "kong": {
+      "version": "KGO 2.1",
+      "core_conformant": true,
+      "core_failed": [],
+      "canary_quality": {
+        "v1_total": 6199,
+        "v2_total": 1551,
+        "samples": 7750,
+        "v1_ratio": 0.7999,
+        "target_ratio": 0.8,
+        "within_2sigma": true,
+        "rounds_sampled": 155,
+        "per_round_v1_mean": 39.99,
+        "per_round_v1_min": 38,
+        "per_round_v1_max": 42,
+        "per_round_excursions": 0
+      },
+      "extended_breadth": {
+        "supported": 1,
+        "total": 5,
+        "ratio": 0.2,
+        "supported_features": [
+          "url-rewrite"
+        ],
+        "unsupported_features": [
+          "https-redirect",
+          "timeout",
+          "backend-tls",
+          "grpc-routing"
+        ]
+      },
+      "experimental": {
+        "retry": "no-data",
+        "session-affinity": "unsupported"
+      },
+      "impl_matrix": {
+        "rate-limiting": {
+          "state": "pass",
+          "matrix": {
+            "matrix_value": "native",
+            "rate_limited": 0
+          }
+        },
+        "health-check": {
+          "state": "no-data",
+          "matrix": {
+            "todo": "live: 벤더 health/failover"
+          }
+        },
+        "load-test": {
+          "state": "pass",
+          "matrix": {
+            "success": 20,
+            "total": 20
+          }
+        },
+        "failover-recovery": {
+          "state": "no-data",
+          "matrix": {
+            "todo": "live: gateway pod 재시작 후 정상화"
+          }
+        },
+        "config-robustness": {
+          "state": "flaky",
+          "matrix": {}
+        }
+      },
+      "flaky_tests": [
+        "config-robustness"
+      ],
+      "data_errors": {
+        "retry": {
+          "not-configured": 155
+        },
+        "health-check": {
+          "not-configured": 155
+        },
+        "failover-recovery": {
+          "not-configured": 155
+        }
+      }
+    },
+    "traefik": {
+      "version": "v3.6.17",
+      "core_conformant": true,
+      "core_failed": [],
+      "canary_quality": {
+        "v1_total": 6200,
+        "v2_total": 1550,
+        "samples": 7750,
+        "v1_ratio": 0.8,
+        "target_ratio": 0.8,
+        "within_2sigma": true,
+        "rounds_sampled": 155,
+        "per_round_v1_mean": 40.0,
+        "per_round_v1_min": 40,
+        "per_round_v1_max": 40,
+        "per_round_excursions": 0
+      },
+      "extended_breadth": {
+        "supported": 4,
+        "total": 5,
+        "ratio": 0.8,
+        "supported_features": [
+          "https-redirect",
+          "url-rewrite",
+          "backend-tls",
+          "grpc-routing"
+        ],
+        "unsupported_features": [
+          "timeout"
+        ]
+      },
+      "experimental": {
+        "retry": "no-data",
+        "session-affinity": "unsupported"
+      },
+      "impl_matrix": {
+        "rate-limiting": {
+          "state": "pass",
+          "matrix": {
+            "matrix_value": "native",
+            "rate_limited": 0
+          }
+        },
+        "health-check": {
+          "state": "no-data",
+          "matrix": {
+            "todo": "live: 벤더 health/failover"
+          }
+        },
+        "load-test": {
+          "state": "pass",
+          "matrix": {
+            "success": 20,
+            "total": 20
+          }
+        },
+        "failover-recovery": {
+          "state": "no-data",
+          "matrix": {
+            "todo": "live: gateway pod 재시작 후 정상화"
+          }
+        },
+        "config-robustness": {
+          "state": "pass",
+          "matrix": {}
+        }
+      },
+      "flaky_tests": [],
+      "data_errors": {
+        "retry": {
+          "not-configured": 155
+        },
+        "health-check": {
+          "not-configured": 155
+        },
+        "failover-recovery": {
+          "not-configured": 155
+        }
+      }
+    },
+    "kgateway": {
+      "version": "v2.2.2",
+      "core_conformant": true,
+      "core_failed": [],
+      "canary_quality": {
+        "v1_total": 6189,
+        "v2_total": 1561,
+        "samples": 7750,
+        "v1_ratio": 0.7986,
+        "target_ratio": 0.8,
+        "within_2sigma": true,
+        "rounds_sampled": 155,
+        "per_round_v1_mean": 39.93,
+        "per_round_v1_min": 31,
+        "per_round_v1_max": 47,
+        "per_round_excursions": 3
+      },
+      "extended_breadth": {
+        "supported": 4,
+        "total": 5,
+        "ratio": 0.8,
+        "supported_features": [
+          "https-redirect",
+          "url-rewrite",
+          "timeout",
+          "grpc-routing"
+        ],
+        "unsupported_features": [
+          "backend-tls"
+        ]
+      },
+      "experimental": {
+        "retry": "no-data",
+        "session-affinity": "pass"
+      },
+      "impl_matrix": {
+        "rate-limiting": {
+          "state": "pass",
+          "matrix": {
+            "matrix_value": "unsupported",
+            "rate_limited": 0
+          }
+        },
+        "health-check": {
+          "state": "no-data",
+          "matrix": {
+            "todo": "live: 벤더 health/failover"
+          }
+        },
+        "load-test": {
+          "state": "pass",
+          "matrix": {
+            "success": 20,
+            "total": 20
+          }
+        },
+        "failover-recovery": {
+          "state": "no-data",
+          "matrix": {
+            "todo": "live: gateway pod 재시작 후 정상화"
+          }
+        },
+        "config-robustness": {
+          "state": "pass",
+          "matrix": {}
+        }
+      },
+      "flaky_tests": [
+        "canary-traffic"
+      ],
+      "data_errors": {
+        "retry": {
+          "not-configured": 155
+        },
+        "health-check": {
+          "not-configured": 155
+        },
+        "failover-recovery": {
+          "not-configured": 155
+        }
+      }
+    }
+  }
+}

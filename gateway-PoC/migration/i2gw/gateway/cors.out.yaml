@@ -1,0 +1,49 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  annotations:
+    gateway.networking.k8s.io/generator: ingress2gateway-1.1.0
+  name: nginx
+  namespace: default
+spec:
+  gatewayClassName: nginx
+  listeners:
+  - hostname: cors.example.com
+    name: cors-example-com-http
+    port: 80
+    protocol: HTTP
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    gateway.networking.k8s.io/generator: ingress2gateway-1.1.0
+  name: cors-cors-example-com
+  namespace: default
+spec:
+  hostnames:
+  - cors.example.com
+  parentRefs:
+  - name: nginx
+  rules:
+  - backendRefs:
+    - name: echo
+      port: 80
+    filters:
+    - cors:
+        allowCredentials: true
+        allowHeaders:
+        - X-Custom
+        allowMethods:
+        - GET
+        - POST
+        allowOrigins:
+        - https://x.example.com
+        maxAge: 1728000
+      type: CORS
+    matches:
+    - path:
+        type: PathPrefix
+        value: /
+status:
+  parents: []

@@ -1,0 +1,43 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  annotations:
+    gateway.networking.k8s.io/generator: ingress2gateway-1.1.0
+  name: nginx
+  namespace: default
+spec:
+  gatewayClassName: nginx
+  listeners:
+  - hostname: url-rewrite.example.com
+    name: url-rewrite-example-com-http
+    port: 80
+    protocol: HTTP
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    gateway.networking.k8s.io/generator: ingress2gateway-1.1.0
+  name: url-rewrite-url-rewrite-example-com
+  namespace: default
+spec:
+  hostnames:
+  - url-rewrite.example.com
+  parentRefs:
+  - name: nginx
+  rules:
+  - backendRefs:
+    - name: echo
+      port: 80
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          replaceFullPath: /new
+          type: ReplaceFullPath
+    matches:
+    - path:
+        type: RegularExpression
+        value: (?i)/old.*
+status:
+  parents: []

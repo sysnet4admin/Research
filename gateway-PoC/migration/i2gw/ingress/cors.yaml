@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cors
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: 'true'
+    nginx.ingress.kubernetes.io/cors-allow-origin: https://x.example.com
+    nginx.ingress.kubernetes.io/cors-allow-methods: GET, POST
+    nginx.ingress.kubernetes.io/cors-allow-headers: X-Custom
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: cors.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: echo
+            port:
+              number: 80

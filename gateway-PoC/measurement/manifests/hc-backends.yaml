@@ -1,0 +1,69 @@
+# health-check 테스트용 실패주입 백엔드.
+# 한 Service(hc-backend)에 good/bad 두 엔드포인트. 둘 다 K8s readiness(/)는 통과(엔드포인트
+# 유지)하나, 게이트웨이 능동 health probe 경로 /health 에서 good=200, bad=503.
+# 능동 health check가 동작하면 bad가 풀에서 빠져 트래픽 100% good(hc-good 토큰).
+# 동작 안 하면 good/bad 혼합.
+apiVersion: v1
+kind: ConfigMap
+metadata: { name: hc-good-conf, namespace: gwtest }
+data:
+  default.conf: |
+    server {
+      listen 80;
+      location = /health { add_header Content-Type text/plain; return 200 "ok"; }
+      location / { add_header Content-Type text/plain; return 200 "hc-good"; }
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata: { name: hc-bad-conf, namespace: gwtest }
+data:
+  default.conf: |
+    server {
+      listen 80;
+      location = /health { add_header Content-Type text/plain; return 503 "bad"; }
+      location / { add_header Content-Type text/plain; return 200 "hc-bad"; }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: hc-good, namespace: gwtest }
+spec:
+  # good 2개 + bad 1개 = unhealthy 33%(<50%). envoy 등은 unhealthy 50%면 panic 모드로
+  # 전체 분산하므로, bad가 완전히 빠지려면 unhealthy 비율을 panic 임계 아래로 둬야 한다.
+  replicas: 2
+  selector: { matchLabels: { app: hc-backend, hc: good } }
+  template:
+    metadata: { labels: { app: hc-backend, hc: good } }
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.27-alpine
+        ports: [ { containerPort: 80 } ]
+        readinessProbe: { httpGet: { path: /, port: 80 }, initialDelaySeconds: 2, periodSeconds: 3 }
+        volumeMounts: [ { name: conf, mountPath: /etc/nginx/conf.d } ]
+      volumes: [ { name: conf, configMap: { name: hc-good-conf } } ]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: hc-bad, namespace: gwtest }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: hc-backend, hc: bad } }
+  template:
+    metadata: { labels: { app: hc-backend, hc: bad } }
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.27-alpine
+        ports: [ { containerPort: 80 } ]
+        readinessProbe: { httpGet: { path: /, port: 80 }, initialDelaySeconds: 2, periodSeconds: 3 }
+        volumeMounts: [ { name: conf, mountPath: /etc/nginx/conf.d } ]
+      volumes: [ { name: conf, configMap: { name: hc-bad-conf } } ]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: hc-backend, namespace: gwtest }
+spec:
+  selector: { app: hc-backend }
+  ports: [ { port: 80, targetPort: 80 } ]

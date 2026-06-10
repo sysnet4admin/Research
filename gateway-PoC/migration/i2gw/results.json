@@ -1,0 +1,442 @@
+{
+  "i2gw_version": "ingress2gateway version: 1.1.0\nBuilt with Go version: go1.26.2",
+  "samples": {
+    "host-routing": {
+      "annotations": [],
+      "class": "native",
+      "manual_note": "",
+      "declined": {},
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    },
+    "path-routing": {
+      "annotations": [],
+      "class": "native",
+      "manual_note": "",
+      "declined": {},
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    },
+    "tls-termination": {
+      "annotations": [],
+      "class": "native",
+      "manual_note": "",
+      "declined": {},
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix",
+        "RequestRedirect"
+      ]
+    },
+    "websocket": {
+      "annotations": [],
+      "class": "native",
+      "manual_note": "",
+      "declined": {},
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    },
+    "header-routing": {
+      "annotations": [
+        "canary",
+        "canary-by-header"
+      ],
+      "class": "converts",
+      "manual_note": "",
+      "declined": {},
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    },
+    "https-redirect": {
+      "annotations": [
+        "ssl-redirect",
+        "force-ssl-redirect"
+      ],
+      "class": "partial",
+      "manual_note": "",
+      "declined": {
+        "force-ssl-redirect": "│  Unsupported annotation nginx.ingress.kubernetes.io/force-ssl-redirect"
+      },
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    },
+    "path-redirect": {
+      "annotations": [
+        "permanent-redirect"
+      ],
+      "class": "converts",
+      "manual_note": "",
+      "declined": {},
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix",
+        "ReplaceFullPath",
+        "RequestRedirect"
+      ]
+    },
+    "url-rewrite": {
+      "annotations": [
+        "rewrite-target"
+      ],
+      "class": "partial",
+      "manual_note": "",
+      "declined": {},
+      "info_caveat": true,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "RegularExpression",
+        "ReplaceFullPath",
+        "URLRewrite"
+      ]
+    },
+    "canary": {
+      "annotations": [
+        "canary",
+        "canary-weight"
+      ],
+      "class": "converts",
+      "manual_note": "",
+      "declined": {},
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    },
+    "request-mirror": {
+      "annotations": [
+        "mirror-target"
+      ],
+      "class": "no",
+      "manual_note": "",
+      "declined": {
+        "mirror-target": "│  Unsupported annotation nginx.ingress.kubernetes.io/mirror-target"
+      },
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    },
+    "header-modifier": {
+      "annotations": [
+        "x-forwarded-prefix"
+      ],
+      "class": "no",
+      "manual_note": "x-forwarded-prefix가 출력에 RequestHeaderModifier 필터 없이 조용히 누락(거절 통지도 없음). proxy-set-headers/custom-headers는 미변환. ingress-nginx 헤더 수정 어노테이션은 i2gw 등가물 없음",
+      "declined": {},
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    },
+    "regex": {
+      "annotations": [
+        "use-regex"
+      ],
+      "class": "partial",
+      "manual_note": "",
+      "declined": {},
+      "info_caveat": true,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "RegularExpression"
+      ]
+    },
+    "timeout": {
+      "annotations": [
+        "proxy-connect-timeout",
+        "proxy-read-timeout",
+        "proxy-send-timeout"
+      ],
+      "class": "partial",
+      "manual_note": "timeouts 필드는 생성되나 값 비충실(입력 10/60/60s가 request:10m0s 고정값으로, best-effort 매핑)",
+      "declined": {},
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    },
+    "cors": {
+      "annotations": [
+        "enable-cors",
+        "cors-allow-origin",
+        "cors-allow-methods",
+        "cors-allow-headers"
+      ],
+      "class": "converts",
+      "manual_note": "",
+      "declined": {},
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "CORS",
+        "PathPrefix"
+      ]
+    },
+    "external-auth": {
+      "annotations": [
+        "auth-url",
+        "auth-signin"
+      ],
+      "class": "no",
+      "manual_note": "",
+      "declined": {
+        "auth-url": "│  Unsupported annotation nginx.ingress.kubernetes.io/auth-url",
+        "auth-signin": "│  Unsupported annotation nginx.ingress.kubernetes.io/auth-signin"
+      },
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    },
+    "backend-tls": {
+      "annotations": [
+        "backend-protocol"
+      ],
+      "class": "partial",
+      "manual_note": "backend-protocol:HTTPS 단독은 거절(strict validation: proxy-ssl-verify/secret/server-name/name 전부 필요). 전체 제공 시 BackendTLSPolicy 변환",
+      "declined": {},
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    },
+    "grpc": {
+      "annotations": [
+        "backend-protocol"
+      ],
+      "class": "converts",
+      "manual_note": "",
+      "declined": {},
+      "info_caveat": false,
+      "converted_kinds": [
+        "GRPCRoute",
+        "Gateway"
+      ],
+      "emitted_types": []
+    },
+    "tls-passthrough": {
+      "annotations": [
+        "ssl-passthrough"
+      ],
+      "class": "converts",
+      "manual_note": "",
+      "declined": {},
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "TLSRoute"
+      ],
+      "emitted_types": []
+    },
+    "mtls-client": {
+      "annotations": [
+        "auth-tls-secret",
+        "auth-tls-verify-client",
+        "auth-tls-verify-depth"
+      ],
+      "class": "no",
+      "manual_note": "",
+      "declined": {
+        "auth-tls-verify-depth": "│  Unsupported annotation nginx.ingress.kubernetes.io/auth-tls-verify-depth",
+        "auth-tls-secret": "│  Unsupported annotation nginx.ingress.kubernetes.io/auth-tls-secret",
+        "auth-tls-verify-client": "│  Unsupported annotation nginx.ingress.kubernetes.io/auth-tls-verify-client"
+      },
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix",
+        "RequestRedirect"
+      ]
+    },
+    "rate-limit": {
+      "annotations": [
+        "limit-rps"
+      ],
+      "class": "no",
+      "manual_note": "",
+      "declined": {
+        "limit-rps": "│  Unsupported annotation nginx.ingress.kubernetes.io/limit-rps"
+      },
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    },
+    "body-size": {
+      "annotations": [
+        "proxy-body-size"
+      ],
+      "class": "no",
+      "manual_note": "",
+      "declined": {
+        "proxy-body-size": "Most Gateway API implementations have reasonable body size and buffering defaults"
+      },
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    },
+    "session-affinity": {
+      "annotations": [
+        "affinity",
+        "session-cookie-name",
+        "session-cookie-expires"
+      ],
+      "class": "no",
+      "manual_note": "",
+      "declined": {
+        "session-cookie-name": "│  Unsupported annotation nginx.ingress.kubernetes.io/session-cookie-name",
+        "affinity": "Session affinity is not supported",
+        "session-cookie-expires": "Session affinity is not supported"
+      },
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    },
+    "ip-allow-deny": {
+      "annotations": [
+        "whitelist-source-range"
+      ],
+      "class": "no",
+      "manual_note": "",
+      "declined": {
+        "whitelist-source-range": "IP-based authorization is not supported"
+      },
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    },
+    "basic-auth": {
+      "annotations": [
+        "auth-type",
+        "auth-secret",
+        "auth-realm"
+      ],
+      "class": "no",
+      "manual_note": "",
+      "declined": {
+        "auth-secret": "│  Unsupported annotation nginx.ingress.kubernetes.io/auth-secret",
+        "auth-type": "│  Unsupported annotation nginx.ingress.kubernetes.io/auth-type",
+        "auth-realm": "│  Unsupported annotation nginx.ingress.kubernetes.io/auth-realm"
+      },
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    },
+    "snippet": {
+      "annotations": [
+        "configuration-snippet"
+      ],
+      "class": "no",
+      "manual_note": "",
+      "declined": {
+        "configuration-snippet": "│  Unsupported annotation nginx.ingress.kubernetes.io/configuration-snippet"
+      },
+      "info_caveat": false,
+      "converted_kinds": [
+        "Gateway",
+        "HTTPRoute"
+      ],
+      "emitted_types": [
+        "PathPrefix"
+      ]
+    }
+  }
+}

@@ -1,0 +1,70 @@
+# 확장 측정용 추가 백엔드/서버. deploy_fixtures 가 00-backends.yaml 과 함께 배포한다.
+#  - ws-backend: websocket(Extended HTTPRouteBackendProtocolWebSocket) 검증. jmalloc/echo-server는
+#    HTTP Upgrade→101 후 메시지 에코. Service appProtocol kubernetes.io/ws 로 websocket 신호.
+#  - extauthz: ext-authz(GEP-1494 표준필터 + 벤더 extAuth) 검증용 더미 인증 서버.
+#    Authorization == "Bearer allowme" 면 200(allow), 아니면 403(deny). 크립토 없음.
+# arm64 멀티아치 확인됨.
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: ws-backend, namespace: gwtest }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: ws-backend } }
+  template:
+    metadata: { labels: { app: ws-backend } }
+    spec:
+      containers:
+      - name: ws
+        image: jmalloc/echo-server:latest
+        ports: [ { containerPort: 8080 } ]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: ws-backend, namespace: gwtest }
+spec:
+  selector: { app: ws-backend }
+  ports:
+  - { name: ws, port: 80, targetPort: 8080, appProtocol: kubernetes.io/ws }
+---
+# 더미 ext-authz HTTP 서버 (Authorization=="Bearer allowme" → 200, else 403)
+apiVersion: v1
+kind: ConfigMap
+metadata: { name: extauthz-cm, namespace: gwtest }
+data:
+  app.py: |
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+    class H(BaseHTTPRequestHandler):
+        def _h(self):
+            auth = self.headers.get('Authorization','')
+            if auth == 'Bearer allowme':
+                self.send_response(200); self.send_header('x-authz','ok'); self.end_headers()
+            else:
+                self.send_response(403); self.end_headers()
+        do_GET=_h; do_POST=_h; do_HEAD=_h; do_PUT=_h
+        def log_message(self,*a): pass
+    HTTPServer(('',8000),H).serve_forever()
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: extauthz, namespace: gwtest }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: extauthz } }
+  template:
+    metadata: { labels: { app: extauthz } }
+    spec:
+      containers:
+      - name: authz
+        image: python:3.12-alpine
+        command: ["python3","/app/app.py"]
+        ports: [ { containerPort: 8000 } ]
+        volumeMounts: [ { name: app, mountPath: /app } ]
+      volumes: [ { name: app, configMap: { name: extauthz-cm } } ]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: extauthz, namespace: gwtest }
+spec:
+  selector: { app: extauthz }
+  ports: [ { port: 8000, targetPort: 8000 } ]

@@ -1,0 +1,26 @@
+# Gateway 템플릿 (envsubst: IMPL, GWCLASS, NS). impl마다 하나.
+# HTTP 80 + HTTPS 443(Terminate, secret gw-tls). gw-tls는 run-round 가 생성.
+# 주의(Traefik): 자체 프록시 LB Service를 쓰므로 status.addresses가 비면
+#   discover_ip 가 traefik ns의 LB Service로 폴백(라이브 보강).
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: ${IMPL}-gw
+  namespace: ${NS}
+spec:
+  gatewayClassName: ${GWCLASS}
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: ${HTTP_PORT}
+    allowedRoutes:
+      namespaces: { from: Same }
+  - name: https
+    protocol: HTTPS
+    port: ${HTTPS_PORT}
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - { kind: Secret, name: gw-tls }
+    allowedRoutes:
+      namespaces: { from: Same }

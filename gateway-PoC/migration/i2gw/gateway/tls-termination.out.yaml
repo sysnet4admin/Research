@@ -1,0 +1,74 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  annotations:
+    gateway.networking.k8s.io/generator: ingress2gateway-1.1.0
+  name: nginx
+  namespace: default
+spec:
+  gatewayClassName: nginx
+  listeners:
+  - hostname: tls-termination.example.com
+    name: tls-termination-example-com-http
+    port: 80
+    protocol: HTTP
+  - hostname: tls-termination.example.com
+    name: tls-termination-example-com-https
+    port: 443
+    protocol: HTTPS
+    tls:
+      certificateRefs:
+      - group: ""
+        kind: Secret
+        name: tls-termination-tls
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    gateway.networking.k8s.io/generator: ingress2gateway-1.1.0
+  name: tls-termination-tls-termination-example-com
+  namespace: default
+spec:
+  hostnames:
+  - tls-termination.example.com
+  parentRefs:
+  - name: nginx
+    port: 443
+    sectionName: tls-termination-example-com-https
+  rules:
+  - backendRefs:
+    - name: echo
+      port: 80
+    matches:
+    - path:
+        type: PathPrefix
+        value: /
+status:
+  parents: []
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    gateway.networking.k8s.io/generator: ingress2gateway-1.1.0
+  name: tls-termination-tls-termination-example-com-http
+  namespace: default
+spec:
+  hostnames:
+  - tls-termination.example.com
+  parentRefs:
+  - name: nginx
+    port: 80
+  rules:
+  - filters:
+    - requestRedirect:
+        scheme: https
+        statusCode: 308
+      type: RequestRedirect
+    matches:
+    - path:
+        type: PathPrefix
+        value: /
+status:
+  parents: null

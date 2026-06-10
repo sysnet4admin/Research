@@ -1,0 +1,13 @@
+┌─ WARN  ────────────────────────────────────────
+│  Ingress NGINX serves TLS traffic for host "rate-limit.example.com" with a self-signed certificate. This behavior will not be translated and the host will not be accessible via HTTPS.
+│  source: INGRESS-NGINX
+└─
+┌─ WARN  ────────────────────────────────────────
+│  Unsupported annotation nginx.ingress.kubernetes.io/limit-rps
+│  source: INGRESS-NGINX
+│  object: Ingress: default/rate-limit
+└─
+┌─ WARN  ────────────────────────────────────────
+│  Gateway API does not support configuring URL normalization (RFC 3986, Section 6). Please check if this matters for your use case and consult implementation-specific details.
+│  source: STANDARD_EMITTER
+└─

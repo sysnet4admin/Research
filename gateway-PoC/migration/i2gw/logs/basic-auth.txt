@@ -1,0 +1,23 @@
+┌─ WARN  ────────────────────────────────────────
+│  Ingress NGINX serves TLS traffic for host "basic-auth.example.com" with a self-signed certificate. This behavior will not be translated and the host will not be accessible via HTTPS.
+│  source: INGRESS-NGINX
+└─
+┌─ WARN  ────────────────────────────────────────
+│  Unsupported annotation nginx.ingress.kubernetes.io/auth-secret
+│  source: INGRESS-NGINX
+│  object: Ingress: default/basic-auth
+└─
+┌─ WARN  ────────────────────────────────────────
+│  Unsupported annotation nginx.ingress.kubernetes.io/auth-type
+│  source: INGRESS-NGINX
+│  object: Ingress: default/basic-auth
+└─
+┌─ WARN  ────────────────────────────────────────
+│  Unsupported annotation nginx.ingress.kubernetes.io/auth-realm
+│  source: INGRESS-NGINX
+│  object: Ingress: default/basic-auth
+└─
+┌─ WARN  ────────────────────────────────────────
+│  Gateway API does not support configuring URL normalization (RFC 3986, Section 6). Please check if this matters for your use case and consult implementation-specific details.
+│  source: STANDARD_EMITTER
+└─

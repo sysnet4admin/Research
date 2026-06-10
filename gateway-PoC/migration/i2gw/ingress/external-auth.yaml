@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: external-auth
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/auth-url: http://auth.example.com/check
+    nginx.ingress.kubernetes.io/auth-signin: https://auth.example.com/start
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: external-auth.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: echo
+            port:
+              number: 80

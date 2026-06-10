@@ -1,0 +1,1902 @@
+{
+  "rounds": 155,
+  "gateway_api_version": "v1.4",
+  "crd_channel": "experimental",
+  "implementations": {
+    "nginx": {
+      "version": "2.4.2",
+      "tests": {
+        "host-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "path-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "header-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "tls-termination": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "canary-traffic": {
+          "counts": {
+            "pass": 150,
+            "fail": 5
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.967741935483871,
+          "variance": 0.0312,
+          "flaky": true,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "v1": 42,
+            "v2": 8
+          },
+          "canary_pool": {
+            "v1_total": 6156,
+            "v2_total": 1594,
+            "samples": 7750,
+            "v1_ratio": 0.7943,
+            "target_ratio": 0.8,
+            "within_2sigma": true,
+            "rounds_sampled": 155,
+            "per_round_v1_mean": 39.72,
+            "per_round_v1_min": 32,
+            "per_round_v1_max": 48,
+            "per_round_excursions": 8
+          }
+        },
+        "header-modifier": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "cross-namespace": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "https-redirect": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "url-rewrite": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "timeout": {
+          "counts": {
+            "fail": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "elapsed_s": 5,
+            "code": "200"
+          }
+        },
+        "backend-tls": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "grpc-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "retry": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: 실패 주입 + retry 정책"
+          }
+        },
+        "session-affinity": {
+          "counts": {
+            "fail": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "rate-limiting": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "matrix_value": "low-level-config",
+            "rate_limited": 0
+          }
+        },
+        "health-check": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: 벤더 health/failover"
+          }
+        },
+        "load-test": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "success": 20,
+            "total": 20
+          }
+        },
+        "failover-recovery": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: gateway pod 재시작 후 정상화"
+          }
+        },
+        "config-robustness": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        }
+      }
+    },
+    "envoy": {
+      "version": "v1.7.3",
+      "tests": {
+        "host-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "path-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "header-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "tls-termination": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "canary-traffic": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "v1": 40,
+            "v2": 10
+          },
+          "canary_pool": {
+            "v1_total": 6200,
+            "v2_total": 1550,
+            "samples": 7750,
+            "v1_ratio": 0.8,
+            "target_ratio": 0.8,
+            "within_2sigma": true,
+            "rounds_sampled": 155,
+            "per_round_v1_mean": 40.0,
+            "per_round_v1_min": 39,
+            "per_round_v1_max": 41,
+            "per_round_excursions": 0
+          }
+        },
+        "header-modifier": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "cross-namespace": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "https-redirect": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "url-rewrite": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "timeout": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "elapsed_s": 2,
+            "code": "504"
+          }
+        },
+        "backend-tls": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "grpc-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "retry": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: 실패 주입 + retry 정책"
+          }
+        },
+        "session-affinity": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "rate-limiting": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "matrix_value": "unsupported",
+            "rate_limited": 0
+          }
+        },
+        "health-check": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: 벤더 health/failover"
+          }
+        },
+        "load-test": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "success": 20,
+            "total": 20
+          }
+        },
+        "failover-recovery": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: gateway pod 재시작 후 정상화"
+          }
+        },
+        "config-robustness": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        }
+      }
+    },
+    "istio": {
+      "version": "1.30.0",
+      "tests": {
+        "host-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "path-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "header-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "tls-termination": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "canary-traffic": {
+          "counts": {
+            "pass": 151,
+            "fail": 4
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.9741935483870968,
+          "variance": 0.0251,
+          "flaky": true,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "v1": 38,
+            "v2": 12
+          },
+          "canary_pool": {
+            "v1_total": 6197,
+            "v2_total": 1553,
+            "samples": 7750,
+            "v1_ratio": 0.7996,
+            "target_ratio": 0.8,
+            "within_2sigma": true,
+            "rounds_sampled": 155,
+            "per_round_v1_mean": 39.98,
+            "per_round_v1_min": 32,
+            "per_round_v1_max": 47,
+            "per_round_excursions": 8
+          }
+        },
+        "header-modifier": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "cross-namespace": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "https-redirect": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "url-rewrite": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "timeout": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "elapsed_s": 2,
+            "code": "504"
+          }
+        },
+        "backend-tls": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "grpc-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "retry": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: 실패 주입 + retry 정책"
+          }
+        },
+        "session-affinity": {
+          "counts": {
+            "fail": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "rate-limiting": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "matrix_value": "low-level-config",
+            "rate_limited": 0
+          }
+        },
+        "health-check": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: 벤더 health/failover"
+          }
+        },
+        "load-test": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "success": 20,
+            "total": 20
+          }
+        },
+        "failover-recovery": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: gateway pod 재시작 후 정상화"
+          }
+        },
+        "config-robustness": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        }
+      }
+    },
+    "cilium": {
+      "version": "1.19.4",
+      "tests": {
+        "host-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "path-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "header-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "tls-termination": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "canary-traffic": {
+          "counts": {
+            "pass": 152,
+            "fail": 3
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.9806451612903225,
+          "variance": 0.019,
+          "flaky": true,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "v1": 37,
+            "v2": 13
+          },
+          "canary_pool": {
+            "v1_total": 6179,
+            "v2_total": 1571,
+            "samples": 7750,
+            "v1_ratio": 0.7973,
+            "target_ratio": 0.8,
+            "within_2sigma": true,
+            "rounds_sampled": 155,
+            "per_round_v1_mean": 39.86,
+            "per_round_v1_min": 31,
+            "per_round_v1_max": 47,
+            "per_round_excursions": 8
+          }
+        },
+        "header-modifier": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "cross-namespace": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "https-redirect": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "url-rewrite": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "timeout": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "elapsed_s": 2,
+            "code": "504"
+          }
+        },
+        "backend-tls": {
+          "counts": {
+            "fail": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "grpc-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "retry": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: 실패 주입 + retry 정책"
+          }
+        },
+        "session-affinity": {
+          "counts": {
+            "fail": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "rate-limiting": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "matrix_value": "unsupported",
+            "rate_limited": 0
+          }
+        },
+        "health-check": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: 벤더 health/failover"
+          }
+        },
+        "load-test": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "success": 20,
+            "total": 20
+          }
+        },
+        "failover-recovery": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: gateway pod 재시작 후 정상화"
+          }
+        },
+        "config-robustness": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        }
+      }
+    },
+    "kong": {
+      "version": "KGO 2.1",
+      "tests": {
+        "host-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "path-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "header-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "tls-termination": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "canary-traffic": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "v1": 40,
+            "v2": 10
+          },
+          "canary_pool": {
+            "v1_total": 6199,
+            "v2_total": 1551,
+            "samples": 7750,
+            "v1_ratio": 0.7999,
+            "target_ratio": 0.8,
+            "within_2sigma": true,
+            "rounds_sampled": 155,
+            "per_round_v1_mean": 39.99,
+            "per_round_v1_min": 38,
+            "per_round_v1_max": 42,
+            "per_round_excursions": 0
+          }
+        },
+        "header-modifier": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "cross-namespace": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "https-redirect": {
+          "counts": {
+            "fail": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "url-rewrite": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "timeout": {
+          "counts": {
+            "fail": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "elapsed_s": 5,
+            "code": "200"
+          }
+        },
+        "backend-tls": {
+          "counts": {
+            "fail": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "grpc-routing": {
+          "counts": {
+            "fail": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "retry": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: 실패 주입 + retry 정책"
+          }
+        },
+        "session-affinity": {
+          "counts": {
+            "fail": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "rate-limiting": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "matrix_value": "native",
+            "rate_limited": 0
+          }
+        },
+        "health-check": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: 벤더 health/failover"
+          }
+        },
+        "load-test": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "success": 20,
+            "total": 20
+          }
+        },
+        "failover-recovery": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: gateway pod 재시작 후 정상화"
+          }
+        },
+        "config-robustness": {
+          "counts": {
+            "pass": 152,
+            "fail": 3
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.9806451612903225,
+          "variance": 0.019,
+          "flaky": true,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        }
+      }
+    },
+    "traefik": {
+      "version": "v3.6.17",
+      "tests": {
+        "host-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "path-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "header-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "tls-termination": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "canary-traffic": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "v1": 40,
+            "v2": 10
+          },
+          "canary_pool": {
+            "v1_total": 6200,
+            "v2_total": 1550,
+            "samples": 7750,
+            "v1_ratio": 0.8,
+            "target_ratio": 0.8,
+            "within_2sigma": true,
+            "rounds_sampled": 155,
+            "per_round_v1_mean": 40.0,
+            "per_round_v1_min": 40,
+            "per_round_v1_max": 40,
+            "per_round_excursions": 0
+          }
+        },
+        "header-modifier": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "cross-namespace": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "https-redirect": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "url-rewrite": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "timeout": {
+          "counts": {
+            "fail": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "elapsed_s": 5,
+            "code": "200"
+          }
+        },
+        "backend-tls": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "grpc-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "retry": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: 실패 주입 + retry 정책"
+          }
+        },
+        "session-affinity": {
+          "counts": {
+            "fail": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "rate-limiting": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "matrix_value": "native",
+            "rate_limited": 0
+          }
+        },
+        "health-check": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: 벤더 health/failover"
+          }
+        },
+        "load-test": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "success": 20,
+            "total": 20
+          }
+        },
+        "failover-recovery": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: gateway pod 재시작 후 정상화"
+          }
+        },
+        "config-robustness": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        }
+      }
+    },
+    "kgateway": {
+      "version": "v2.2.2",
+      "tests": {
+        "host-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "path-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "header-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "tls-termination": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "canary-traffic": {
+          "counts": {
+            "pass": 152,
+            "fail": 3
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.9806451612903225,
+          "variance": 0.019,
+          "flaky": true,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "v1": 42,
+            "v2": 8
+          },
+          "canary_pool": {
+            "v1_total": 6189,
+            "v2_total": 1561,
+            "samples": 7750,
+            "v1_ratio": 0.7986,
+            "target_ratio": 0.8,
+            "within_2sigma": true,
+            "rounds_sampled": 155,
+            "per_round_v1_mean": 39.93,
+            "per_round_v1_min": 31,
+            "per_round_v1_max": 47,
+            "per_round_excursions": 7
+          }
+        },
+        "header-modifier": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "cross-namespace": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "https-redirect": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "url-rewrite": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "timeout": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "elapsed_s": 3,
+            "code": "504"
+          }
+        },
+        "backend-tls": {
+          "counts": {
+            "fail": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 0.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "grpc-routing": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "retry": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: 실패 주입 + retry 정책"
+          }
+        },
+        "session-affinity": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        },
+        "rate-limiting": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "matrix_value": "unsupported",
+            "rate_limited": 0
+          }
+        },
+        "health-check": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: 벤더 health/failover"
+          }
+        },
+        "load-test": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "success": 20,
+            "total": 20
+          }
+        },
+        "failover-recovery": {
+          "counts": {
+            "not-configured": 155
+          },
+          "valid_rounds": 0,
+          "pass_rate": null,
+          "variance": null,
+          "flaky": false,
+          "data_errors": {
+            "not-configured": 155
+          },
+          "infra_excluded": 0,
+          "sample_metadata": {
+            "todo": "live: gateway pod 재시작 후 정상화"
+          }
+        },
+        "config-robustness": {
+          "counts": {
+            "pass": 155
+          },
+          "valid_rounds": 155,
+          "pass_rate": 1.0,
+          "variance": 0.0,
+          "flaky": false,
+          "data_errors": {},
+          "infra_excluded": 0,
+          "sample_metadata": {}
+        }
+      }
+    }
+  }
+}

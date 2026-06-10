@@ -1,0 +1,13 @@
+┌─ WARN  ────────────────────────────────────────
+│  Ingress NGINX serves TLS traffic for host "backend-tls.example.com" with a self-signed certificate. This behavior will not be translated and the host will not be accessible via HTTPS.
+│  source: INGRESS-NGINX
+└─
+┌─ ERROR ────────────────────────────────────────
+│  Ingress default/backend-tls requested backend TLS but failed strict validation requirements to emit a BackendTLSPolicy: nginx.ingress.kubernetes.io/proxy-ssl-verify must be strictly 'on', nginx.ingress.kubernetes.io/proxy-ssl-secret must be provided with a trusted CA certificate, nginx.ingress.kubernetes.io/proxy-ssl-server-name must be strictly 'on' (SNI is required), nginx.ingress.kubernetes.io/proxy-ssl-name must be explicitly provided (defaulting to upstream_balancer is invalid)
+│  source: INGRESS-NGINX
+│  object: Ingress: default/backend-tls
+└─
+┌─ WARN  ────────────────────────────────────────
+│  Gateway API does not support configuring URL normalization (RFC 3986, Section 6). Please check if this matters for your use case and consult implementation-specific details.
+│  source: STANDARD_EMITTER
+└─

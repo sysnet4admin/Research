@@ -1,0 +1,19 @@
+┌─ WARN  ────────────────────────────────────────
+│  Unsupported annotation nginx.ingress.kubernetes.io/auth-tls-verify-depth
+│  source: INGRESS-NGINX
+│  object: Ingress: default/mtls-client
+└─
+┌─ WARN  ────────────────────────────────────────
+│  Unsupported annotation nginx.ingress.kubernetes.io/auth-tls-secret
+│  source: INGRESS-NGINX
+│  object: Ingress: default/mtls-client
+└─
+┌─ WARN  ────────────────────────────────────────
+│  Unsupported annotation nginx.ingress.kubernetes.io/auth-tls-verify-client
+│  source: INGRESS-NGINX
+│  object: Ingress: default/mtls-client
+└─
+┌─ WARN  ────────────────────────────────────────
+│  Gateway API does not support configuring URL normalization (RFC 3986, Section 6). Please check if this matters for your use case and consult implementation-specific details.
+│  source: STANDARD_EMITTER
+└─

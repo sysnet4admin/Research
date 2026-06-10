@@ -1,0 +1,168 @@
+# HTTPRoute 픽스처 (envsubst: IMPL, NS). 전부 ${IMPL}-gw 에 attach.
+# Core 라우팅 + 일부 Extended. tls/grpc/session/timeout/backend-tls 라우트는
+# 라이브 보강(per-impl 수용성 검증 필요).
+# 주의: flow 매핑 { } 안의 ${VAR}는 따옴표 필수("{"가 YAML 특수문자).
+---
+# host-routing: v1.example.com→echo-v1, v2.example.com→echo-v2
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: "${IMPL}-host-v1"
+  namespace: "${NS}"
+spec:
+  parentRefs: [ { name: "${IMPL}-gw" } ]
+  hostnames: [ "v1.example.com" ]
+  rules:
+  - matches: [ { path: { type: PathPrefix, value: / } } ]
+    backendRefs: [ { name: echo-v1, port: 80 } ]
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: "${IMPL}-host-v2"
+  namespace: "${NS}"
+spec:
+  parentRefs: [ { name: "${IMPL}-gw" } ]
+  hostnames: [ "v2.example.com" ]
+  rules:
+  - matches: [ { path: { type: PathPrefix, value: / } } ]
+    backendRefs: [ { name: echo-v2, port: 80 } ]
+---
+# path-routing + header-modifier(/hdr) + cross(/cross) + rewrite(/old) : v1.example.com
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: "${IMPL}-paths"
+  namespace: "${NS}"
+spec:
+  parentRefs: [ { name: "${IMPL}-gw" } ]
+  hostnames: [ "v1.example.com" ]
+  rules:
+  - matches: [ { path: { type: PathPrefix, value: /v1 } } ]
+    backendRefs: [ { name: echo-v1, port: 80 } ]
+  - matches: [ { path: { type: PathPrefix, value: /v2 } } ]
+    backendRefs: [ { name: echo-v2, port: 80 } ]
+  - matches: [ { path: { type: PathPrefix, value: /hdr } } ]
+    filters:
+    - type: RequestHeaderModifier
+      requestHeaderModifier: { set: [ { name: X-Test, value: modified } ] }
+    backendRefs: [ { name: echo-v1, port: 80 } ]
+  - matches: [ { path: { type: PathPrefix, value: /old } } ]
+    filters:
+    - type: URLRewrite
+      urlRewrite: { path: { type: ReplacePrefixMatch, replacePrefixMatch: /new } }
+    backendRefs: [ { name: echo-v1, port: 80 } ]
+  - matches: [ { path: { type: PathPrefix, value: /cross } } ]
+    backendRefs: [ { name: echo-cross, namespace: gwtest-backend2, port: 80 } ]
+---
+# header-routing: X-Version 헤더로 분기
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: "${IMPL}-header"
+  namespace: "${NS}"
+spec:
+  parentRefs: [ { name: "${IMPL}-gw" } ]
+  hostnames: [ "v1.example.com" ]
+  rules:
+  - matches: [ { headers: [ { name: X-Version, value: v1 } ] } ]
+    backendRefs: [ { name: echo-v1, port: 80 } ]
+  - matches: [ { headers: [ { name: X-Version, value: v2 } ] } ]
+    backendRefs: [ { name: echo-v2, port: 80 } ]
+---
+# canary-traffic: 80/20 가중 분할
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: "${IMPL}-canary"
+  namespace: "${NS}"
+spec:
+  parentRefs: [ { name: "${IMPL}-gw" } ]
+  hostnames: [ "canary.example.com" ]
+  rules:
+  - matches: [ { path: { type: PathPrefix, value: / } } ]
+    backendRefs:
+    - { name: echo-v1, port: 80, weight: 80 }
+    - { name: echo-v2, port: 80, weight: 20 }
+---
+# https-redirect: redirect.example.com HTTP → HTTPS (RequestRedirect, Extended)
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: "${IMPL}-redirect"
+  namespace: "${NS}"
+spec:
+  parentRefs: [ { name: "${IMPL}-gw" } ]
+  hostnames: [ "redirect.example.com" ]
+  rules:
+  - filters:
+    - type: RequestRedirect
+      requestRedirect: { scheme: https, statusCode: 301 }
+---
+# session-affinity: sessionPersistence(experimental). sticky.example.com
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: "${IMPL}-sticky"
+  namespace: "${NS}"
+spec:
+  parentRefs: [ { name: "${IMPL}-gw" } ]
+  hostnames: [ "sticky.example.com" ]
+  rules:
+  - matches: [ { path: { type: PathPrefix, value: / } } ]
+    backendRefs: [ { name: echo-v1, port: 80 } ]
+    sessionPersistence:
+      sessionName: gwsession
+      type: Cookie
+---
+# timeout: timeout.example.com, request timeout 2s, 백엔드 httpbin /delay/5
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: "${IMPL}-timeout"
+  namespace: "${NS}"
+spec:
+  parentRefs: [ { name: "${IMPL}-gw" } ]
+  hostnames: [ "timeout.example.com" ]
+  rules:
+  - matches: [ { path: { type: PathPrefix, value: / } } ]
+    timeouts: { request: 2s }
+    backendRefs: [ { name: httpbin, port: 80 } ]
+---
+# grpc-routing: GRPCRoute grpc.example.com → grpc-backend(h2c)
+apiVersion: gateway.networking.k8s.io/v1
+kind: GRPCRoute
+metadata:
+  name: "${IMPL}-grpc"
+  namespace: "${NS}"
+spec:
+  parentRefs: [ { name: "${IMPL}-gw" } ]
+  hostnames: [ "grpc.example.com" ]
+  rules:
+  - backendRefs: [ { name: grpc-backend, port: 9000 } ]
+---
+# backend-tls: BackendTLSPolicy로 gateway→backend(HTTPS) 검증
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
+metadata:
+  name: "${IMPL}-btls"
+  namespace: "${NS}"
+spec:
+  targetRefs:
+  - { group: "", kind: Service, name: backend-tls }
+  validation:
+    caCertificateRefs:
+    - { group: "", kind: ConfigMap, name: backend-ca }
+    hostname: backend-tls.local
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: "${IMPL}-btls-route"
+  namespace: "${NS}"
+spec:
+  parentRefs: [ { name: "${IMPL}-gw" } ]
+  hostnames: [ "btls.example.com" ]
+  rules:
+  - matches: [ { path: { type: PathPrefix, value: / } } ]
+    backendRefs: [ { name: backend-tls, port: 443 } ]

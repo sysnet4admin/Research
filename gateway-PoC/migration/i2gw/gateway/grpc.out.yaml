@@ -1,0 +1,33 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  annotations:
+    gateway.networking.k8s.io/generator: ingress2gateway-1.1.0
+  name: nginx
+  namespace: default
+spec:
+  gatewayClassName: nginx
+  listeners:
+  - hostname: grpc.example.com
+    name: grpc-example-com-http
+    port: 80
+    protocol: HTTP
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GRPCRoute
+metadata:
+  annotations:
+    gateway.networking.k8s.io/generator: ingress2gateway-1.1.0
+  name: grpc-grpc-example-com
+  namespace: default
+spec:
+  hostnames:
+  - grpc.example.com
+  parentRefs:
+  - name: nginx
+  rules:
+  - backendRefs:
+    - name: echo
+      port: 80
+status:
+  parents: null

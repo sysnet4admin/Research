@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mtls-client
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/auth-tls-secret: default/ca-secret
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: 'on'
+    nginx.ingress.kubernetes.io/auth-tls-verify-depth: '1'
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: mtls-client.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: echo
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - mtls-client.example.com
+    secretName: mtls-client-tls

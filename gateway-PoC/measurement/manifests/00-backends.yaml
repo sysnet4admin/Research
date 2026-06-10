@@ -1,0 +1,160 @@
+# 공용 백엔드 픽스처. 모든 구현체가 공유한다.
+# mendhak/http-https-echo: 요청을 JSON으로 반향(path, headers, hostname[pod], env).
+#   - v1/v2 식별: env BACKEND_ID → 응답 JSON에 포함(routing/canary)
+#   - path 반향: url-rewrite 검증
+#   - headers 반향: header-modifier 검증
+#   - hostname(pod): session-affinity sticky 검증
+#   - 8443 HTTPS: backend-tls 검증
+# arm64 멀티아치. grpc-backend는 별도(라이브서 arm64 확인).
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gwtest
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gwtest-backend2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-v1
+  namespace: gwtest
+spec:
+  replicas: 2          # session-affinity sticky 검증 위해 2+
+  selector: { matchLabels: { app: echo-v1 } }
+  template:
+    metadata: { labels: { app: echo-v1 } }
+    spec:
+      containers:
+      - name: echo
+        image: mendhak/http-https-echo:37
+        env:
+        - { name: HTTP_PORT, value: "8080" }
+        - { name: HTTPS_PORT, value: "8443" }
+        - { name: ECHO_INCLUDE_ENV_VARS, value: "1" }
+        - { name: BACKEND_ID, value: "backend-v1" }
+        ports: [ { containerPort: 8080 }, { containerPort: 8443 } ]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: echo-v1, namespace: gwtest }
+spec:
+  selector: { app: echo-v1 }
+  ports:
+  - { name: http, port: 80, targetPort: 8080 }
+  - { name: https, port: 443, targetPort: 8443 }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-v2
+  namespace: gwtest
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: echo-v2 } }
+  template:
+    metadata: { labels: { app: echo-v2 } }
+    spec:
+      containers:
+      - name: echo
+        image: mendhak/http-https-echo:37
+        env:
+        - { name: HTTP_PORT, value: "8080" }
+        - { name: ECHO_INCLUDE_ENV_VARS, value: "1" }
+        - { name: BACKEND_ID, value: "backend-v2" }
+        ports: [ { containerPort: 8080 } ]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: echo-v2, namespace: gwtest }
+spec:
+  selector: { app: echo-v2 }
+  ports: [ { name: http, port: 80, targetPort: 8080 } ]
+---
+# cross-namespace 대상 백엔드 + ReferenceGrant (Core)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-cross
+  namespace: gwtest-backend2
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: echo-cross } }
+  template:
+    metadata: { labels: { app: echo-cross } }
+    spec:
+      containers:
+      - name: echo
+        image: mendhak/http-https-echo:37
+        env:
+        - { name: HTTP_PORT, value: "8080" }
+        - { name: ECHO_INCLUDE_ENV_VARS, value: "1" }
+        - { name: BACKEND_ID, value: "backend-cross" }
+        ports: [ { containerPort: 8080 } ]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: echo-cross, namespace: gwtest-backend2 }
+spec:
+  selector: { app: echo-cross }
+  ports: [ { name: http, port: 80, targetPort: 8080 } ]
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferenceGrant
+metadata:
+  name: allow-gwtest-to-backend2
+  namespace: gwtest-backend2
+spec:
+  from:
+  - { group: gateway.networking.k8s.io, kind: HTTPRoute, namespace: gwtest }
+  to:
+  - { group: "", kind: Service }
+---
+# go-httpbin (timeout 테스트: /delay/N 지연 응답). arm64 멀티아치.
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: httpbin, namespace: gwtest }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: httpbin } }
+  template:
+    metadata: { labels: { app: httpbin } }
+    spec:
+      containers:
+      - name: httpbin
+        image: mccutchen/go-httpbin:latest
+        ports: [ { containerPort: 8080 } ]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: httpbin, namespace: gwtest }
+spec:
+  selector: { app: httpbin }
+  ports: [ { name: http, port: 80, targetPort: 8080 } ]
+---
+# gRPC 백엔드: Gateway API conformance echo 서버(arm64 멀티아치, reflection 지원).
+# GRPC_ECHO_SERVER=1로 gRPC 활성화, plaintext h2c 포트 3000.
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: grpc-backend, namespace: gwtest }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: grpc-backend } }
+  template:
+    metadata: { labels: { app: grpc-backend } }
+    spec:
+      containers:
+      - name: grpc-echo
+        image: gcr.io/k8s-staging-gateway-api/echo-basic:v20260314-v1.5.1
+        env: [ { name: GRPC_ECHO_SERVER, value: "1" } ]
+        ports: [ { containerPort: 3000 } ]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: grpc-backend, namespace: gwtest }
+spec:
+  selector: { app: grpc-backend }
+  ports: [ { name: grpc, port: 9000, targetPort: 3000, appProtocol: kubernetes.io/h2c } ]

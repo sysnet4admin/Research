@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tls-termination
+  namespace: default
+  annotations: {}
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: tls-termination.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: echo
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - tls-termination.example.com
+    secretName: tls-termination-tls

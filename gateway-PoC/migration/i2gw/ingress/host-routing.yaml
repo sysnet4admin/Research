@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: host-routing
+  namespace: default
+  annotations: {}
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: host-routing.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: echo
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: host-routing2
+  namespace: default
+  annotations: {}
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: host-routing2.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: echo
+            port:
+              number: 80

@@ -1,0 +1,544 @@
+# Gateway PoC 채점 루브릭 (기계 판독, 단일 진실원)
+# 설계 근거와 동결 절차는 SCORING.md 참조.
+#
+# 상태: 동결(version 1). 레벨/채널은 kubernetes-sigs/gateway-api v1.4.0 태그
+# (pkg/features, apis/v1 Support 주석)로 확정. 결과 보고 변경 금지(SCORING.md 8장).
+# 각 test의 check 메커니즘(curl/kubectl 상세)은 측정 스크립트에서 구현하되,
+# pass_criteria와 threshold는 여기서 동결한다.
+
+version: 3   # v3(2026-06-05): graded Extended 5→13 확대(검증완료 8 추가, 전부 standard flag),
+             #   매트릭스(rate-limiting/body-size/regex) 휴리스틱→실측, auth(jwt/extauth) 항목 추가.
+             # v2(2026-06-04): canary 집계를 라운드별 100%→누적 풀링으로 정정(아래)
+gateway_api_target: "v1.4"
+crd_channel: "experimental"   # standard 상위집합. session-affinity 등 실험 필드 커버
+
+# 라운드 집계 임계값 (SCORING.md 5장)
+aggregation:
+  core_pass_rate_required: 1.00      # 결정론 Core 항목은 전 라운드 통과 요구
+  report_variance: true              # 모든 항목 통과율 분산 보고
+  # canary(표본 테스트) 예외: 라운드별 2-sigma[34,46] 경계는 정상이어도 약 5%/라운드
+  # 이탈(노이즈). 155라운드 다중 측정에서 7종 모두 라운드별로 가끔 이탈하나 누적
+  # 풀링 split은 전부 79.4~80.0%로 수렴 → 라운드별 100%가 아니라 누적 풀링이 표본
+  # 테스트의 통계적 정답. core_pass_rate_required는 결정론 항목에만 적용.
+  canary_aggregation: "pooled"       # 누적 v1/v2 합산 split이 목표±2σ면 Core PASS
+  canary_pool_sigma: 2               # 풀링 2-sigma 경계
+  canary_report_per_round_variance: true  # 라운드별 분산은 품질 서브메트릭으로 보존(보고)
+
+# 등급 표현 (3축, SCORING.md 2.1)
+grading:
+  core_conformance: "7개 Core(HTTP 프로파일) 전부 PASS → Conformant"
+  extended_breadth: "지원 Extended-standard 수 / 5"
+  experimental_capability: "retry, session-affinity는 v1.4 conformance flag 없음. 별도 역량 보고"
+  impl_matrix: "비표준 4항목은 등급 미반영, 보유 매트릭스로만 제시"
+
+# 레벨 정의
+# 레벨 = Support(Core/Extended) × 채널(standard/experimental)의 조합.
+# 공식 모델(GEP-1709): conformance는 채널별로 채점·보고됨(gatewayAPIChannel). per-feature
+# "conformance flag"는 없고, 기능의 conformance feature 존재 여부 + 채널로 결정된다.
+levels:
+  core: "Support:Core conformance 기능. 필수(양 채널). @v1.4"
+  extended-standard: "Support:Extended conformance 기능 + standard 채널 @v1.4(안정). graded 폭(기준 축)"
+  extended-experimental: "Support:Extended conformance 기능 + experimental 채널 @v1.4(필드 변경 가능). graded 폭(experimental 축, 별도)"
+  experimental: "API에 experimental 필드로 존재하나 v1.4 conformance 기능(테스트) 자체가 없음. 채점 불가, 역량 보고"
+  impl-specific: "Gateway API 표준에 없는 구현체 고유 기능. 매트릭스(conformance 무관)"
+  non-functional: "운영/성능/견고성. feature 아님"
+
+categories: [routing, tls, traffic, modification]
+
+# SKIP 분리 코드 (SCORING.md 4장)
+skip_codes:
+  unsupported: "구현체 설계상 미제공"
+  not-configured: "하네스 미구성. 버그로 처리, 재측정"
+  infra-excluded: "인프라 플레이크. 평가 제외, 재실행"
+
+tests:
+  # ================= Core (7) — HTTP 프로파일 필수 =================
+  host-routing:
+    level: core
+    category: routing
+    channel: standard
+    feature: "HTTPRoute hostnames"
+    check:
+      type: http_body_match
+      requests:
+        - host: "v1.example.com"
+          expect_body_contains: "${BACKEND_V1_TOKEN}"
+        - host: "v2.example.com"
+          expect_body_contains: "${BACKEND_V2_TOKEN}"
+    pass_criteria: "all requests route to the matching backend"
+
+  path-routing:
+    level: core
+    category: routing
+    channel: standard
+    feature: "HTTPRoute path Prefix/Exact match"
+    check:
+      type: http_body_match
+      requests:
+        - path: "/v1"
+          expect_body_contains: "${BACKEND_V1_TOKEN}"
+        - path: "/v2"
+          expect_body_contains: "${BACKEND_V2_TOKEN}"
+    pass_criteria: "each path routes to the matching backend"
+
+  header-routing:
+    level: core
+    category: routing
+    channel: standard
+    feature: "HTTPRoute header match (Exact)"
+    check:
+      type: http_body_match
+      requests:
+        - headers: { "X-Version": "v1" }
+          expect_body_contains: "${BACKEND_V1_TOKEN}"
+        - headers: { "X-Version": "v2" }
+          expect_body_contains: "${BACKEND_V2_TOKEN}"
+    pass_criteria: "header value selects the matching backend"
+
+  tls-termination:
+    level: core
+    category: tls
+    channel: standard
+    feature: "Gateway HTTPS listener, tls.mode Terminate"
+    check:
+      type: https_request
+      sni: "v1.example.com"
+      verify: "TLS handshake completes; response body from backend"
+    pass_criteria: "gateway terminates TLS and serves backend over HTTPS"
+
+  canary-traffic:
+    level: core
+    category: traffic
+    channel: standard
+    feature: "HTTPBackendRef.weight (Core, no separate flag)"
+    check:
+      type: http_sampling
+      host: "canary.example.com"
+      samples: 50
+      expect_split: { v1: 0.8, v2: 0.2 }
+      # 라운드별 경계(품질용): mean=40, sigma=sqrt(50*0.8*0.2)=2.83, 2-sigma → [34,46]
+      # 이 경계는 라운드별 분산 보고(2σ이탈 카운트)에만 쓴다. Core 통과 판정은 아래
+      # aggregation(누적 풀링 split ±2σ)로 한다(v2 정정). 단일 라운드 채점이면 [34,46].
+      pass_min_v1: 34
+      pass_max_v1: 46
+    pass_criteria: "누적 풀링 split이 80/20에 ±2σ 내 수렴(v2). 라운드별 [34,46]은 분산 보고용"
+    quality_submetric: "누적 split 비율 + 라운드별 평균/min~max/2σ이탈수 (보고용, report 2b절)"
+
+  header-modifier:
+    level: core
+    category: modification
+    channel: standard
+    feature: "RequestHeaderModifier (Core); ResponseHeaderModifier part is Extended"
+    check:
+      type: header_echo
+      modifier: { set: { "X-Test": "modified" } }
+      verify: "backend echoes the injected request header"
+    pass_criteria: "request header add/set/remove reflected at backend"
+    note: "응답 헤더 수정까지 검증하면 그 부분은 Extended로 별도 표기"
+
+  cross-namespace:
+    level: core
+    category: routing
+    channel: standard
+    feature: "ReferenceGrant"
+    check:
+      type: cross_ns_route
+      route_ns: "gateway-poc"
+      backend_ns: "backend-ns"
+      verify: "route resolves only when ReferenceGrant present"
+    pass_criteria: "cross-namespace backendRef works with ReferenceGrant"
+
+  # ============ Extended-standard (5) — 선택, conformance flag 존재 ============
+  https-redirect:
+    level: extended-standard
+    category: tls
+    channel: standard
+    feature: "HTTPRouteSchemeRedirect / HTTPRoutePortRedirect"
+    check:
+      type: http_redirect
+      request: { scheme: http, host: "v1.example.com" }
+      expect_status: [301, 302]
+      expect_location_scheme: "https"
+    pass_criteria: "HTTP request redirected to HTTPS with 301/302"
+
+  url-rewrite:
+    level: extended-standard
+    category: modification
+    channel: standard
+    feature: "HTTPRoutePathRewrite / HTTPRouteHostRewrite"
+    check:
+      type: path_rewrite_echo
+      request_path: "/old/foo"
+      expect_backend_path: "/new/foo"
+    pass_criteria: "backend receives the rewritten path/host"
+
+  timeout:
+    level: extended-standard
+    category: traffic
+    channel: standard
+    feature: "HTTPRouteRequestTimeout / HTTPRouteBackendTimeout"
+    check:
+      type: timeout_assert
+      configured_timeout_s: 2
+      backend_delay_s: 5
+      expect: "request aborted at ~configured timeout"
+    pass_criteria: "request times out at the configured value (not backend delay)"
+
+  backend-tls:
+    level: extended-standard
+    category: tls
+    channel: standard
+    feature: "BackendTLSPolicy (graduated to standard in v1.4)"
+    check:
+      type: backend_tls_assert
+      policy: "BackendTLSPolicy with CA + hostname"
+      verify: "gateway connects to backend over validated TLS"
+    pass_criteria: "gateway-to-backend TLS validated per BackendTLSPolicy"
+    note: "작년 Traefik 실패(v1alpha3 vs v1)는 v1.4 승격으로 해소 예상"
+
+  grpc-routing:
+    level: extended-standard
+    category: routing
+    channel: standard
+    profile: grpc
+    feature: "GRPCRoute (Core within GRPC profile)"
+    check:
+      type: grpc_call            # FIX: 실제 gRPC 호출. 리소스 존재만으로 PASS 금지
+      tool: grpcurl
+      verify: "gRPC request through gateway returns a valid response"
+    pass_criteria: "actual gRPC call via GRPCRoute succeeds (not resource existence)"
+
+  # ---- v3 추가 Extended (8) — 전부 standard 채널 conformance flag 보유(v1.4.0 pkg/features) ----
+  response-header-modifier:
+    level: extended-standard
+    category: modification
+    channel: standard
+    feature: "SupportHTTPRouteResponseHeaderModification"
+    differentiation: differentiating   # kong 미지원
+    check: { type: resp_header_assert, verify: "ResponseHeaderModifier sets response header" }
+    pass_criteria: "response carries the set header"
+
+  request-mirror:
+    level: extended-standard
+    category: traffic
+    channel: standard
+    feature: "SupportHTTPRouteRequestMirror"
+    differentiation: differentiating   # envoy/istio/kgateway 위주
+    check: { type: mirror_assert, verify: "mirrored request reaches mirror backend (pod log)" }
+    pass_criteria: "mirror backend receives the request"
+
+  method-matching:
+    level: extended-standard
+    category: routing
+    channel: standard
+    feature: "SupportHTTPRouteMethodMatching"
+    differentiation: common
+    check: { type: method_match, verify: "GET vs POST route to different backends" }
+    pass_criteria: "method-based routing works"
+
+  query-param-matching:
+    level: extended-standard
+    category: routing
+    channel: standard
+    feature: "SupportHTTPRouteQueryParamMatching"
+    differentiation: common
+    check: { type: query_match, verify: "?ver=v1/v2 route to different backends" }
+    pass_criteria: "query-param-based routing works"
+
+  backend-request-header-mod:
+    level: extended-standard
+    category: modification
+    channel: standard
+    feature: "SupportHTTPRouteBackendRequestHeaderModification"
+    differentiation: differentiating   # nginx UnsupportedValue, traefik 미지원
+    check: { type: backend_req_header_assert, verify: "backendRef filter injects header to backend" }
+    pass_criteria: "backend receives injected header"
+
+  path-redirect:
+    level: extended-standard
+    category: routing
+    channel: standard
+    feature: "SupportHTTPRoutePathRedirect"
+    differentiation: differentiating   # kong 미수행
+    check: { type: path_redirect_assert, verify: "ReplaceFullPath 302 Location /newpath" }
+    pass_criteria: "redirect to replaced full path"
+
+  websocket:
+    level: extended-standard
+    category: traffic
+    channel: standard
+    feature: "SupportHTTPRouteBackendProtocolWebSocket"
+    differentiation: common
+    check: { type: ws_handshake, verify: "HTTP Upgrade -> 101 Switching Protocols" }
+    pass_criteria: "websocket upgrade handshake succeeds"
+
+  listener-isolation:
+    level: extended-standard
+    category: routing
+    channel: standard
+    feature: "SupportGatewayHTTPListenerIsolation (Gateway feature)"
+    differentiation: common
+    check: { type: listener_isolation, verify: "specific-hostname listener isolates from wildcard listener" }
+    pass_criteria: "hostname routed to its specific listener (isolated from wildcard)"
+
+  # ====== experimental 필드(conformance 기능 자체가 없음) — 채점 불가, 역량 보고 ======
+  # ★retry·SessionPersistence는 v1.4.0 pkg/features(AllFeatures) 어디에도 conformance
+  #  기능이 없다(httproute/gateway/... 전부 확인). API엔 experimental 필드로 존재하나
+  #  conformance 테스트가 없어 graded 불가. cors(SupportHTTPRouteCORS)와 구분된다.
+  retry:
+    level: experimental
+    category: traffic
+    channel: experimental
+    in_grade: false
+    feature: "HTTPRoute retry (experimental 필드, v1.4 conformance 기능 없음)"
+    check:
+      type: retry_assert
+      verify: "failing backend response triggers configured retry"
+    pass_criteria: "retry policy retries on configured condition"
+    report_as: "experimental capability (no conformance feature)"
+
+  session-affinity:
+    level: experimental
+    category: traffic
+    channel: experimental
+    in_grade: false
+    feature: "SessionPersistence (experimental 필드, v1.4 conformance 기능 없음)"
+    check:
+      type: sticky_assert        # FIX: 동일 백엔드 파드 고정 검증(쿠키 존재만으로 부족)
+      requests: 10
+      verify: "same backend pod across requests with session cookie"
+    pass_criteria: "requests stick to one backend pod (verified by pod identity)"
+    report_as: "experimental capability (no conformance feature)"
+
+  # ============ Impl-specific / 비기능 — 등급 미반영, 매트릭스 ============
+  rate-limiting:
+    level: impl-specific
+    category: null
+    channel: n/a
+    in_grade: false
+    feature: "not in Gateway API spec (vendor-specific)"
+    check:
+      type: rate_limit_measured   # v3: 휴리스틱 폐기. 구현체 정책(5/min) 실배포 후 429 카운트.
+      limit_per_min: 5
+      requests: 30                 # 동결
+      enforce_threshold: 5         # 429 >= 5 면 강제로 판정
+      mechanism: { native: "envoy,kgateway,kong,traefik,nginx(RateLimitPolicy)", low-level-config: "istio(EnvoyFilter)", unsupported: "cilium" }
+    matrix_value: "native | low-level-config | unsupported"
+
+  body-size:
+    level: impl-specific
+    category: null
+    channel: n/a
+    in_grade: false
+    feature: "request body size limit (vendor-specific, no Gateway API field)"
+    check:
+      type: body_size_measured     # 2MB POST → 413
+      limit: "1k"
+      post_bytes: 2097152
+      expect_status: 413
+      mechanism: { native: "nginx(ClientSettingsPolicy),traefik,kong", low-level-config: "istio(EnvoyFilter buffer)", unsupported: "envoy,kgateway(정책 미확정),cilium" }
+    matrix_value: "native | low-level-config | unsupported"
+
+  regex:
+    level: impl-specific           # GEP-2694 closed → conformance flag 없음 → 매트릭스
+    category: routing
+    channel: n/a
+    in_grade: false
+    feature: "RegularExpression path match (no standard conformance flag)"
+    check:
+      type: regex_match
+      route: "path RegularExpression /api/v[0-9]+/.*"
+      verify: "/api/v123/x→200, /api/vABC/x→404 (정확매칭). 과매칭=부정확"
+    matrix_value: "supported | overmatch | unsupported"
+
+  auth-jwt:
+    level: impl-specific           # JWT 표준 conformance flag 없음(구현체) → 매트릭스
+    category: null
+    channel: n/a
+    in_grade: false
+    feature: "JWT authentication (vendor; no Gateway API standard)"
+    check:
+      type: auth_jwt_documented    # E8 검증값(라이브 7종). per-round 라이브 미통합(무거움/비채점).
+      verify: "보호 라우트 no-token/valid/bad-token (RS256+JWKS)"
+    matrix_value: "native-jwks | consumer-credential | plus-only | unsupported"
+    note: "_INTERNAL_NOTES/PRESENTATION_EVIDENCE.md E8: native JWKS 3종(istio/envoy/kgateway), kong(KGO 시크릿이슈), nginx(Plus전용/Basic OSS), traefik/cilium 미지원"
+
+  auth-extauth:
+    level: experimental            # GEP-1494 ExternalAuth 표준필터=experimental + 구현체
+    category: null
+    channel: experimental
+    in_grade: false
+    feature: "external authorization (GEP-1494 standard filter + vendor)"
+    check:
+      type: auth_extauth_documented  # E9 검증값(라이브 7종).
+      verify: "표준 ExternalAuth 필터 + 구현체 extAuth, no-token/allow/deny"
+    matrix_value: "vendor-native | standard-filter-failopen | unsupported"
+    note: "_INTERNAL_NOTES/PRESENTATION_EVIDENCE.md E9: 표준 GEP-1494 필터 아무도 강제 못함(cilium/kgateway는 표준필터 미구현이라 통과=silent no-op, 나머지 거부/오류). GEP-1494 experimental이라 실패모드 미규정(스펙에 MUST fail closed 없음). 구현체 native 4종(envoy/traefik/kgateway/istio)"
+
+  cors:
+    level: extended-experimental    # SupportHTTPRouteCORS = Extended + experimental 채널(v1.4.0 pkg/features)
+    category: traffic
+    channel: experimental
+    in_grade: true                  # experimental 채널 Extended로 graded(standard와 별도 breadth)
+    feature: "SupportHTTPRouteCORS (Support: Extended, Channel: Experimental)"
+    differentiation: differentiating
+    check: { type: cors_assert, verify: "OPTIONS preflight → Access-Control-Allow-Origin" }
+    pass_criteria: "preflight가 Access-Control-Allow-Origin 반환"
+
+  health-check:
+    level: impl-specific
+    category: null
+    channel: n/a
+    in_grade: false
+    feature: "vendor health-check / failover (not Gateway API)"
+    check:
+      type: health_endpoint
+      verify: "gateway health/failover behavior per vendor mechanism"
+    matrix_value: "supported | unsupported"
+
+  load-test:
+    level: non-functional
+    category: null
+    channel: n/a
+    in_grade: false
+    feature: "performance, not a Gateway API feature"
+    check:
+      type: concurrency
+      concurrent: 20             # 동결
+      pass_threshold: 18         # 동결: >=18/20 success
+    matrix_value: "success_ratio (reported)"
+
+  failover-recovery:
+    level: non-functional
+    category: null
+    channel: n/a
+    in_grade: false
+    feature: "reliability, not a Gateway API feature"
+    check:
+      type: pod_restart_recovery
+      verify: "routing normalizes after gateway pod restart"
+    matrix_value: "recovery_time (reported)"
+
+  config-robustness:
+    level: non-functional
+    category: null
+    channel: n/a
+    in_grade: false
+    feature: "혼합 배포 견고성(7종 동일 잣대): 모든 기능 라우트 동시 배포 시 기본 라우팅 생존"
+    check:
+      type: robustness
+      verify: "deploy all feature routes at once; basic host-routing must survive"
+    matrix_value: "robust | fragile (Kong은 all-or-nothing으로 fragile)"
+
+  # ===== 출발점 뷰 보강(2026-06-05): 미측정이던 4항목 실측. graded 폭(13/1) 불변 위해 매트릭스로 보고 =====
+  # mtls-client는 측정 항목에서 제외: v1.4 Gateway CRD에 frontendValidation 필드 자체가 없음
+  # (experimental v1.4.1 직접 확인). 표준 API로 측정 불가 → migration_view에서 구조적 판정(v1.5 GA 목표).
+
+  tls-passthrough:
+    level: impl-specific
+    category: tls
+    channel: experimental
+    in_grade: false
+    feature: "TLSRoute passthrough (Gateway API, experimental 채널)"
+    check:
+      type: tls_passthrough_assert  # TLSRoute mode=Passthrough, SNI 기반으로 백엔드가 TLS 종료
+      verify: "passthrough 시 백엔드까지 암호화 그대로 전달(백엔드가 종료)"
+    matrix_value: "supported | unsupported"
+    note: "표준(experimental 채널) 기능. 출발점 뷰 🟡. TLSRoute 미구현 구현체는 unsupported"
+
+  ip-filter:
+    level: impl-specific
+    category: null
+    channel: n/a
+    in_grade: false
+    feature: "IP allow/deny (구현체; whitelist-source-range 대체, 표준 필터 없음)"
+    check:
+      type: ip_filter_measured      # 허용 CIDR 외 요청 403/거부
+      verify: "허용 CIDR 외 클라이언트 차단(403/거부), 허용 내 통과"
+      mechanism: { native: "envoy(SecurityPolicy authorization CIDR), istio(AuthorizationPolicy ipBlocks), traefik(Middleware ipAllowList), kong(KongPlugin ip-restriction), cilium(CiliumNetworkPolicy)", unsupported: "nginx, kgateway(정책 미확정)" }
+    matrix_value: "native | unsupported"
+
+  basic-auth:
+    level: impl-specific
+    category: null
+    channel: n/a
+    in_grade: false
+    feature: "HTTP basic auth (구현체; auth-type basic 대체, 표준 Gateway API 없음)"
+    check:
+      type: basic_auth_measured     # 자격증명 없으면 401, 유효하면 200
+      verify: "credential 없으면 401, 유효 credential이면 200"
+      mechanism: { native: "envoy(SecurityPolicy basicAuth), traefik(Middleware basicAuth), kong(KongPlugin basic-auth), nginx(AuthenticationFilter)", unsupported: "istio, cilium, kgateway(정책 미확정)" }
+    matrix_value: "native | unsupported"
+
+# ============================================================================
+# 출발점 뷰 (migration view): ingress-nginx에서 Gateway API로 가는 마이그레이션 점검표
+# ============================================================================
+# 엄밀성 뷰(위 tests = 공식 Core/Extended 채점)와 "같은 측정 데이터"를 마이그레이션
+# 렌즈로 재조직한다. 항목은 ingress-nginx 어노테이션 실사용에 앵커링하고, 마이그레이션
+# 난이도 4등급으로 그룹한다. report.py --view migration 이 이 블록 + 측정 결과를 조인.
+#
+# 차별점(공식 자산과 중복 아님): conformance suite는 "스펙 준수 이진 PASS/FAIL"만,
+# ingress2gateway는 "기계적 변환 여부"만, 마이그레이션 가이드는 고수준. 우리는 라이브
+# 실측(선언 아님) + conformance 범위 밖 구현체기능(rate-limit/auth/body-size) + conformant
+# 내부의 기능폭 격차를 한 잣대로 가로비교한다.
+#
+# 출처(1차):
+#  - ingress-nginx 은퇴 발표(2025-11-11 kubernetes.io), "Before You Migrate"(2026-02-27)
+#  - ingress2gateway 1.0(2026-03-20): 30+ 어노테이션 자동변환 + 미변환 경고
+#  - IngressNightmare CVE-2025-1974(snippet/annotation→raw nginx 주입이 은퇴 동인)
+#  - Reddit "Gateway API for Ingress-NGINX, a Maintainer's Perspective"(robertjscott, GW API 메인테이너)
+#
+# tier 정의(난이도 4등급, 출발점 뷰의 척추):
+#  standard = Core/Extended-std, i2gw 자동변환, 표준채널(메인테이너: "Ingress만큼 안정"). "그냥 넘어감"
+#  caution  = 실험채널이거나 의미가 달라 검증 필수("Before You Migrate" 함정). v1.5에서 다수 승격 예정
+#  vendor   = 표준 API 없음, 구현체 CRD로만 → 락인 재발(hennexl: "결국 impl-specific")
+#  blocked  = Gateway API에 등가물 자체가 없음(설계상 제거 포함, 재설계 필수)
+#
+# 필드:
+#  importance = ingress-nginx 실사용 중요도(directional: 공개 정량 survey 없음. 메인테이너가
+#    snippet을 "가장 의존+가장 위험"으로 지목한 신호 + 마이그레이션 가이드 강조 종합).
+#  maps_to    = 위 tests의 측정 항목명(실측 셀 조인). null이면 구조적 판정(스펙 레벨, 미측정).
+#  i2gw       = ingress2gateway 1.0 변환: converts | partial | no | n-a(native Ingress라 변환대상 아님).
+#  gw_status  = Gateway API v1.4 지위 요약(표시용).
+
+migration_view:
+  meta:
+    gateway_api_version: "v1.4"
+    i2gw_version: "1.1.0"
+    i2gw_source: "실측(migration/i2gw/verify.py로 어노테이션별 실행, before/after manifest + 로그 보존)"
+    headline: "Gateway API 공식 권고는 'conformant 인증을 받은 구현체를 고르라'는 것이다. 하지만 conformant 인증을 받아도 실제 지원하는 기능 폭은 6개에서 13개까지 갈린다. 그 차이를 비교하는 것이 이 뷰다."
+  tiers:
+    standard: { name: "🟢 표준 마이그레이션", desc: "Core/Extended-std, i2gw 자동변환, 표준채널 안정. 대체로 그대로 전환" }
+    caution:  { name: "🟡 주의 마이그레이션", desc: "실험채널이거나 의미가 달라 검증 필수. v1.5에서 다수 승격 예정" }
+    vendor:   { name: "🟠 구현체 종속",         desc: "표준 API가 없어 각 구현체의 CRD로만 구현 가능. 특정 구현체에 묶이는 락인(lock-in) 발생" }
+    blocked:  { name: "🔴 마이그레이션 불가", desc: "등가물 자체 없음(재설계 필수)" }
+  capabilities:
+    # ---- 🟢 표준 이식 ----
+    - { capability: "host 라우팅",        annotation: "(native Ingress rules)",                     importance: high,   tier: standard, maps_to: host-routing,             i2gw: n-a,      gw_status: "Core" }
+    - { capability: "path 라우팅",        annotation: "(native rules, pathType)",                   importance: high,   tier: standard, maps_to: path-routing,             i2gw: n-a,      gw_status: "Core" }
+    - { capability: "header 라우팅",      annotation: "canary-by-header",                           importance: medium, tier: standard, maps_to: header-routing,           i2gw: converts, gw_status: "Core" }
+    - { capability: "TLS 종료",           annotation: "(native tls.secretName)",                    importance: high,   tier: standard, maps_to: tls-termination,          i2gw: n-a,      gw_status: "Core" }
+    - { capability: "HTTPS 리다이렉트",   annotation: "ssl-redirect, force-ssl-redirect",           importance: high,   tier: standard, maps_to: https-redirect,           i2gw: partial, gw_status: "Core(RequestRedirect)" }
+    - { capability: "path 리다이렉트",    annotation: "permanent-redirect, temporal-redirect, app-root", importance: medium, tier: standard, maps_to: path-redirect,      i2gw: converts, gw_status: "Core/Ext(RequestRedirect)" }
+    - { capability: "URL rewrite",        annotation: "rewrite-target",                             importance: high,   tier: standard, maps_to: url-rewrite,              i2gw: partial, gw_status: "Extended-std(URLRewrite)" }
+    - { capability: "카나리(가중치)",     annotation: "canary, canary-weight, canary-weight-total", importance: high,   tier: standard, maps_to: canary-traffic,           i2gw: converts, gw_status: "Core(weighted backendRefs)" }
+    - { capability: "요청 미러링",        annotation: "mirror-target, mirror-host",                 importance: low,    tier: standard, maps_to: request-mirror,           i2gw: "no",       gw_status: "Extended-std(RequestMirror)" }
+    - { capability: "헤더 수정(요청/응답)", annotation: "proxy-set-headers, custom-headers, x-forwarded-prefix", importance: high, tier: standard, maps_to: header-modifier,   i2gw: "no",  gw_status: "Core(요청)/Ext(응답)", note: "x-forwarded-prefix는 출력에 필터 없이 조용히 누락(거절 통지도 없음), proxy-set-headers/custom-headers도 미변환. i2gw 실측 결과 등가물 방출 0" }
+    - { capability: "websocket",          annotation: "(native, proxy upgrade)",                    importance: medium, tier: standard, maps_to: websocket,                i2gw: n-a,      gw_status: "Extended-std(WebSocket)" }
+    # ---- 🟡 주의 이식 ----
+    - { capability: "regex 경로",         annotation: "use-regex + capture group",                  importance: high,   tier: caution,  maps_to: regex,                   i2gw: partial, gw_status: "impl-specific(RegularExpression)", note: "nginx은 prefix 매치에 대소문자 무시, GW는 풀매치에 대소문자 구분이라 그대로 옮기면 silent 404 위험(Before You Migrate). capture-group rewrite는 대부분 미지원" }
+    - { capability: "timeout",            annotation: "proxy-connect/read/send-timeout",            importance: high,   tier: caution,  maps_to: timeout,                 i2gw: partial,  gw_status: "Standard(v1.2)", note: "nginx의 timeout 3개를 GW의 request/backendRequest 2개로 합쳐야 함, i2gw는 best-effort 변환" }
+    - { capability: "CORS",               annotation: "enable-cors, cors-allow-*, cors-expose-headers, cors-max-age", importance: high, tier: caution, maps_to: cors,        i2gw: converts, gw_status: "Extended-exp(v1.4)", note: "실험채널, v1.5에서 Standard 승격 예정" }
+    - { capability: "외부 인증(OIDC 포함)", annotation: "auth-url, auth-signin, auth-snippet",      importance: high,   tier: caution,  maps_to: auth-extauth,            i2gw: "no",       gw_status: "Extended-exp(GEP-1494, v1.4)", note: "OIDC는 보통 auth-url에서 oauth2-proxy로 구현하므로 이 행에 포함. mTLS 클라이언트 인증과 함께 v1.5 GA 목표" }
+    - { capability: "backend 재암호화",   annotation: "backend-protocol: HTTPS, proxy-ssl-*",       importance: medium, tier: caution,  maps_to: backend-tls,             i2gw: partial, gw_status: "Core(BackendTLSPolicy GA v1.4)" }
+    - { capability: "gRPC 라우팅",        annotation: "backend-protocol: GRPC",                     importance: medium, tier: caution,  maps_to: grpc-routing,            i2gw: converts,  gw_status: "Core(GRPCRoute 별도)" }
+    - { capability: "mTLS 클라이언트 인증", annotation: "auth-tls-secret, auth-tls-verify-client, auth-tls-verify-depth", importance: medium, tier: caution, maps_to: null, structural_cell: "TBD(v1.5)", i2gw: "no", gw_status: "v1.4 미제공, v1.5(2026-04)에서 추가", note: "표준 frontendValidation 필드가 v1.4 Gateway CRD에 아예 없음(experimental v1.4.1 CRD 직접 확인: tls는 certificateRefs/mode/options뿐). v1.5(2026-04-21 릴리스, GEP-91)에서 frontendValidation.caCertificateRefs로 추가됨(AllowValidOnly/AllowInsecureFallback). 우리 벤치마크는 v1.4 고정이라 미측정 → TBD(v1.5). Cilium 1.20 stable(7월 말 예정) 이후 v1.5 재베이스라인 시 측정 가능" }
+    - { capability: "TLS passthrough",    annotation: "ssl-passthrough",                            importance: medium, tier: caution,  maps_to: tls-passthrough,         i2gw: converts,       gw_status: "Extended-exp(TLSRoute)", note: "TLSRoute(passthrough)로 7종 실측. TLSRoute v1.5 GA 목표(PR #4064)" }
+    # ---- 🟠 구현체 종속 ----
+    - { capability: "rate limiting",      annotation: "limit-rps, limit-rpm, limit-connections, limit-rate, limit-whitelist", importance: high, tier: vendor, maps_to: rate-limiting, i2gw: "no", gw_status: "표준 없음 → 구현체 정책 CRD" }
+    - { capability: "요청 본문 크기 제한", annotation: "proxy-body-size",                           importance: high,   tier: vendor,   maps_to: body-size,               i2gw: "no",       gw_status: "표준 없음(i2gw도 경고)" }
+    - { capability: "세션 어피니티",      annotation: "affinity: cookie, session-cookie-name/expires", importance: medium, tier: vendor, maps_to: session-affinity,        i2gw: "no",  gw_status: "스펙 있으나 cookie설정 impl종속", note: "i2gw 실측 결과 affinity/session-cookie-* 3개 전부 거절(Session affinity is not supported), 출력에 어피니티 구성 0" }
+    - { capability: "JWT 검증",           annotation: "(auth-snippet / 플러그인)",                  importance: high,   tier: vendor,   maps_to: auth-jwt,                i2gw: "no",       gw_status: "표준 없음 → 구현체" }
+    - { capability: "IP allow/deny",      annotation: "whitelist-source-range, denylist-source-range", importance: medium, tier: vendor, maps_to: ip-filter,             i2gw: "no",  gw_status: "표준 필터 없음 → 구현체 정책", note: "구현체 CIDR 정책으로 7종 실측. i2gw는 impl-specific config로만 방출" }
+    - { capability: "basic auth",         annotation: "auth-type: basic, auth-secret, auth-realm",  importance: medium, tier: vendor,   maps_to: basic-auth,              i2gw: "no",       gw_status: "표준 없음 → 구현체 정책", note: "표준 Gateway API엔 없으나 구현체가 구현(envoy SecurityPolicy, traefik/kong, NGF AuthenticationFilter)해 🟠로 분류. 7종 실측" }
+    - { capability: "설정 스니펫",        annotation: "configuration-snippet, server-snippet, stream-snippet", importance: high, tier: blocked, maps_to: null,            i2gw: "no",       gw_status: "설계상 등가물 없음(IngressNightmare 원인)", note: "실사용됨(커스텀 헤더, 타임아웃, 버퍼 크기, 경로 차단 등). 단 그 용례 다수는 이미 타입드 기능에 흡수(헤더 수정/timeout 등 다른 행에서 측정). 잔여 본질인 임의 nginx 지시문 주입은 표준도 안전한 구현체 대체물도 없어 측정 무의미(측정 대상 아님). v1.9.0부터 보안상 기본 비활성화(CVE-2021-25742). NGF에만 snippet 옵션 잔존(그 CVE의 원인 기능)" }
