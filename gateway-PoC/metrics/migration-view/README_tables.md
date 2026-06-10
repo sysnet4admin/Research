@@ -12,7 +12,7 @@
 |---|---|
 | **🟢 Standard migration** | Core/Extended-std, i2gw auto-conversion, standard channel is stable. Mostly carries over as-is |
 | **🟡 Caution migration** | Experimental channel or different semantics, verification required. Many to be promoted in v1.5 |
-| **🟠 Implementation-locked** | No standard API, only implementable via each implementation's CRD. Causes lock-in to a specific implementation |
+| **🟠 Vendor-locked** | No standard API, only implementable via each implementation's CRD, so vendor lock-in recurs |
 | **🔴 Migration-impossible** | No equivalent at all (redesign required) |
 
 ## 2. Per-implementation coverage (by measurable items)
@@ -75,7 +75,7 @@
   - **mTLS client auth**: The standard frontendValidation field is entirely absent from the v1.4 Gateway CRD (confirmed directly on the experimental v1.4.1 CRD: tls has only certificateRefs/mode/options). v1.5 (released 2026-04-21, GEP-91) added it as frontendValidation.caCertificateRefs (AllowValidOnly/AllowInsecureFallback). Our benchmark is pinned to v1.4, so it is unmeasured, hence TBD(v1.5). Measurable when the v1.5 re-baseline runs after Cilium 1.20 stable (expected late July)
   - **TLS passthrough**: Measured on all 7 via TLSRoute (passthrough). TLSRoute targets v1.5 GA (PR #4064)
 
-### 🟠 Implementation-locked (6)
+### 🟠 Vendor-locked (6)
 
 | Feature | ingress-nginx annotation | Importance | GW API v1.4 | i2gw | nginx | envoy | istio | cilium | kong | kgateway | traefik |
 |---|---|---|---|---|---|---|---|---|---|---|---|

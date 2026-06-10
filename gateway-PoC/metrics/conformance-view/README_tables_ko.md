@@ -102,7 +102,7 @@
 | kgateway | native | unsupported | supported | supported | unsupported | native |
 | traefik | native | native | supported | supported | native | native |
 
-> **측정 설정 주의(공정성, 2026-06-10 재검증)**: 일부 항목은 구현체 권장 설정을 켜야 동작한다. Kong은 query-param/method 매칭을 위해 `router_flavor=expressions`로 측정했다(OSS 디폴트 traditional_compatible은 query-param 미지원, 즉 디폴트로 재면 더 낮게 나온다). kgateway basic-auth는 TrafficPolicy basicAuth로 동작(native). Cilium rate-limiting/body-size는 선언형 표준/벤더 경로가 없어 unsupported로 적었으나, raw CiliumEnvoyConfig(istio EnvoyFilter와 동급 저수준 escape hatch)로는 가능하다(미측정). Istio tls-passthrough는 alpha 플래그(PILOT_ENABLE_ALPHA_GATEWAY_API)를 켜도 v1.4에서 미동작이라 미지원(istio TLSRoute는 Terminate만 공식 conformant, passthrough 미검증, 이슈 #47366).
+> **측정 설정 주의(공정성, 2026-06-10 재검증)**: 일부 항목은 구현체 권장 설정을 켜야 동작한다. Kong은 query-param/method 매칭을 위해 `router_flavor=expressions`로 측정했다(OSS 디폴트 traditional_compatible은 query-param 미지원, 즉 디폴트로 재면 더 낮게 나온다). kgateway basic-auth는 TrafficPolicy basicAuth로 동작(native). Cilium rate-limiting/body-size는 선언형 표준이나 구현체 경로가 없어 unsupported로 적었으나, raw CiliumEnvoyConfig(istio EnvoyFilter와 동급 저수준 escape hatch)로는 가능하다(미측정). Istio tls-passthrough는 alpha 플래그(PILOT_ENABLE_ALPHA_GATEWAY_API)를 켜도 v1.4에서 미동작이라 미지원(istio TLSRoute는 Terminate만 공식 conformant, passthrough 미검증, 이슈 #47366).
 
 ## 6. 비기능 / 운영 지표 (기능 아님, 성능, 견고성, 복구)
 
@@ -136,7 +136,7 @@
 | kgateway | native JWKS | GatewayExtension native | 표준필터 미구현(통과)★ |
 | traefik | 미지원 | forwardAuth native | 수용하나 500 |
 
-> ★ GEP-1494 표준 ExternalAuth 필터는 어떤 구현체도 강제하지 못한다. envoy/nginx/istio/kong/traefik은 거부 또는 오류, cilium/kgateway는 표준 필터를 구현하지 않아 무인증 트래픽이 그대로 통과한다(silent no-op). GEP-1494는 experimental 단계라 실패모드(fail-open/closed)를 규정하지 않는다(스펙에 'MUST fail closed' 문구 없음, PR #4001에서 실패 의미 보류). cilium은 1.20, kgateway는 벤더 TrafficPolicy로만 ext-authz를 제공한다. 결론: 표준 필터는 아직 프로덕션 auth로 못 쓰고 벤더 CRD가 필요하다.
+> ★ GEP-1494 표준 ExternalAuth 필터는 어떤 구현체도 강제하지 못한다. envoy/nginx/istio/kong/traefik은 거부 또는 오류, cilium/kgateway는 표준 필터를 구현하지 않아 무인증 트래픽이 그대로 통과한다(silent no-op). GEP-1494는 experimental 단계라 실패모드(fail-open/closed)를 규정하지 않는다(스펙에 'MUST fail closed' 문구 없음, PR #4001에서 실패 의미 보류). cilium은 1.20, kgateway는 자체 TrafficPolicy로만 ext-authz를 제공한다. 결론: 표준 필터는 아직 프로덕션 auth로 못 쓰고 구현체 CRD가 필요하다.
 
 ## 8. 플레이크 / 데이터 주의 (canary 제외, 섹션 3 참조)
 

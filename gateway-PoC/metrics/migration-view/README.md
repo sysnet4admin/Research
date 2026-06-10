@@ -20,12 +20,12 @@ Question: **I run ingress-nginx. What carries over, and what breaks, if I move t
 ## Four difficulty grades (the spine of the checklist)
 - 🟢 **Standard migration**: Core/Extended-std, ingress2gateway auto-conversion, standard channel (in the maintainers' words, "as stable as Ingress"). Mostly carries over as-is.
 - 🟡 **Caution migration**: experimental channel or different semantics, verification required. CORS, external auth, mTLS client, and TLSRoute are v1.4 experimental channel and slated for Standard promotion in v1.5.
-- 🟠 **Vendor-locked**: no standard API, provided only via vendor CRDs, so lock-in recurs. rate-limit, body-size, and JWT are here.
+- 🟠 **Vendor-locked**: no standard API, provided only via each implementation's CRD, so vendor lock-in recurs. rate-limit, body-size, and JWT are here.
 - 🔴 **Migration-impossible**: the Gateway API has no equivalent at all (removed by design). snippets, basic auth.
 
 ## How this view differs from official material
 - The official **conformance suite** is only "binary spec-compliance PASS/FAIL", **ingress2gateway** is only "whether mechanical conversion happens", and the **migration guide** is high-level.
-- This view cross-compares, on one yardstick, live **measurement** (not declaration), the **vendor features** outside conformance scope (rate-limit, auth, body-size), and the **feature-breadth gap** within conformant implementations. For example, the CORS annotation converts, but on measurement only 3 of 7 pass.
+- This view cross-compares, on one yardstick, live **measurement** (not declaration), the **implementation features** outside conformance scope (rate-limit, auth, body-size), and the **feature-breadth gap** within conformant implementations. For example, the CORS annotation converts, but on measurement only 3 of 7 pass.
 
 ## Sources (primary) and limits
 - Sources: ingress-nginx retirement announcement (2025-11-11), "Before You Migrate" (2026-02-27), ingress2gateway 1.0 (2026-03-20), IngressNightmare CVE-2025-1974, Reddit "Gateway API for Ingress-NGINX, a Maintainer's Perspective" (robertjscott).

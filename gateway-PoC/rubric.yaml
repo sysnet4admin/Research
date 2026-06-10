@@ -511,7 +511,7 @@ migration_view:
   tiers:
     standard: { name: "🟢 표준 마이그레이션", name_en: "🟢 Standard migration", desc: "Core/Extended-std, i2gw 자동변환, 표준채널 안정. 대체로 그대로 전환", desc_en: "Core/Extended-std, i2gw auto-conversion, standard channel is stable. Mostly carries over as-is" }
     caution:  { name: "🟡 주의 마이그레이션", name_en: "🟡 Caution migration", desc: "실험채널이거나 의미가 달라 검증 필수. v1.5에서 다수 승격 예정", desc_en: "Experimental channel or different semantics, verification required. Many to be promoted in v1.5" }
-    vendor:   { name: "🟠 구현체 종속",         name_en: "🟠 Implementation-locked",         desc: "표준 API가 없어 각 구현체의 CRD로만 구현 가능. 특정 구현체에 묶이는 락인(lock-in) 발생", desc_en: "No standard API, only implementable via each implementation's CRD. Causes lock-in to a specific implementation" }
+    vendor:   { name: "🟠 벤더 종속",         name_en: "🟠 Vendor-locked",         desc: "표준 API가 없어 각 구현체의 CRD로만 구현 가능. 특정 구현체에 묶이는 벤더 락인(vendor lock-in) 발생", desc_en: "No standard API, only implementable via each implementation's CRD, so vendor lock-in recurs" }
     blocked:  { name: "🔴 마이그레이션 불가", name_en: "🔴 Migration-impossible", desc: "등가물 자체 없음(재설계 필수)", desc_en: "No equivalent at all (redesign required)" }
   capabilities:
     # ---- 🟢 표준 이식 ----

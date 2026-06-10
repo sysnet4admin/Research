@@ -12,7 +12,7 @@
 |---|---|
 | **🟢 표준 마이그레이션** | Core/Extended-std, i2gw 자동변환, 표준채널 안정. 대체로 그대로 전환 |
 | **🟡 주의 마이그레이션** | 실험채널이거나 의미가 달라 검증 필수. v1.5에서 다수 승격 예정 |
-| **🟠 구현체 종속** | 표준 API가 없어 각 구현체의 CRD로만 구현 가능. 특정 구현체에 묶이는 락인(lock-in) 발생 |
+| **🟠 벤더 종속** | 표준 API가 없어 각 구현체의 CRD로만 구현 가능. 특정 구현체에 묶이는 벤더 락인(vendor lock-in) 발생 |
 | **🔴 마이그레이션 불가** | 등가물 자체 없음(재설계 필수) |
 
 ## 2. 구현체별 커버리지 (측정 가능 항목 기준)
@@ -75,7 +75,7 @@
   - **mTLS 클라이언트 인증**: 표준 frontendValidation 필드가 v1.4 Gateway CRD에 아예 없음(experimental v1.4.1 CRD 직접 확인: tls는 certificateRefs/mode/options뿐). v1.5(2026-04-21 릴리스, GEP-91)에서 frontendValidation.caCertificateRefs로 추가됨(AllowValidOnly/AllowInsecureFallback). 우리 벤치마크는 v1.4 고정이라 미측정 → TBD(v1.5). Cilium 1.20 stable(7월 말 예정) 이후 v1.5 재베이스라인 시 측정 가능
   - **TLS passthrough**: TLSRoute(passthrough)로 7종 실측. TLSRoute v1.5 GA 목표(PR #4064)
 
-### 🟠 구현체 종속 (6)
+### 🟠 벤더 종속 (6)
 
 | 기능 | ingress-nginx 어노테이션 | 중요도 | GW API v1.4 | i2gw | nginx | envoy | istio | cilium | kong | kgateway | traefik |
 |---|---|---|---|---|---|---|---|---|---|---|---|

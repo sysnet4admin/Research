@@ -102,7 +102,7 @@
 | kgateway | native | unsupported | supported | supported | unsupported | native |
 | traefik | native | native | supported | supported | native | native |
 
-> **Measurement-setting note (fairness, re-verified 2026-06-10)**: some items only work when the implementation's recommended setting is enabled. Kong was measured with `router_flavor=expressions` for query-param/method matching (the OSS default traditional_compatible lacks query-param, so measuring with the default scores lower). kgateway basic-auth works via TrafficPolicy basicAuth (native). Cilium rate-limiting/body-size were marked unsupported because there is no declarative standard or vendor path, but they are possible via raw CiliumEnvoyConfig (a low-level escape hatch on par with istio EnvoyFilter; unmeasured). Istio tls-passthrough stays unsupported even with the alpha flag (PILOT_ENABLE_ALPHA_GATEWAY_API) because it does not work in v1.4 (istio TLSRoute is officially conformant only for Terminate, passthrough unverified, issue #47366).
+> **Measurement-setting note (fairness, re-verified 2026-06-10)**: some items only work when the implementation's recommended setting is enabled. Kong was measured with `router_flavor=expressions` for query-param/method matching (the OSS default traditional_compatible lacks query-param, so measuring with the default scores lower). kgateway basic-auth works via TrafficPolicy basicAuth (native). Cilium rate-limiting/body-size were marked unsupported because there is no declarative standard or implementation path, but they are possible via raw CiliumEnvoyConfig (a low-level escape hatch on par with istio EnvoyFilter; unmeasured). Istio tls-passthrough stays unsupported even with the alpha flag (PILOT_ENABLE_ALPHA_GATEWAY_API) because it does not work in v1.4 (istio TLSRoute is officially conformant only for Terminate, passthrough unverified, issue #47366).
 
 ## 6. Non-functional / operational metrics (not features: performance, robustness, recovery)
 
@@ -136,7 +136,7 @@
 | kgateway | native JWKS | GatewayExtension native | standard filter not implemented (passes)★ |
 | traefik | unsupported | forwardAuth native | accepts but 500 |
 
-> ★ The GEP-1494 standard ExternalAuth filter is enforced by no implementation. envoy/nginx/istio/kong/traefik reject or error, while cilium/kgateway do not implement the standard filter, so unauthenticated traffic passes through as-is (silent no-op). GEP-1494 is at the experimental stage and does not specify a failure mode (fail-open/closed) (there is no 'MUST fail closed' wording in the spec; PR #4001 deferred failure semantics). cilium provides ext-authz only in 1.20, kgateway only via its vendor TrafficPolicy. Conclusion: the standard filter is not yet usable as production auth and a vendor CRD is required.
+> ★ The GEP-1494 standard ExternalAuth filter is enforced by no implementation. envoy/nginx/istio/kong/traefik reject or error, while cilium/kgateway do not implement the standard filter, so unauthenticated traffic passes through as-is (silent no-op). GEP-1494 is at the experimental stage and does not specify a failure mode (fail-open/closed) (there is no 'MUST fail closed' wording in the spec; PR #4001 deferred failure semantics). cilium provides ext-authz only in 1.20, kgateway only via its own TrafficPolicy. Conclusion: the standard filter is not yet usable as production auth and an implementation CRD is required.
 
 ## 8. flake / data note (canary excluded, see section 3)
 
