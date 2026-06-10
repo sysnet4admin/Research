@@ -119,16 +119,21 @@ backend-request-header-mod/path-redirect/websocket/listener-isolation),
 ```
 gateway-PoC/
   SCORING.md               # 이 문서. 동결 기준
-  rubric.yaml              # 17항목 레벨/카테고리/합격기준/임계값 (기계 판독)
-  run-gateway-poc-17tests.sh   # 측정 전용 → round-N.json(원시 결과+메타)만 출력
+  rubric.yaml              # graded 항목 레벨/카테고리/합격기준/임계값 (기계 판독, v3)
+  measurement/             # 측정 하네스 → round-N.json(원시 결과+메타)
+    run-round.sh, lib-tests.sh, config.sh, manifests/
+  implementations/         # 구현체별 install.sh (7종)
   scripts/
-    score.py               # round-N.json + rubric.yaml → 항목 판정
     aggregate.py           # rounds/*.json → aggregated.json(통과율/분산)
-    report.py              # → report.html + README 등급표
+    merge_canary.py, merge_ops.py  # 분리 캠페인(canary 풀/운영 테스트) 병합
+    score.py               # aggregated.json + rubric.yaml → scores.json(항목 판정)
+    report.py              # → 두 뷰 README_tables.md(+ 로컬/블로그용 report.html)
+    finalize.sh            # 위 단계 일괄 실행(단일 진입점)
   results/
     rounds/round-N.json    # 원시, 커밋(경량)
-    aggregated.json
-  metrics/report.html
+    aggregated.json, scores.json
+  metrics/
+    conformance-view/, migration-view/   # 두 뷰(README + 표, 영어/한국어)
 ```
 
 원시 측정과 채점을 분리하면 임계값 변경 시 재측정 없이 재채점된다. 기존의

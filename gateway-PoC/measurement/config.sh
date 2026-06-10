@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # 측정 단계 공용 설정. bash 3.2 호환.
 # 측정은 컨트롤러(install 단계)가 준비된 클러스터에서 픽스처(Gateway/route/백엔드)를
-# 배포하고 17개 테스트를 돌려 round-N.json 을 만든다.
+# 배포하고 rubric.yaml에 정의된 테스트를 돌려 round-N.json 을 만든다.
 
 set -euo pipefail
 
