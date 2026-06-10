@@ -10,8 +10,8 @@ Ingress(ingress-nginx)에서 Kubernetes Gateway API로 옮기는 팀을 위한, 
 
 | 뷰 | 당신의 질문 | 위치 |
 |---|---|---|
-| **출발점 (마이그레이션)** | "ingress-nginx를 쓰는데, 각 구현체로 옮기면 뭐가 넘어가고 뭐가 막히나?" | [`metrics/migration-view/`](metrics/migration-view/) |
-| **엄밀성 (conformance)** | "각 구현체가 Gateway API 스펙을 얼마나 엄밀히 구현했고, 측정상 얼마나 잘 동작하나?" | [`metrics/conformance-view/`](metrics/conformance-view/) |
+| **출발점 (마이그레이션)** | "ingress-nginx를 쓰는데, 각 구현체로 옮기면 뭐가 넘어가고 뭐가 막히나?" | [`metrics/migration-view/`](metrics/migration-view/README_ko.md) |
+| **엄밀성 (conformance)** | "각 구현체가 Gateway API 스펙을 얼마나 엄밀히 구현했고, 측정상 얼마나 잘 동작하나?" | [`metrics/conformance-view/`](metrics/conformance-view/README_ko.md) |
 
 공식 자산과의 차별점: Gateway API conformance suite(자가선언 PASS/FAIL)나 ingress2gateway(기계적 어노테이션 변환)와 달리, 이 벤치마크는 라이브 거동을 실측하고, conformance가 범위 밖으로 두는 벤더 확장 기능(rate limiting, auth, body size)을 포함하며, conformant 구현체 *안에서의* 기능폭 격차를 비교한다.
 

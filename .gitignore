@@ -8,3 +8,15 @@
 __pycache__/
 *.pyc
 *.pyo
+
+# 벤치마크 런타임 산출물
+.claude/scheduled_tasks.lock
+AIOps-Agent-Benchmark/runs/current
+
+# raw 데이터 — 별도 아카이브에 압축 보존
+# 본 리포는 재현불가 입력(score.yaml/timing.json/metadata.json)만 추적
+# 분리·아카이브: scripts/archive_raw.sh
+AIOps-Agent-Benchmark/runs/**/raw.json
+AIOps-Agent-Benchmark/runs/**/transcript.log
+AIOps-Agent-Benchmark/runs/**/cluster_snapshot.json
+AIOps-Agent-Benchmark/runs/**/metrics.json

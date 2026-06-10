@@ -1,17 +1,19 @@
-# 엄밀성 뷰 (conformance)
+# Rigor view (conformance)
 
-질문: **각 구현체가 Gateway API 스펙을 얼마나 엄밀히 구현했고, 측정상 얼마나 잘 동작하나.**
+[한국어](README_ko.md)
 
-공식 스펙(Support: Core/Extended × Channel: standard/experimental)에 정렬한 **라이브 실측**과, 공식 conformance가 보지 않는 **품질/비기능 지표**를 함께 본다.
+Question: **how faithfully does each implementation realize the Gateway API spec, and how well does it behave under measurement?**
 
-## 산출물
-- [`README_tables.md`](README_tables.md) 상세 표 (요약, 항목별, canary 품질, experimental, 벤더 매트릭스, 비기능, auth, 플레이크). GitHub에서 바로 렌더된다.
-- [`report.html`](report.html) 같은 내용의 인터랙티브 버전. 브라우저로 열거나 raw.githack.com으로 렌더해 본다.
+It looks at both the **live measurement** aligned to the official spec (Support: Core/Extended × Channel: standard/experimental) and the **quality/non-functional metrics** that official conformance does not see.
 
-## 이 뷰가 공식 conformance suite와 다른 점
-공식 conformance는 벤더가 자가제출하는 **이진 PASS/FAIL**이고 표준+실험 채널 기능만 본다. 이 뷰는:
-- **선언이 아니라 실측**: 라이브 클러스터에서 기능을 직접 돌려 거동을 잰다.
-- **품질 축 추가**: canary 80/20 분포 수렴(누적 풀링 split), 부하 성공률, 견고성 등 conformance가 측정하지 않는 지표를 본다.
-- ⚠️ 공식 모델에 정렬한 **자체 데이터패스 측정**이지 upstream 스위트 등재 **공식 인증은 아니다**(공식 v1.4.0 리포트와 일치함은 1차소스로 확인).
+## Outputs
+- [`README_tables.md`](README_tables.md): the detailed tables (summary, per-item, canary quality, experimental, vendor matrix, non-functional, auth, flake). Rendered directly on GitHub.
+- [`report.html`](report.html): the same content as an interactive version. Open it in a browser or render it via raw.githack.com.
 
-채점 기준과 동결 절차는 프로젝트 루트의 `SCORING.md`, `rubric.yaml` 참조. 마이그레이션(출발점) 렌즈는 [`../migration-view/`](../migration-view/).
+## How this view differs from the official conformance suite
+Official conformance is a vendor-self-submitted **binary PASS/FAIL** and only looks at standard + experimental channel features. This view:
+- **Measures, not declares**: it runs features directly on a live cluster and measures behavior.
+- **Adds a quality axis**: canary 80/20 distribution convergence (cumulative pooled split), load success rate, robustness, and other metrics conformance does not measure.
+- ⚠️ It is **our own data-path measurement** aligned to the official model, not an **official certification** in the upstream suite registry (agreement with the official v1.4.0 report confirmed against primary sources).
+
+For the scoring criteria and freeze procedure, see `SCORING.md` and `rubric.yaml` at the project root. For the migration (starting-point) lens, see [`../migration-view/`](../migration-view/).
