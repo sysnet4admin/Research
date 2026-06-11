@@ -17,4 +17,4 @@
 - **품질 축 추가**: canary 80/20 분포 수렴(누적 풀링 split), 부하 성공률, 견고성 등 conformance가 측정하지 않는 지표를 본다.
 - ⚠️ 공식 모델에 정렬한 **자체 데이터패스 측정**이지 upstream 스위트 등재 **공식 인증은 아니다**(공식 v1.4.0 리포트와 일치함은 1차소스로 확인).
 
-채점 기준과 동결 절차는 프로젝트 루트의 `SCORING.md`, `rubric.yaml` 참조. 마이그레이션(출발점) 렌즈는 [`../migration-view/README_ko.md`](../migration-view/README_ko.md).
+채점 기준과 확정 절차는 프로젝트 루트의 `SCORING.md`, `rubric.yaml` 참조. 마이그레이션(출발점) 렌즈는 [`../migration-view/README_ko.md`](../migration-view/README_ko.md).

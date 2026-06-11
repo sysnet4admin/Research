@@ -1,10 +1,10 @@
 # Gateway PoC 채점 루브릭 (기계 판독, 단일 진실원)
-# 설계 근거와 동결 절차는 SCORING.md 참조.
+# 설계 근거와 확정 절차는 SCORING.md 참조.
 #
-# 상태: 동결(version 1). 레벨/채널은 kubernetes-sigs/gateway-api v1.4.0 태그
+# 상태: 확정(version 1). 레벨/채널은 kubernetes-sigs/gateway-api v1.4.0 태그
 # (pkg/features, apis/v1 Support 주석)로 확정. 결과 보고 변경 금지(SCORING.md 8장).
 # 각 test의 check 메커니즘(curl/kubectl 상세)은 측정 스크립트에서 구현하되,
-# pass_criteria와 threshold는 여기서 동결한다.
+# pass_criteria와 threshold는 여기서 확정한다.
 
 version: 3   # v3(2026-06-05): graded Extended 5→13 확대(검증완료 8 추가, 전부 standard flag),
              #   매트릭스(rate-limiting/body-size/regex) 휴리스틱→실측, auth(jwt/extauth) 항목 추가.
@@ -33,7 +33,7 @@ grading:
 
 # 레벨 정의
 # 레벨 = Support(Core/Extended) × 채널(standard/experimental)의 조합.
-# 공식 모델(GEP-1709): conformance는 채널별로 채점·보고됨(gatewayAPIChannel). per-feature
+# 공식 모델(GEP-1709): conformance는 채널별로 채점하고 보고됨(gatewayAPIChannel). per-feature
 # "conformance flag"는 없고, 기능의 conformance feature 존재 여부 + 채널로 결정된다.
 levels:
   core: "Support:Core conformance 기능. 필수(양 채널). @v1.4"
@@ -52,7 +52,7 @@ skip_codes:
   infra-excluded: "인프라 플레이크. 평가 제외, 재실행"
 
 tests:
-  # ================= Core (7) — HTTP 프로파일 필수 =================
+  # ================= Core (7): HTTP 프로파일 필수 =================
   host-routing:
     level: core
     category: routing
@@ -148,7 +148,7 @@ tests:
       verify: "route resolves only when ReferenceGrant present"
     pass_criteria: "cross-namespace backendRef works with ReferenceGrant"
 
-  # ============ Extended-standard (5) — 선택, conformance flag 존재 ============
+  # ============ Extended-standard (5): 선택, conformance flag 존재 ============
   https-redirect:
     level: extended-standard
     category: tls
@@ -208,7 +208,7 @@ tests:
       verify: "gRPC request through gateway returns a valid response"
     pass_criteria: "actual gRPC call via GRPCRoute succeeds (not resource existence)"
 
-  # ---- v3 추가 Extended (8) — 전부 standard 채널 conformance flag 보유(v1.4.0 pkg/features) ----
+  # ---- v3 추가 Extended (8): 전부 standard 채널 conformance flag 보유(v1.4.0 pkg/features) ----
   response-header-modifier:
     level: extended-standard
     category: modification
@@ -281,8 +281,8 @@ tests:
     check: { type: listener_isolation, verify: "specific-hostname listener isolates from wildcard listener" }
     pass_criteria: "hostname routed to its specific listener (isolated from wildcard)"
 
-  # ====== experimental 필드(conformance 기능 자체가 없음) — 채점 불가, 역량 보고 ======
-  # ★retry·SessionPersistence는 v1.4.0 pkg/features(AllFeatures) 어디에도 conformance
+  # ====== experimental 필드(conformance 기능 자체가 없음): 채점 불가, 역량 보고 ======
+  # ★retry, SessionPersistence는 v1.4.0 pkg/features(AllFeatures) 어디에도 conformance
   #  기능이 없다(httproute/gateway/... 전부 확인). API엔 experimental 필드로 존재하나
   #  conformance 테스트가 없어 graded 불가. cors(SupportHTTPRouteCORS)와 구분된다.
   retry:
@@ -310,7 +310,7 @@ tests:
     pass_criteria: "requests stick to one backend pod (verified by pod identity)"
     report_as: "experimental capability (no conformance feature)"
 
-  # ============ Impl-specific / 비기능 — 등급 미반영, 매트릭스 ============
+  # ============ Impl-specific / 비기능: 등급 미반영, 매트릭스 ============
   rate-limiting:
     level: impl-specific
     category: null
@@ -320,7 +320,7 @@ tests:
     check:
       type: rate_limit_measured   # v3: 휴리스틱 폐기. 구현체 정책(5/min) 실배포 후 429 카운트.
       limit_per_min: 5
-      requests: 30                 # 동결
+      requests: 30                 # 고정
       enforce_threshold: 5         # 429 >= 5 면 강제로 판정
       mechanism: { native: "envoy,kgateway,kong,traefik,nginx(RateLimitPolicy)", low-level-config: "istio(EnvoyFilter)", unsupported: "cilium" }
     matrix_value: "native | low-level-config | unsupported"
@@ -404,8 +404,8 @@ tests:
     feature: "performance, not a Gateway API feature"
     check:
       type: concurrency
-      concurrent: 20             # 동결
-      pass_threshold: 18         # 동결: >=18/20 success
+      concurrent: 20             # 고정
+      pass_threshold: 18         # 고정: >=18/20 success
     matrix_value: "success_ratio (reported)"
 
   failover-recovery:

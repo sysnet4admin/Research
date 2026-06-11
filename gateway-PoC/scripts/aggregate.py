@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""aggregate.py — rounds/*.json → aggregated.json
+"""aggregate.py: rounds/*.json → aggregated.json
 
 항목별 라운드 통과율/분산을 계산한다(수작업 집계를 코드로 대체).
 인프라 제외(infra-excluded) 라운드는 분모에서 제외(인프라 제외 정책).

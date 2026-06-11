@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""score.py — aggregated.json + rubric.yaml → scores.json (3축)
+"""score.py: aggregated.json + rubric.yaml → scores.json (3축)
 
 3축(SCORING.md 2.1):
   - Core 적합성: 7개 Core 전부 supported → Conformant
@@ -7,7 +7,7 @@
   - 실험 역량: retry, session-affinity 등 (등급 미반영, 보고)
   - Impl 매트릭스: 비표준 항목 (등급 미반영, 보고)
 
-"supported" 정의(동결): pass_rate == 1.0 (전 라운드 통과). Core 100% 요구와
+"supported" 정의(확정): pass_rate == 1.0 (전 라운드 통과). Core 100% 요구와
 동일 기준을 Extended 지원 판정에도 적용. 실제 통과율/분산은 리포트에 그대로 표기.
 
 사용: python3 score.py [--agg FILE] [--rubric FILE] [--out FILE]
@@ -22,7 +22,7 @@ import gwlib
 HERE = Path(__file__).resolve().parent
 GW = HERE.parent
 
-SUPPORTED_THRESHOLD = 1.0   # 동결: 전 라운드 통과해야 supported(결정론 항목)
+SUPPORTED_THRESHOLD = 1.0   # 확정: 전 라운드 통과해야 supported(결정론 항목)
 CANARY_TEST = "canary-traffic"
 
 

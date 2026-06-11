@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""merge_ops.py — 격리 측정한 운영 테스트(failover-recovery 등) 결과를 aggregated.json에 병합.
+"""merge_ops.py: 격리 측정한 운영 테스트(failover-recovery 등) 결과를 aggregated.json에 병합.
 
 배경: failover-recovery 같은 운영 테스트는 데이터플레인을 강제 재시작하므로 결정론/
 canary 측정과 섞으면 다른 항목을 교란한다. 그래서 별도 캠페인(results/rounds-ops)에서
 측정하고, 그 결과의 해당 테스트 엔트리만 메인 aggregated.json에 주입한다(canary 병합과
-같은 분리-후-병합 패턴). 동결 graded/canary 항목은 건드리지 않는다.
+같은 분리-후-병합 패턴). 확정된 graded/canary 항목은 건드리지 않는다.
 
 사용: merge_ops.py --agg AGG --ops OPS_AGG --tests "failover-recovery" --out OUT
 """

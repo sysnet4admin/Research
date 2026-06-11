@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""merge_canary.py — 신규 v3 캠페인 aggregated + 기존 155라운드 canary 병합.
+"""merge_canary.py: 신규 v3 캠페인 aggregated + 기존 155라운드 canary 병합.
 
-배경: graded Extended 확대(/13)·매트릭스 실측화로 결정론 항목을 소수 라운드 재측정한다.
+배경: graded Extended 확대(/13)와 매트릭스 실측화로 결정론 항목을 소수 라운드 재측정한다.
 canary(가중 분배)는 표본 테스트라 다라운드 풀링이 필요하고, 발표 메트릭(79.4~80.0%)이
-동결돼 있다. 따라서 결정론 항목은 신규 캠페인 값을, canary는 기존 155라운드 풀링값을 쓴다.
+그대로 보존돼 있다. 따라서 결정론 항목은 신규 캠페인 값을, canary는 기존 155라운드 풀링값을 쓴다.
 
 동작: 신규 aggregated의 각 impl `canary-traffic` 테스트 엔트리를 기존 aggregated 값으로 교체.
 사용: merge_canary.py --new NEW_AGG --old OLD_AGG --out OUT
@@ -37,7 +37,7 @@ def main() -> None:
     new["canary_source"] = {
         "from": "frozen-155-round-pool",
         "rounds_sampled": old.get("rounds"),
-        "note": "결정론 항목은 v3 캠페인 재측정, canary는 기존 155라운드 풀링 보존(발표 메트릭 동결)",
+        "note": "결정론 항목은 v3 캠페인 재측정, canary는 기존 155라운드 풀링 보존(발표 수치 고정)",
     }
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     Path(args.out).write_text(json.dumps(new, indent=2, ensure_ascii=False))

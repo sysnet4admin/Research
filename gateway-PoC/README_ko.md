@@ -28,7 +28,7 @@ Ingress(ingress-nginx)에서 Kubernetes Gateway API로 옮기는 팀을 위한, 
   | Istio | 1.30.0 | Traefik | v3.6.17 |
   | Cilium | 1.19.4 | | |
 
-- **채점 conformance**: Core(7) + Extended standard 채널(13) + Extended experimental 채널(1). 공식 모델에 정렬한 라이브 데이터패스 실측으로 채점한다(결정론 항목 3라운드, 가중 라우팅 canary는 동결된 155라운드 풀).
+- **채점 conformance**: Core(7) + Extended standard 채널(13) + Extended experimental 채널(1). 공식 모델에 정렬한 라이브 데이터패스 실측으로 채점한다(결정론 항목 3라운드, 가중 라우팅 canary는 보존한 155라운드 풀).
 - **conformance 너머**: 벤더 확장 매트릭스(rate-limiting, body-size, regex, tls-passthrough, ip-filter, basic-auth), 비기능 및 운영 지표(load, failover-recovery, health-check, config-robustness), auth 단면(JWT, 외부 인증).
 - **마이그레이션 증거**: ingress-nginx 어노테이션별로 ingress2gateway 1.1.0을 직접 실행하고, before/after manifest와 변환 통지를 [`migration/i2gw/`](migration/i2gw/)에 보존했다.
 
@@ -44,7 +44,7 @@ Ingress(ingress-nginx)에서 Kubernetes Gateway API로 옮기는 팀을 위한, 
 | [`implementations/`](implementations/) | 구현체별 설치 스크립트(7종) |
 | [`migration/i2gw/`](migration/i2gw/) | ingress2gateway 변환 증거 |
 | [`results/`](results/) | 측정 원본 라운드와 집계 |
-| `SCORING.md`, `rubric.yaml` | 채점 모델과 동결 rubric(v3) |
+| `SCORING.md`, `rubric.yaml` | 채점 모델과 확정 rubric(v3) |
 
 ## 재현
 
@@ -54,7 +54,7 @@ Ingress(ingress-nginx)에서 Kubernetes Gateway API로 옮기는 팀을 위한, 
 ./scripts/finalize.sh
 ```
 
-측정 하네스와 구현체별 설치 스크립트는 `measurement/`, `implementations/`에 있다. 채점 모델과 동결 절차는 `SCORING.md`에 정리돼 있다.
+측정 하네스와 구현체별 설치 스크립트는 `measurement/`, `implementations/`에 있다. 채점 모델과 확정 절차는 `SCORING.md`에 정리돼 있다.
 
 ## 이전 PoC (v1.2)
 

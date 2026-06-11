@@ -1,6 +1,6 @@
 """Gateway PoC scoring 공유 라이브러리.
 
-round-N.json(원시 측정) + rubric.yaml(동결 채점 계약)을 로드하고
+round-N.json(원시 측정) + rubric.yaml(확정 채점 계약)을 로드하고
 레벨 그룹을 도출한다. aggregate/score/report 가 공유한다.
 
 round-N.json 스키마:

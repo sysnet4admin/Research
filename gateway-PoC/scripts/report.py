@@ -79,7 +79,7 @@ def _auth_label(token: str, lang: str) -> str:
 # canary_source.note는 aggregated.json(데이터)에 한국어로 저장된 provenance 문자열이다.
 # 데이터를 바꾸지 않고, 영어 리포트 표시 시점에만 알려진 원문을 번역한다.
 _CANARY_NOTE_EN = {
-    "결정론 항목은 v3 캠페인 재측정, canary는 기존 155라운드 풀링 보존(발표 메트릭 동결)":
+    "결정론 항목은 v3 캠페인 재측정, canary는 기존 155라운드 풀링 보존(발표 수치 고정)":
         "deterministic items re-measured in the v3 campaign, canary preserves the existing 155-round pooling "
         "(presentation metric frozen)",
 }
@@ -330,7 +330,7 @@ TXT = {
         "c_basis": "결정론 {rounds} rounds",
         "c_basis_canary": ", canary {n}라운드 풀",
         "c_intro_rounds": "> **라운드 근거**: 결정론(determinstic) 항목은 v3 캠페인 {rounds}라운드, "
-            "canary(가중 라우팅)는 동결된 {canary}라운드 풀이다(발표 메트릭 동결). "
+            "canary(가중 라우팅)는 보존한 {canary}라운드 풀이다(발표 수치 고정). "
             "두 축의 라운드 수가 다르며, 섹션 2의 canary 행 판정은 155라운드 풀링(섹션 3)에 근거한다.",
         "c_intro_lens": "> 공식 스펙(Core/Extended/채널)에 정렬한 **실측 검증** + conformance가 보지 않는 "
             "**품질/비기능 지표**(canary 분포, 부하, 견고성). 출발점(마이그레이션) 뷰는 "
