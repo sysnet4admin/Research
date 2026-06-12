@@ -185,7 +185,7 @@ conformance를 받았으나 **Cilium(안정 1.19.x=v1.4)과 kgateway(안정 2.1=
 
 > 출처: kubernetes-sigs/gateway-api `conformance/reports/`의 실제 리포트 파일. **안정 릴리스로 v1.5.1을 받지 못한 건 Cilium과 kgateway뿐**이라, 7종 공통 안정 최고 버전이 v1.4다.
 
-> **버전 skew 주의**: 각 구현체는 릴리스당 Gateway API 한 버전에 핀되고, Kubernetes 같은 N±1 skew 정책이 없다. 컨트롤러가 지원하는 범위보다 CRD 버전을 올리면 새 리소스가 컨트롤러에 무시되거나 미검증 상태가 될 수 있다(구버전 컨트롤러가 너무 새 CRD 버전을 "above maximum, ignoring"으로 건너뛰는 동작을 재현으로 확인). 올리기 전 각 구현체 릴리스 노트의 Gateway API 지원 버전을 확인할 것. 이 표의 conformance 버전은 공식 리포트를 인용한 것이다.
+> **버전 skew 주의**: 각 구현체는 릴리스당 Gateway API 한 버전에 핀되고, Kubernetes 같은 N±1 skew 정책이 없다. 컨트롤러가 지원하는 범위보다 CRD 버전을 올리면 새 리소스가 컨트롤러에 무시되거나 미검증 상태가 될 수 있다(구버전 컨트롤러가 지원 범위를 넘는 CRD 버전을 "above maximum, ignoring"으로 건너뛰는 동작을 재현으로 확인). 올리기 전 각 구현체 릴리스 노트의 Gateway API 지원 버전을 확인할 것. 이 표의 conformance 버전은 공식 리포트를 인용한 것이다.
 
 작년 PoC의 두 결함은 해소됨: Traefik는 v3.6+에서 BackendTLSPolicy가 v1 standard로
 승격되며 Gateway Ready/포트 문제 해결. kgateway는 v2.2+에서 arm64 지원(v2.3 클린).
