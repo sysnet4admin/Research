@@ -363,7 +363,7 @@ tests:
       type: auth_jwt_documented    # E8 검증값(라이브 7종). per-round 라이브 미통합(무거움/비채점).
       verify: "보호 라우트 no-token/valid/bad-token (RS256+JWKS)"
     matrix_value: "native-jwks | consumer-credential | plus-only | unsupported"
-    note: "_INTERNAL_NOTES/PRESENTATION_EVIDENCE.md E8: native JWKS 3종(istio/envoy/kgateway), kong(KGO 시크릿이슈), nginx(Plus전용/Basic OSS), traefik/cilium 미지원"
+    note: "E8(내부 증거 기록): native JWKS 3종(istio/envoy/kgateway), kong(KGO 시크릿이슈), nginx(Plus전용/Basic OSS), traefik/cilium 미지원"
 
   auth-extauth:
     level: experimental            # GEP-1494 ExternalAuth 표준필터=experimental + 구현체
@@ -375,7 +375,7 @@ tests:
       type: auth_extauth_documented  # E9 검증값(라이브 7종).
       verify: "표준 ExternalAuth 필터 + 구현체 extAuth, no-token/allow/deny"
     matrix_value: "vendor-native | standard-filter-failopen | unsupported"
-    note: "_INTERNAL_NOTES/PRESENTATION_EVIDENCE.md E9: 표준 GEP-1494 필터 아무도 강제 못함(cilium/kgateway는 표준필터 미구현이라 통과=silent no-op, 나머지 거부/오류). GEP-1494 experimental이라 실패모드 미규정(스펙에 MUST fail closed 없음). 구현체 native 4종(envoy/traefik/kgateway/istio)"
+    note: "E9(내부 증거 기록): 표준 GEP-1494 필터 아무도 강제 못함(cilium/kgateway는 표준필터 미구현이라 통과=silent no-op, 나머지 거부/오류). GEP-1494 experimental이라 실패모드 미규정(스펙에 MUST fail closed 없음). 구현체 native 4종(envoy/traefik/kgateway/istio)"
 
   cors:
     level: extended-experimental    # SupportHTTPRouteCORS = Extended + experimental 채널(v1.4.0 pkg/features)
