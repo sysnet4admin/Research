@@ -155,7 +155,7 @@ gateway-PoC/
 **재측정 단서(공정성):** kong은 `KONG_ROUTER_FLAVOR=expressions`(기본 traditional_compatible 아님),
 kgateway는 basic-auth TrafficPolicy를 명시 설정한 뒤 재측정해 일부 항목이 unsupported→supported로
 바뀌었다(kong query-param 5→6/13 등). 이는 결과를 보고 임계값을 바꾼 것이 아니라 **구현체를
-의도대로 동작시키는 설정 교정**(근거 `_INTERNAL_NOTES/VENDOR_FAIRNESS.md`)이다. 다른 5종에는
+의도대로 동작시키는 설정 교정**이다(벤더 공정성 검토 근거는 내부 기록 보존). 다른 5종에는
 동등한 재측정 사유가 발견되지 않았다. 인용 시 이 설정 차이를 함께 밝힌다.
 
 ## 7. 구현 시 반드시 고칠 결함 (기존 스크립트)
