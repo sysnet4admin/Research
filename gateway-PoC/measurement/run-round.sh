@@ -177,6 +177,8 @@ deploy_fixtures() {
   kc -n "$TEST_NS" rollout status deploy/extauthz --timeout=120s
   kc -n "$TEST_NS" rollout status deploy/hc-good --timeout=120s
   kc -n "$TEST_NS" rollout status deploy/hc-bad --timeout=120s
+  kc -n "$TEST_NS" rollout status deploy/httpbin --timeout=120s
+  kc -n "$TEST_NS" rollout status deploy/grpc-backend --timeout=120s
   echo "==> 클라이언트(netshoot: curl/openssl/grpcurl)"
   kc -n "$TEST_NS" run "$CLIENT_POD" --image=nicolaka/netshoot --restart=Never \
     --command -- sleep 36000 >/dev/null 2>&1 || true
@@ -952,7 +954,14 @@ route_ready() {
     regex) host=regex.example.com; path=/api/v1/x ;;
     cors) host=cors.example.com ;;
     path-redirect) host=predirect.example.com; want_redirect=1 ;;
-    timeout|grpc-routing) sleep 12; return 0 ;;          # 특수(지연/h2c) → 고정 대기
+    timeout|grpc-routing)
+      # 맹목 sleep 대신 이 ns의 HTTPRoute가 전부 Accepted 될 때까지 폴링(최대 ~60s) 후 정착.
+      # (지연/h2c라 응답 폴링이 모호 → status로 라우트 프로그래밍을 확인)
+      local i; for i in $(seq 1 20); do
+        local pend; pend="$(kc -n "$TEST_NS" get httproute -o jsonpath='{range .items[*]}{.status.parents[0].conditions[?(@.type=="Accepted")].status}{"\n"}{end}' 2>/dev/null | grep -vc True || echo 1)"
+        [ "${pend:-1}" = 0 ] && break; sleep 3
+      done
+      sleep 3; return 0 ;;
     retry|health-check) sleep 2; return 0 ;;             # 라우트 없음(스텁)
     # 자체완결 테스트(자체 게이트웨이/정책 배포) → 표준 라우트 준비대기 불필요(테스트 내부서 처리)
     listener-isolation|rate-limiting|body-size|auth-jwt|auth-extauth|ip-filter|basic-auth|mtls-client|tls-passthrough) sleep 2; return 0 ;;
@@ -965,7 +974,8 @@ route_ready() {
     if [ "$want_redirect" = 1 ]; then
       [ "${code:0:2}" = "30" ] && good=1
     else
-      [ -n "$code" ] && [ "$code" != "404" ] && [ "$code" != "000" ] && good=1
+      # 2xx/3xx만 ready로 본다(5xx=upstream 미준비/에러를 ready로 오판하던 것 교정)
+      [ -n "$code" ] && { [ "${code:0:1}" = "2" ] || [ "${code:0:1}" = "3" ]; } && good=1
     fi
     if [ "$good" = 1 ]; then ok=$((ok+1)); [ "$ok" -ge 2 ] && return 0; else ok=0; fi
     sleep 2

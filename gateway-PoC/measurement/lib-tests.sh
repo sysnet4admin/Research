@@ -104,8 +104,9 @@ test_canary_traffic() {
     echo "$r" | grep -q "$BACKEND_V2_TOKEN" && v2=$((v2+1))
   done
   local meta; meta="$(jq -nc --argjson a "$v1" --argjson b "$v2" '{v1:$a,v2:$b}')"
-  # 동결 경계 [34,46] (2σ, rubric.yaml)
-  if [ "$v1" -ge 34 ] && [ "$v1" -le 46 ]; then RPASS "$meta"; else RFAIL "$meta"; fi
+  # per-round 경계 [35,45] = 정수 2σ(n=50,p=0.8). aggregate.py CANARY_ROUND_BOUNDS와 일치.
+  # 이는 분산 보고용이며 Core 판정은 누적 풀링 within_2sigma를 쓴다(per-round 무영향).
+  if [ "$v1" -ge 35 ] && [ "$v1" -le 45 ]; then RPASS "$meta"; else RFAIL "$meta"; fi
 }
 
 test_header_modifier() {
@@ -406,7 +407,7 @@ test_rate_limiting() {
   # 강제되면(429 발생) 메커니즘 라벨, 아니면 unsupported(비발동)
   if [ "$n429" -ge 5 ]; then mv="$mech"; else mv="unsupported"; fi
   local meta; meta="$(jq -nc --arg mv "$mv" --argjson n "$n429" --argjson ok "$n200" '{matrix_value:$mv,rate_limited:$n,allowed:$ok}')"
-  RPASS "$meta"   # in_grade:false → 매트릭스로만
+  if [ "$mv" = unsupported ]; then RSKIP_U "$meta"; else RPASS "$meta"; fi   # 결과가 matrix_value 반영(in_grade:false)
 }
 
 test_body_size() {
@@ -426,7 +427,7 @@ test_body_size() {
   policy_for "$GW_IMPL" body-size | kc delete -f - --ignore-not-found >/dev/null 2>&1
   if [ "$code" = 413 ]; then mv="$mech"; else mv="unsupported"; fi
   local meta; meta="$(jq -nc --arg mv "$mv" --arg c "${code:-000}" '{matrix_value:$mv,post_code:$c}')"
-  RPASS "$meta"
+  if [ "$mv" = unsupported ]; then RSKIP_U "$meta"; else RPASS "$meta"; fi
 }
 
 # basic-auth 매트릭스(벤더): 정책 배포 → credential 없으면 401, 유효하면 200. native/unsupported.

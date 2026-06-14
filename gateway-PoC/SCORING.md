@@ -139,6 +139,25 @@ gateway-PoC/
 원시 측정과 채점을 분리하면 임계값 변경 시 재측정 없이 재채점된다. 기존의
 "한 bash + 수작업" 결합이 재현 불가의 원인이었다.
 
+### 6.1 측정 캠페인 provenance (어느 결과가 어느 캠페인에서)
+
+발행 데이터는 단일 라운드가 아니라 여러 캠페인을 finalize.sh가 병합한 것이다. `run-round.sh`
+단독 재실행으로는 전체가 재현되지 않으므로, 항목별 출처를 명시한다.
+
+| 항목 | 캠페인 | 비고 |
+|---|---|---|
+| Core 결정론 6 + Extended graded 13 | `rounds-v3`(3라운드) | 결정론(라운드 간 불변) |
+| canary-traffic | 155라운드 풀(`merge_canary`) | 표본 테스트, 누적 풀링 보존 |
+| 운영(retry/health-check/failover) | `rounds-ops`(격리, `merge_ops`) | 데이터플레인 재시작이라 분리 측정 |
+| kong query-param/method/grpc | `rounds-kong-expr` | 아래 재측정 단서 참조 |
+| kgateway basic-auth | `rounds-kgw-ba` | 아래 재측정 단서 참조 |
+
+**재측정 단서(공정성):** kong은 `KONG_ROUTER_FLAVOR=expressions`(기본 traditional_compatible 아님),
+kgateway는 basic-auth TrafficPolicy를 명시 설정한 뒤 재측정해 일부 항목이 unsupported→supported로
+바뀌었다(kong query-param 5→6/13 등). 이는 결과를 보고 임계값을 바꾼 것이 아니라 **구현체를
+의도대로 동작시키는 설정 교정**(근거 `_INTERNAL_NOTES/VENDOR_FAIRNESS.md`)이다. 다른 5종에는
+동등한 재측정 사유가 발견되지 않았다. 인용 시 이 설정 차이를 함께 밝힌다.
+
 ## 7. 구현 시 반드시 고칠 결함 (기존 스크립트)
 
 1. grpc-routing 폴백이 백엔드 "존재"만으로 PASS 반환(약 1180행). 실제 gRPC
