@@ -41,7 +41,7 @@ python3 verify.py          # ingress/·gateway/·logs/·results.json 재생성
 
 ## 다중 에이전트 재감사 정정 (2026-06-08)
 
-`evaluation/results/2026-06-08_gateway_i2gw-verify/`의 평가에서 classify() 거절탐지 결함과 샘플 결함을 찾아 정정함. verify.py 재실행 후 증거 기준 확정:
+독립 검증(다중 에이전트 교차 평가)에서 classify() 거절탐지 결함과 샘플 결함을 찾아 정정함. verify.py 재실행 후 증거 기준 확정:
 
 | 항목 | 정정 전 | 정정 후 | 사유 |
 |---|---|---|---|
