@@ -1,4 +1,4 @@
-# Scenario 013 — Service Down: Dependency Failure
+# Scenario 009: Service Down: Dependency Failure
 
 ## Context
 

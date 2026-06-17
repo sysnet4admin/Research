@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# setup.sh — PVC references a non-existent StorageClass → Pending chain.
+# setup.sh: PVC references a non-existent StorageClass → Pending chain.
 # Pod → PVC(Pending) → StorageClass "fast-ssd" not found.
 
 set -euo pipefail
 CTX="AIOps-Agent-Benchmark"
 
-echo "[009-pvc] Creating data namespace..."
+echo "[005-pvc] Creating data namespace..."
 kubectl --context "$CTX" create namespace data --dry-run=client -o yaml \
   | kubectl --context "$CTX" apply -f -
 
-echo "[009-pvc] Creating PVC with non-existent StorageClass..."
+echo "[005-pvc] Creating PVC with non-existent StorageClass..."
 cat <<EOF | kubectl --context "$CTX" apply -f -
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -25,7 +25,7 @@ spec:
       storage: 1Gi
 EOF
 
-echo "[009-pvc] Deploying db-writer referencing the broken PVC..."
+echo "[005-pvc] Deploying db-writer referencing the broken PVC..."
 cat <<EOF | kubectl --context "$CTX" apply -f -
 apiVersion: apps/v1
 kind: Deployment
@@ -62,14 +62,14 @@ spec:
           claimName: data-pvc
 EOF
 
-echo "[009-pvc] Waiting 20s..."
+echo "[005-pvc] Waiting 20s..."
 sleep 20
 
-echo "[009-pvc] Current state:"
+echo "[005-pvc] Current state:"
 kubectl --context "$CTX" get pods -n data
 echo ""
 kubectl --context "$CTX" get pvc -n data
 echo ""
-echo "[009-pvc] Setup complete."
+echo "[005-pvc] Setup complete."
 echo "  db-writer pod Pending → PVC Pending → StorageClass 'fast-ssd' does not exist"
 echo "  Correct StorageClass is: managed-nfs-storage (cluster default)"

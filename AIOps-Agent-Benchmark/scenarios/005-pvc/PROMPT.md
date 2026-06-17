@@ -1,4 +1,4 @@
-# Scenario 009 — Pod Stuck Pending: Storage Not Provisioned
+# Scenario 005: Pod Stuck Pending: Storage Not Provisioned
 
 ## Context
 
@@ -18,5 +18,5 @@ Cluster context: `AIOps-Agent-Benchmark`
 ## Rules
 
 - Use `--context AIOps-Agent-Benchmark` on every kubectl command.
-- Do not assume the cause — follow the evidence chain.
+- Do not assume the cause: follow the evidence chain.
 - Do not modify anything outside the `data` namespace.

@@ -16,4 +16,4 @@ Requirements:
 ## Rules
 
 - Read-only: do not create, modify, or delete any resources.
-- Do not assume — use actual kubectl output.
+- Do not assume: use actual kubectl output.

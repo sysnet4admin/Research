@@ -1,4 +1,4 @@
-# Scenario 002 — CrashLoopBackOff Diagnosis and Fix
+# Scenario 001: CrashLoopBackOff Diagnosis and Fix
 
 ## Context
 
@@ -18,5 +18,5 @@ Cluster context: `AIOps-Agent-Benchmark`
 
 - Use `--context AIOps-Agent-Benchmark` on every kubectl command.
 - Read logs and events **before** making any changes.
-- Do not delete and recreate the Deployment — patch or edit it.
+- Do not delete and recreate the Deployment: patch or edit it.
 - Do not modify anything outside the `staging` namespace.

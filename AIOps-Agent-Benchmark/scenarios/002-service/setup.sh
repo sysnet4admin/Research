@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# setup.sh — Inject wrong Service selector for scenario 005.
+# setup.sh: Inject wrong Service selector for scenario 002.
 
 set -euo pipefail
 CTX="AIOps-Agent-Benchmark"
 
-echo "[005-service] Creating production namespace..."
+echo "[002-service] Creating production namespace..."
 kubectl --context "$CTX" create namespace production --dry-run=client -o yaml \
   | kubectl --context "$CTX" apply -f -
 
-echo "[005-service] Deploying frontend pods (label: app=frontend)..."
+echo "[002-service] Deploying frontend pods (label: app=frontend)..."
 cat <<EOF | kubectl --context "$CTX" apply -f -
 apiVersion: apps/v1
 kind: Deployment
@@ -33,7 +33,7 @@ spec:
         - containerPort: 80
 EOF
 
-echo "[005-service] Creating Service with WRONG selector (app=frontend-svc)..."
+echo "[002-service] Creating Service with WRONG selector (app=frontend-svc)..."
 cat <<EOF | kubectl --context "$CTX" apply -f -
 apiVersion: v1
 kind: Service
@@ -49,13 +49,13 @@ spec:
   type: ClusterIP
 EOF
 
-echo "[005-service] Waiting 20s for Pods to start..."
+echo "[002-service] Waiting 20s for Pods to start..."
 sleep 20
 
-echo "[005-service] Current state:"
+echo "[002-service] Current state:"
 kubectl --context "$CTX" get pods,svc,endpoints -n production
 echo ""
-echo "[005-service] Setup complete."
+echo "[002-service] Setup complete."
 echo "  Pods label:    app=frontend"
 echo "  Service selector: app=frontend-svc (WRONG)"
 echo "  Expected: Service has 0 endpoints"

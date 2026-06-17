@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# setup.sh — Readiness probe misconfigured: pod Running but endpoint = 0.
+# setup.sh: Readiness probe misconfigured: pod Running but endpoint = 0.
 # Probe checks /healthz but nginx only serves /  → 404 → not ready → no traffic.
 
 set -euo pipefail
 CTX="AIOps-Agent-Benchmark"
 
-echo "[008-readiness] Creating web namespace..."
+echo "[004-readiness] Creating web namespace..."
 kubectl --context "$CTX" create namespace web --dry-run=client -o yaml \
   | kubectl --context "$CTX" apply -f -
 
-echo "[008-readiness] Deploying frontend with wrong readiness probe path..."
+echo "[004-readiness] Deploying frontend with wrong readiness probe path..."
 cat <<EOF | kubectl --context "$CTX" apply -f -
 apiVersion: apps/v1
 kind: Deployment
@@ -59,14 +59,14 @@ spec:
     targetPort: 80
 EOF
 
-echo "[008-readiness] Waiting 40s for probe cycle..."
+echo "[004-readiness] Waiting 40s for probe cycle..."
 sleep 40
 
-echo "[008-readiness] Current state:"
+echo "[004-readiness] Current state:"
 kubectl --context "$CTX" get pods -n web
 echo ""
 kubectl --context "$CTX" get endpoints -n web
 echo ""
-echo "[008-readiness] Setup complete."
-echo "  Pods are Running but 0/1 READY — readiness probe fails on /healthz (404)"
+echo "[004-readiness] Setup complete."
+echo "  Pods are Running but 0/1 READY: readiness probe fails on /healthz (404)"
 echo "  Service has 0 endpoints → no traffic reaches the pod"

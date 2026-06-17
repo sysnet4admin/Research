@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# setup.sh — Inject CrashLoopBackOff state for scenario 002.
+# setup.sh: Inject CrashLoopBackOff state for scenario 001.
 
 set -euo pipefail
 CTX="AIOps-Agent-Benchmark"
 
-echo "[002-crashloop] Creating staging namespace..."
+echo "[001-crashloop] Creating staging namespace..."
 kubectl --context "$CTX" create namespace staging --dry-run=client -o yaml \
   | kubectl --context "$CTX" apply -f -
 
-echo "[002-crashloop] Deploying worker with bad command (exit 1)..."
+echo "[001-crashloop] Deploying worker with bad command (exit 1)..."
 cat <<EOF | kubectl --context "$CTX" apply -f -
 apiVersion: apps/v1
 kind: Deployment
@@ -31,10 +31,10 @@ spec:
         command: ["/bin/sh", "-c", "echo 'starting'; exit 1"]
 EOF
 
-echo "[002-crashloop] Waiting 30s for CrashLoopBackOff..."
+echo "[001-crashloop] Waiting 30s for CrashLoopBackOff..."
 sleep 30
 
-echo "[002-crashloop] Current state:"
+echo "[001-crashloop] Current state:"
 kubectl --context "$CTX" get pods -n staging
 echo ""
-echo "[002-crashloop] Setup complete. Expected: worker pods in CrashLoopBackOff"
+echo "[001-crashloop] Setup complete. Expected: worker pods in CrashLoopBackOff"

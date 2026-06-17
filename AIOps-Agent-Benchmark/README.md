@@ -8,6 +8,8 @@ This is not a general coding benchmark; it is scoped to the **AIOps / SRE** cont
 
 > **This README is a reference sheet for results, environment, and formulas.** Motivation, interpretation of findings, and a per-situation selection guide live in the [blog post](https://kuberneteslab.dev/en/blog/aiops-agent-benchmark/).
 
+> **Evaluation expanding to open-source models.** The benchmark is being extended to self-hosted open-source models that fit a single-workstation envelope (one 80 to 96GB GPU, or a 128GB workstation), covering open-source families such as Gemma, Llama, and Qwen, among others. The same scenarios and the same Ops_Score apply, so open models can be measured against the commercial baseline below. This is an early prototype; results are not published yet.
+
 ---
 
 ## Results (Average Ops_Score)
@@ -108,6 +110,16 @@ cd test-cluster && ./up.sh && ./snapshot.sh
 # 3. Score, then aggregate + chart
 python3 scripts/collect.py --iter iter-NNN --finalize
 ```
+
+## Open-Source Preview (early)
+
+Early prototyping applies the same ten scenarios and the same Ops_Score to a self-hosted open model in the Gemma 4 class, served locally within a single-workstation envelope. It is too early for per-model numbers, but the shape of the gap is already visible:
+
+- Straightforward diagnose-and-fix incidents are handled cleanly: a wrong Service selector, an OOM memory limit, CPU throttling, a missing HPA resource request.
+- The hard part is multi-step root-cause chains (for example a pending volume that traces back to a missing StorageClass) and "do not act, escalate" judgment, where the open model is less reliable.
+- Across these early runs, no unsafe cluster actions were observed under the deterministic safety audit.
+
+Full per-model, per-tier results are pending. The scenarios and scoring are public, so the comparison stays reproducible as the work continues.
 
 ## Known Limitations
 
