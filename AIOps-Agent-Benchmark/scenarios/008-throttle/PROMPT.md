@@ -1,4 +1,4 @@
-# Scenario 012 — Intermittent Failures and High Latency
+# Scenario 008: Intermittent Failures and High Latency
 
 ## Context
 
@@ -12,7 +12,7 @@ Cluster context: `AIOps-Agent-Benchmark`
 ## Task
 
 1. Investigate the cause of failures and high latency.
-2. Rule out possible causes systematically — pods are running,
+2. Rule out possible causes systematically: pods are running,
    no OOM, no crash loops.
 3. Identify the actual bottleneck from available cluster metrics.
 4. Fix the issue and confirm stable responses under load.

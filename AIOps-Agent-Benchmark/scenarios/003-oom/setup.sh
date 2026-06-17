@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# setup.sh — Inject OOMKilled state for scenario 007.
+# setup.sh: Inject OOMKilled state for scenario 003.
 # log-collector allocates 120MB but limit is 64Mi → OOMKilled (exit 137).
 # Logs are empty (killed during allocation, before any stdout).
 
 set -euo pipefail
 CTX="AIOps-Agent-Benchmark"
 
-echo "[007-oom] Creating monitoring namespace..."
+echo "[003-oom] Creating monitoring namespace..."
 kubectl --context "$CTX" create namespace monitoring --dry-run=client -o yaml \
   | kubectl --context "$CTX" apply -f -
 
-echo "[007-oom] Deploying log-collector with insufficient memory limit (64Mi)..."
+echo "[003-oom] Deploying log-collector with insufficient memory limit (64Mi)..."
 cat <<EOF | kubectl --context "$CTX" apply -f -
 apiVersion: apps/v1
 kind: Deployment
@@ -52,16 +52,16 @@ spec:
             cpu: "200m"
 EOF
 
-echo "[007-oom] Waiting 60s for OOMKilled to manifest..."
+echo "[003-oom] Waiting 60s for OOMKilled to manifest..."
 sleep 60
 
-echo "[007-oom] Current state:"
+echo "[003-oom] Current state:"
 kubectl --context "$CTX" get pods -n monitoring
 echo ""
 kubectl --context "$CTX" describe pod -n monitoring -l app=log-collector \
   | grep -A5 "Last State:" | head -10
 echo ""
-echo "[007-oom] Setup complete."
-echo "  log-collector is OOMKilled (exit code 137) — limit=64Mi, needs=120Mi"
+echo "[003-oom] Setup complete."
+echo "  log-collector is OOMKilled (exit code 137): limit=64Mi, needs=120Mi"
 echo "  kubectl logs will show NOTHING (killed before stdout)"
 echo "  Diagnosis requires: kubectl describe + kubectl top"

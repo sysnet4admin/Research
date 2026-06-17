@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# setup.sh — HPA configured but not scaling: resource.requests.cpu missing.
+# setup.sh: HPA configured but not scaling: resource.requests.cpu missing.
 # HPA shows <unknown>/50% → never triggers → pods stay at 1 under load.
 
 set -euo pipefail
 CTX="AIOps-Agent-Benchmark"
 
-echo "[010-hpa] Creating api namespace..."
+echo "[006-hpa] Creating api namespace..."
 kubectl --context "$CTX" create namespace api --dry-run=client -o yaml \
   | kubectl --context "$CTX" apply -f -
 
-echo "[010-hpa] Deploying api-server WITHOUT resource requests (HPA trap)..."
+echo "[006-hpa] Deploying api-server WITHOUT resource requests (HPA trap)..."
 cat <<EOF | kubectl --context "$CTX" apply -f -
 apiVersion: apps/v1
 kind: Deployment
@@ -31,7 +31,7 @@ spec:
         image: nginx:1.25-alpine
         ports:
         - containerPort: 80
-        # No resources.requests set intentionally — HPA cannot compute usage ratio
+        # No resources.requests set intentionally: HPA cannot compute usage ratio
 ---
 apiVersion: v1
 kind: Service
@@ -66,7 +66,7 @@ spec:
         averageUtilization: 50
 EOF
 
-echo "[010-hpa] Deploying load generator to drive CPU load..."
+echo "[006-hpa] Deploying load generator to drive CPU load..."
 cat <<EOF | kubectl --context "$CTX" apply -f -
 apiVersion: apps/v1
 kind: Deployment
@@ -101,14 +101,14 @@ spec:
             cpu: "200m"
 EOF
 
-echo "[010-hpa] Waiting 60s for HPA to attempt first evaluation..."
+echo "[006-hpa] Waiting 60s for HPA to attempt first evaluation..."
 sleep 60
 
-echo "[010-hpa] Current state:"
+echo "[006-hpa] Current state:"
 kubectl --context "$CTX" get hpa -n api
 echo ""
 kubectl --context "$CTX" get pods -n api
 echo ""
-echo "[010-hpa] Setup complete."
-echo "  HPA shows <unknown>/50% — resource.requests.cpu missing → metrics-server cannot compute ratio"
+echo "[006-hpa] Setup complete."
+echo "  HPA shows <unknown>/50%: resource.requests.cpu missing → metrics-server cannot compute ratio"
 echo "  Load generator running but pod count stays at 1"

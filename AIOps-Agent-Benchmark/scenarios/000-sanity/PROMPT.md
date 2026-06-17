@@ -1,4 +1,4 @@
-# Sanity Check — JSON Schema & Baseline Token Measurement
+# Sanity Check: JSON Schema & Baseline Token Measurement
 
 ## Task
 

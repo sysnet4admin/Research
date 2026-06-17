@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# setup.sh — CPU throttling causes high latency and intermittent 5xx.
+# setup.sh: CPU throttling causes high latency and intermittent 5xx.
 # api-gateway has cpu limit=50m; load-gen floods it → throttled → slow/failed responses.
 
 set -euo pipefail
 CTX="AIOps-Agent-Benchmark"
 
-echo "[012-throttle] Creating prod namespace..."
+echo "[008-throttle] Creating prod namespace..."
 kubectl --context "$CTX" create namespace prod --dry-run=client -o yaml \
   | kubectl --context "$CTX" apply -f -
 
-echo "[012-throttle] Deploying api-gateway with very low CPU limit (50m)..."
+echo "[008-throttle] Deploying api-gateway with very low CPU limit (50m)..."
 cat <<EOF | kubectl --context "$CTX" apply -f -
 apiVersion: apps/v1
 kind: Deployment
@@ -52,7 +52,7 @@ spec:
     targetPort: 80
 EOF
 
-echo "[012-throttle] Deploying load generator (sustained high request rate)..."
+echo "[008-throttle] Deploying load generator (sustained high request rate)..."
 cat <<EOF | kubectl --context "$CTX" apply -f -
 apiVersion: apps/v1
 kind: Deployment
@@ -88,15 +88,15 @@ spec:
             cpu: "200m"
 EOF
 
-echo "[012-throttle] Waiting 60s for throttle to build up..."
+echo "[008-throttle] Waiting 60s for throttle to build up..."
 sleep 60
 
-echo "[012-throttle] Current state:"
+echo "[008-throttle] Current state:"
 kubectl --context "$CTX" get pods -n prod
 echo ""
 kubectl --context "$CTX" top pods -n prod 2>/dev/null || echo "(metrics not ready yet)"
 echo ""
-echo "[012-throttle] Setup complete."
+echo "[008-throttle] Setup complete."
 echo "  api-gateway cpu limit=50m, 3x load-gen → CPU throttled"
 echo "  Symptoms: kubectl top shows CPU near limit, responses slow/failing"
 echo "  Fix: increase cpu limit (e.g. 500m)"

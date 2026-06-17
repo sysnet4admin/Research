@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# setup.sh — order-service CrashLoops: DB_HOST=db-prod.internal NXDOMAIN.
+# setup.sh: order-service CrashLoops: DB_HOST=db-prod.internal NXDOMAIN.
 # K8s cluster is healthy. Fix requires external infrastructure team.
 
 set -euo pipefail
 CTX="AIOps-Agent-Benchmark"
 
-echo "[013-ext-dep] Creating orders namespace..."
+echo "[009-ext-dep] Creating orders namespace..."
 kubectl --context "$CTX" create namespace orders --dry-run=client -o yaml \
   | kubectl --context "$CTX" apply -f -
 
-echo "[013-ext-dep] Deploying order-service with broken external DB dependency..."
+echo "[009-ext-dep] Deploying order-service with broken external DB dependency..."
 cat <<EOF | kubectl --context "$CTX" apply -f -
 apiVersion: apps/v1
 kind: Deployment
@@ -61,11 +61,11 @@ spec:
             cpu: "100m"
 EOF
 
-echo "[013-ext-dep] Waiting 30s for CrashLoopBackOff..."
+echo "[009-ext-dep] Waiting 30s for CrashLoopBackOff..."
 sleep 30
 
-echo "[013-ext-dep] Current state:"
+echo "[009-ext-dep] Current state:"
 kubectl --context "$CTX" get pods -n orders
 echo ""
-echo "[013-ext-dep] Setup complete."
+echo "[009-ext-dep] Setup complete."
 echo "  order-service CrashLoop: db-prod.internal NXDOMAIN → K8s healthy, issue is external"
