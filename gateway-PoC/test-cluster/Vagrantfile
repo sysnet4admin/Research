@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
       end
       cfg.vm.host_name = "cp-k8s"
       cfg.vm.network "private_network", ip: "192.168.1.150"
-      cfg.vm.network "forwarded_port", guest: 22, host: 60160, auto_correct: true, id: "ssh"
+      cfg.vm.network "forwarded_port", guest: 22, host: 60150, auto_correct: true, id: "ssh"
       cfg.vm.synced_folder "../data", "/vagrant", disabled: true
       cfg.vm.provision "shell", path: "k8s_env_build.sh", args: [ N, k8s_V[0..3] ]
       cfg.vm.provision "shell", path: "k8s_pkg_cfg.sh", args: [ k8s_V, ctrd_V, "CP"]
@@ -48,7 +48,7 @@ Vagrant.configure("2") do |config|
       end
       cfg.vm.host_name = "w#{i}-k8s"
       cfg.vm.network "private_network", ip: "192.168.1.15#{i}"
-      cfg.vm.network "forwarded_port", guest: 22, host: "6016#{i}", auto_correct: true, id: "ssh"
+      cfg.vm.network "forwarded_port", guest: 22, host: "6015#{i}", auto_correct: true, id: "ssh"
       cfg.vm.synced_folder "../data", "/vagrant", disabled: true
       cfg.vm.provision "shell", path: "k8s_env_build.sh", args: [ N, k8s_V[0..3] ]
       cfg.vm.provision "shell", path: "k8s_pkg_cfg.sh", args: [ k8s_V, ctrd_V, "W" ]
