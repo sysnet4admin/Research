@@ -2,7 +2,11 @@
 
 [한국어](README_ko.md)
 
-Does moving a project context file from `CLAUDE.md` to **AGENTS.md** make Claude Code slower or more expensive? [AGENTS.md](https://agents.md/) is the open context-file format governed by AAIF (Agentic AI Foundation, Linux Foundation), read by 30+ coding agents. Claude Code does not read it natively ([issue #34235](https://github.com/anthropics/claude-code/issues/34235)), so a migration needs one of two workarounds: an `@AGENTS.md` import line inside `CLAUDE.md`, or a `CLAUDE.md` symlink pointing at `AGENTS.md`. This study measures whether either workaround costs anything, on real Kubernetes incident-response tasks.
+Does moving a project context file from `CLAUDE.md` to **AGENTS.md** make Claude Code slower or more expensive?
+
+That question is where this study started.
+
+[AGENTS.md](https://agents.md/) is the open context-file format governed by AAIF (Agentic AI Foundation, Linux Foundation), read by 30+ coding agents. Claude Code does not read it natively ([issue #34235](https://github.com/anthropics/claude-code/issues/34235)), so a migration needs one of two workarounds: an `@AGENTS.md` import line inside `CLAUDE.md`, or a `CLAUDE.md` symlink pointing at `AGENTS.md`. This study measures whether either workaround costs anything, on real Kubernetes incident-response tasks.
 
 > Scenarios, scoring parser, and audit capture are reused from the companion [AIOps Agent Benchmark](https://github.com/sysnet4admin/Research/tree/main/AIOps-Agent-Benchmark). This study runs Claude Code only; it is not a cross-vendor comparison.
 
