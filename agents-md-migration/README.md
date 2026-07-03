@@ -20,7 +20,9 @@ The payload (context body) is byte-identical across conditions, verified by chec
 |---|---|---|
 | **A** native | `CLAUDE.md` (body) | reads `CLAUDE.md` directly |
 | **B** import | `CLAUDE.md` (single line `@AGENTS.md`) + `AGENTS.md` (body) | follows the `@AGENTS.md` import |
-| **C** symlink | `AGENTS.md` (body) + `CLAUDE.md` symlink to it | follows the symlink |
+| **C** symlink | `AGENTS.md` (body) + `CLAUDE.md` symlink to it | opening the `CLAUDE.md` path makes the OS resolve the link and return the `AGENTS.md` content |
+
+In condition C, Claude Code does nothing special: the filesystem resolves the link at open time, so from Claude Code's side the read is identical to native. This matches the measurement (C within ±1% of A).
 
 The payload is a real, human-curated context file (the AIOps benchmark's project `CLAUDE.md`: cluster rules, scoring formulas, known pitfalls), not a synthetic document.
 
@@ -106,4 +108,4 @@ Per-run raw data (`runs/`) and the measured payload (a working project `CLAUDE.m
 ## Prior work
 
 - [arXiv 2601.20404](https://arxiv.org/abs/2601.20404) measured human-written AGENTS.md files with Codex (native AGENTS.md reader): median runtime -28.6%, output tokens -16.6%. It did not measure the import indirection or a non-native reader, which is the gap this study fills for Claude Code.
-- An ETH Zurich study found LLM-generated AGENTS.md files *reduced* success and raised cost, so file quality decides the direction. This study holds the file fixed (human-curated) and varies only the delivery method.
+- An [ETH Zurich study (arXiv 2602.11988)](https://arxiv.org/abs/2602.11988) found LLM-generated AGENTS.md files *reduced* success and raised cost, so how the file is written decides the outcome. This study holds the file fixed (human-curated) and varies only the delivery method.
