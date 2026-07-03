@@ -36,9 +36,9 @@ Kubernetes, 클라우드 네이티브, AI에 대한 벤치마크 및 PoC 연구 
 
 ### [agents-md-migration](./agents-md-migration)
 
-프로젝트 컨텍스트 파일을 CLAUDE.md에서 AGENTS.md로(import 또는 심링크) 옮기면 Claude Code가 느려지거나 토큰 비용이 늘어나는지를 쿠버네티스 장애 대응 작업과 4개 모델 티어에서 측정합니다. 결과: 두 축 모두 페널티 없음.
+프로젝트 컨텍스트 파일을 CLAUDE.md에서 AGENTS.md로(import 또는 심볼릭 링크) 옮기면 Claude Code가 느려지거나 토큰 비용이 늘어나는지를 쿠버네티스 장애 대응 작업과 5개 모델 구성에서 측정합니다. 결과: 두 축 모두 페널티 없음.
 
-→ [README (EN)](./agents-md-migration/README.md) | [README (KO)](./agents-md-migration/README_ko.md)
+→ [블로그 포스트](https://kuberneteslab.dev/ko/blog/agents-md-migration/) | [README (EN)](./agents-md-migration/README.md) | [README (KO)](./agents-md-migration/README_ko.md)
 
 ---
 

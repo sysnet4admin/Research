@@ -11,8 +11,8 @@ sys.path.insert(0, str((HERE.parents[2] / "AIOps-Agent-Benchmark" / "scripts")))
 from collect import parse_claude_raw
 
 RUNS = HERE / "runs"
-MODELS = ["haiku-4-5", "sonnet-4-6", "opus-4-8", "fable-5"]
-PREFIXES = ("haiku-r", "sonnet-r", "opus-r", "fable-r")
+MODELS = ["haiku-4-5", "sonnet-4-6", "sonnet-5", "opus-4-8", "fable-5"]
+PREFIXES = ("haiku-r", "sonnet-r", "sonnet5-r", "opus-r", "fable-r")
 
 
 def load():
