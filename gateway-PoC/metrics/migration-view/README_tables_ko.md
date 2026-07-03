@@ -1,6 +1,6 @@
 # Gateway API PoC 출발점 뷰 (ingress-nginx → Gateway API v1.4 마이그레이션)
 
-> **Gateway API 공식 권고는 'conformance를 통과한(conformant) 구현체를 고르라'는 것이다. 하지만 conformant여도 실제 지원하는 기능 폭은 6개에서 13개까지 갈린다. 그 차이를 비교하는 것이 이 뷰다.**
+> **Gateway API 공식 권고는 'conformant 인증을 받은 구현체를 고르라'는 것이다. 하지만 conformant 인증을 받아도 실제 지원하는 기능 폭은 6개에서 13개까지 갈린다. 그 차이를 비교하는 것이 이 뷰다.**
 
 > **이 뷰의 차별점**: 공식 conformance(선언 PASS/FAIL), ingress2gateway(기계 변환 여부)와 달리, 라이브 클러스터 **실측** + conformance 범위 밖 **구현체 기능**(rate-limit, auth, body-size) + conformant 내부의 **기능폭 격차**를 같은 잣대로 나란히 비교한다. 엄밀성(스펙) 뷰는 `../conformance-view/` 참조.
 

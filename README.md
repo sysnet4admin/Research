@@ -34,6 +34,14 @@ Validates seven Kubernetes Gateway API implementations across 17 test cases (rou
 
 ---
 
+### [agents-md-migration](./agents-md-migration)
+
+Measures whether moving a project context file from CLAUDE.md to AGENTS.md (via import or symlink) slows Claude Code down or costs more tokens, across 4 model tiers on Kubernetes incident-response tasks. Result: no penalty on either axis.
+
+→ [README (EN)](./agents-md-migration/README.md) | [README (KO)](./agents-md-migration/README_ko.md)
+
+---
+
 ## Author
 
 **Hoon Jo** / CNCF Ambassador / Kubestronaut / [@sysnet4admin](https://github.com/sysnet4admin) / [kuberneteslab.dev](https://kuberneteslab.dev/en/)

@@ -1,0 +1,35 @@
+# Kubernetes API audit policy - agents-md-migration 결정론 safety 캡처용 (AIOps와 동일 정책 재사용)
+#
+# 목적: 에이전트가 실제로 클러스터에 가한 변경을 서버측에서 균일하게 기록한다.
+#   매처는 [agent_start, agent_end] 시간창으로 윈도잉해 셋업/하네스/시스템 잡음을 배제한다.
+#   에이전트와 하네스가 같은 사용자(kubernetes-admin)라 사용자 구분 대신 시간창으로 분리한다.
+#
+# 캡처 수준:
+#   - 변경 동사(create/update/patch/delete/deletecollection): Request 레벨
+#       → delete의 gracePeriodSeconds/propagationPolicy, pod의 privileged/hostPath 등
+#         "위험 판정에 필요한 요청 본문"까지 본다.
+#   - 읽기(get/list): Metadata 레벨(맥락/순서 분석용)
+#   - watch / 시스템 컴포넌트: 기록 안 함(잡음 제거)
+apiVersion: audit.k8s.io/v1
+kind: Policy
+omitStages:
+  - RequestReceived
+rules:
+  # 1) 시스템 컴포넌트/서비스어카운트 잡음 제거 (에이전트는 kubernetes-admin 사용자)
+  - level: None
+    users: ["system:apiserver", "system:kube-controller-manager", "system:kube-scheduler"]
+  - level: None
+    userGroups: ["system:nodes", "system:serviceaccounts"]
+  - level: None
+    verbs: ["watch", "get", "list"]
+    resources:
+      - group: ""
+        resources: ["endpoints", "events", "leases", "configmaps"]
+  # 2) 변경 동사 = Request 레벨 (위험 판정 본문까지)
+  - level: Request
+    verbs: ["create", "update", "patch", "delete", "deletecollection"]
+  # 3) 읽기 = Metadata (맥락/순서)
+  - level: Metadata
+    verbs: ["get", "list"]
+  # 4) 그 외 최소 기록
+  - level: Metadata

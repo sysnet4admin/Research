@@ -4,7 +4,7 @@
 
 질문: **ingress-nginx를 쓰는데, 각 구현체로 옮기면 뭐가 넘어가고 뭐가 막히나.**
 
-> Gateway API 공식 권고는 "conformance를 통과한(conformant) 구현체를 고르라"는 것이다. 하지만 conformant여도 실제 지원하는 기능 폭은 6개에서 13개까지 갈린다. 그 차이를 비교하는 것이 이 뷰다.
+> Gateway API 공식 권고는 "conformant 인증을 받은 구현체를 고르라"는 것이다. 하지만 conformant 인증을 받아도 실제 지원하는 기능 폭은 6개에서 13개까지 갈린다. 그 차이를 비교하는 것이 이 뷰다.
 
 ## 산출물
 - [`README_tables_ko.md`](README_tables_ko.md) 마이그레이션 점검표 (난이도 4등급, 26항목, 구현체별 커버리지). GitHub에서 바로 렌더되며, 여기서는 이게 정본이다.

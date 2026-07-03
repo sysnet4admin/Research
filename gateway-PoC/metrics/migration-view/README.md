@@ -4,7 +4,7 @@
 
 Question: **I run ingress-nginx. What carries over, and what breaks, if I move to each implementation?**
 
-> The official Gateway API recommendation is to "pick a conformant implementation." But even when conformant, the actual supported feature breadth ranges from 6 to 13. Comparing that gap is what this view does.
+> The official Gateway API recommendation is to "pick a conformant-certified implementation." But even with conformant certification, the actual supported feature breadth ranges from 6 to 13. Comparing that gap is what this view does.
 
 ## Outputs
 - [`README_tables.md`](README_tables.md): the migration checklist (4 difficulty grades, 26 items, per-implementation coverage), rendered directly on GitHub. This is the canonical output here.
