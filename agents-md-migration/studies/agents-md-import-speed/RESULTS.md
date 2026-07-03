@@ -50,7 +50,7 @@ B가 네 모델 전부에서 일관되게 3~4% 낮다(노이즈면 부호가 섞
 늘리지 않고 오히려 약간 줄인다(Claude Code가 import를 native 인라인과 다르게 렌더링하는 것으로
 보임). symlink는 native와 ±1% 안, 사실상 동일.
 
-uncached input 토큰도 조건 간 0~-4%로 평평하다.
+uncached input 토큰도 조건 간 0~-4%로 차이가 거의 없다.
 
 ### 속도와 실행 지표
 

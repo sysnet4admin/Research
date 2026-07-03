@@ -2,15 +2,15 @@
 
 [English](README.md)
 
-프로젝트 컨텍스트 파일을 `CLAUDE.md`에서 **AGENTS.md**로 옮기면 Claude Code가 느려지거나 비용이 늘어날까? [AGENTS.md](https://agents.md/)는 AAIF(Agentic AI Foundation, Linux Foundation)가 관리하는 열린 컨텍스트 파일 형식으로, 30개가 넘는 코딩 에이전트가 읽는다. 그런데 Claude Code는 이 파일을 그대로는 읽지 않아서([issue #34235](https://github.com/anthropics/claude-code/issues/34235)), 마이그레이션하려면 둘 중 하나가 필요하다. `CLAUDE.md` 안에 `@AGENTS.md` import 한 줄을 두거나, `CLAUDE.md`를 `AGENTS.md`로 가는 심링크로 바꾸는 것이다. 이 연구는 그 두 우회로에 실제 비용이 있는지를 쿠버네티스 장애 대응 작업 위에서 측정했다.
+프로젝트 컨텍스트 파일을 `CLAUDE.md`에서 **AGENTS.md**로 옮기면 Claude Code가 느려지거나 비용이 늘어날까? [AGENTS.md](https://agents.md/)는 AAIF(Agentic AI Foundation, Linux Foundation)가 관리하는 개방형 컨텍스트 파일 형식으로, 30개가 넘는 코딩 에이전트가 읽는다. 그런데 Claude Code는 이 파일을 그대로는 읽지 않아서([issue #34235](https://github.com/anthropics/claude-code/issues/34235)), 마이그레이션하려면 둘 중 하나가 필요하다. `CLAUDE.md` 안에 `@AGENTS.md` import 한 줄을 두거나, `CLAUDE.md`를 `AGENTS.md`로 가는 심볼릭 링크(symlink)로 바꾸는 것이다. 이 연구는 그 두 우회로에 실제 비용이 있는지를 쿠버네티스 장애 대응 작업 위에서 측정했다.
 
 > 시나리오, 채점 파서, audit 캡처는 같이 공개된 [AIOps Agent Benchmark](https://github.com/sysnet4admin/Research/tree/main/AIOps-Agent-Benchmark)를 재사용한다. 이 연구는 Claude Code 하나만 측정하며, 벤더 간 비교가 아니다.
 
 ## 요약
 
-- **세 가지 전달 방식 모두 실제로 읽힌다.** 카나리 검증으로 `@AGENTS.md` import와 심링크 둘 다 Claude Code가 따라가는 것을 확인했다(컨텍스트 없는 대조군만 카나리에 응답하지 않았다).
+- **세 가지 전달 방식 모두 실제로 읽힌다.** 카나리 검증으로 `@AGENTS.md` import와 심볼릭 링크 둘 다 Claude Code가 따라가는 것을 확인했다(컨텍스트 없는 대조군만 카나리에 응답하지 않았다).
 - **속도 저하가 없다.** 4개 모델 티어(Haiku 4.5, Sonnet 4.6, Opus 4.8, Fable 5) 전부에서 wall time 편차의 부호가 조건마다 뒤바뀌고 토큰 편차와도 어긋난다. 이는 컨텍스트 로드 오버헤드가 아니라 LLM 실행 편차의 특징이다.
-- **토큰 비용 페널티가 없다.** 세션 시작 때 한 번 발생하는 컨텍스트 로드 토큰(cache write)이 어느 우회로에서도 늘지 않는다. import 형태는 오히려 네 모델 모두에서 native보다 약 3% 낮게 측정됐고, 심링크는 native와 ±1% 안이다.
+- **토큰 비용 페널티가 없다.** 세션 시작 때 한 번 발생하는 컨텍스트 로드 토큰(cache write)이 어느 우회로에서도 늘지 않는다. import 형태는 오히려 네 모델 모두에서 native보다 약 3% 낮게 측정됐고, 심볼릭 링크는 native와 ±1% 안이다.
 
 ## 조건
 
@@ -20,7 +20,9 @@
 |---|---|---|
 | **A** native | `CLAUDE.md`(본문) | `CLAUDE.md`를 바로 읽음 |
 | **B** import | `CLAUDE.md`(`@AGENTS.md` 한 줄) + `AGENTS.md`(본문) | `@AGENTS.md` import를 따라감 |
-| **C** symlink | `AGENTS.md`(본문) + 그리로 가는 `CLAUDE.md` 심링크 | 심링크를 따라감 |
+| **C** symlink | `AGENTS.md`(본문) + 그리로 가는 `CLAUDE.md` 심볼릭 링크 | `CLAUDE.md` 경로를 여는 순간 OS가 링크를 풀어 `AGENTS.md` 내용을 돌려줌 |
+
+C에서 Claude Code가 따로 하는 일은 없다. 링크 해석은 파일을 여는 시점에 파일시스템이 처리하므로, Claude Code 입장에서는 native와 같은 읽기다. 측정에서 C가 A와 ±1% 안이었던 것과 부합한다.
 
 본문은 합성 문서가 아니라 실제 운영 중인 컨텍스트 파일(AIOps 벤치마크의 프로젝트 `CLAUDE.md`: 클러스터 규칙, 점수 공식, 알려진 함정)이다.
 
@@ -28,7 +30,7 @@
 
 ### 비용: 일회성 컨텍스트 로드 토큰 (cache write)
 
-import나 심링크가 로드되는 내용을 부풀렸다면 B나 C의 cache write 토큰이 A보다 커야 한다. 조건별 중앙값(셀당 n=12: 시나리오 4개 x 반복 3회):
+import나 심볼릭 링크가 로드되는 내용을 부풀렸다면 B나 C의 cache write 토큰이 A보다 커야 한다. 조건별 중앙값(셀당 n=12: 시나리오 4개 x 반복 3회):
 
 | 모델 | A (native) | B (import) vs A | C (symlink) vs A |
 |---|---|---|---|
@@ -37,7 +39,7 @@ import나 심링크가 로드되는 내용을 부풀렸다면 B나 C의 cache wr
 | Opus 4.8 | 15,542 | -4% | -1% |
 | Fable 5 | 16,357 | -3% | -1% |
 
-import는 네 티어 모두에서 오히려 조금 낮다. 캐시에 안 탄 순수 입력 토큰도 조건 간 0에서 -4%로 평평하다.
+import는 네 티어 모두에서 오히려 조금 낮다. 캐시에 안 탄 순수 입력 토큰도 조건 간 0에서 -4%로 차이가 거의 없다.
 
 ### 속도: wall time
 
@@ -50,9 +52,9 @@ import는 네 티어 모두에서 오히려 조금 낮다. 캐시에 안 탄 순
 | Opus 4.8 | 76.2 | 69.1 | 89.3 |
 | Fable 5 | 79.2 | 90.6 | 76.5 |
 
-편차가 커 보이지만 체계가 없다. 부호가 모델과 조건마다 뒤집히고, 시간 편차가 가장 큰 곳의 토큰 편차는 거의 0이다(예: Haiku C는 시간 +35%인데 토큰 +3%). 전달 방식의 오버헤드라면 부호가 한쪽으로 쏠려야 한다. 이 패턴은 에이전트 풀이 경로의 편차다.
+편차가 커 보이지만 일관성이 없다. 부호가 모델과 조건마다 뒤집히고, 시간 편차가 가장 큰 곳의 토큰 편차는 거의 0이다(예: Haiku C는 시간 +35%인데 토큰 +3%). 전달 방식의 오버헤드라면 부호가 한쪽으로 쏠려야 한다. 이 패턴은 에이전트 풀이 경로의 편차다.
 
-output 토큰과 tool call 수도 각각 ±15%, ±8% 안에서 부호가 섞여 평평하다.
+output 토큰과 tool call 수도 각각 ±15%, ±8% 안에서 부호가 섞여 사실상 차이가 없다.
 
 ## 방법
 
@@ -105,5 +107,5 @@ python3 aggregate.py      # 회차별 CSV
 
 ## 선행 연구
 
-- [arXiv 2601.20404](https://arxiv.org/abs/2601.20404)는 사람이 쓴 AGENTS.md를 Codex(AGENTS.md를 네이티브로 읽는 에이전트)에서 측정해 런타임 중앙값 -28.6%, 출력 토큰 -16.6%를 보고했다. 다만 import 우회나 네이티브가 아닌 리더는 측정하지 않았고, 이 연구가 Claude Code에 대해 그 공백을 채운다.
-- ETH Zurich 연구는 LLM이 생성한 AGENTS.md가 오히려 성공률을 낮추고 비용을 올린다고 보고했다. 파일 품질이 방향을 가른다는 뜻이라, 이 연구는 파일을 사람이 다듬은 것으로 고정하고 전달 방식만 바꿨다.
+- [arXiv 2601.20404](https://arxiv.org/abs/2601.20404)는 사람이 쓴 AGENTS.md를 Codex(AGENTS.md를 네이티브로 읽는 에이전트)에서 측정해 런타임 중앙값 -28.6%, 출력 토큰 -16.6%를 보고했다. 다만 import 우회나 네이티브가 아닌 리더는 측정하지 않았고, 그 부분을 이 연구가 Claude Code를 대상으로 측정했다.
+- [ETH Zurich 연구(arXiv 2602.11988)](https://arxiv.org/abs/2602.11988)는 LLM이 생성한 AGENTS.md가 오히려 성공률을 낮추고 비용을 올린다고 보고했다. 파일을 어떻게 만들었는지가 결과를 좌우한다는 의미라, 이 연구는 파일을 사람이 다듬은 것으로 고정하고 전달 방식만 바꿨다.
