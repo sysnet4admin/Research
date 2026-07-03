@@ -1,6 +1,6 @@
 # Gateway API PoC, starting-point view (ingress-nginx → Gateway API v1.4 migration)
 
-> **The official Gateway API recommendation is to 'pick a conformant implementation.' But even when conformant, the actual supported feature breadth ranges from 6 to 13. Comparing that gap is what this view does.**
+> **The official Gateway API recommendation is to 'pick a conformant-certified implementation.' But even with conformant certification, the actual supported feature breadth ranges from 6 to 13. Comparing that gap is what this view does.**
 
 > **What sets this view apart**: unlike official conformance (declared PASS/FAIL) and ingress2gateway (whether mechanical conversion happens), it cross-compares, on one yardstick, live cluster **measurement** + **implementation features** outside conformance scope (rate-limit, auth, body-size) + the **feature-breadth gap** within conformant implementations. For the rigor (spec) view see `../conformance-view/`.
 

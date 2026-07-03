@@ -20,3 +20,7 @@ AIOps-Agent-Benchmark/runs/**/raw.json
 AIOps-Agent-Benchmark/runs/**/transcript.log
 AIOps-Agent-Benchmark/runs/**/cluster_snapshot.json
 AIOps-Agent-Benchmark/runs/**/metrics.json
+
+# OSS 프로토타입: 클러스터 전체 덤프(재생성 가능, ~1MB/시나리오)는 제외.
+# transcript·raw·audit-slice·점수·comparison·HTML은 증거로 git 추적.
+AIOps-Agent-Benchmark/_INTERNAL_NOTES/oss-prototype/runs/**/verify_snapshot.json
