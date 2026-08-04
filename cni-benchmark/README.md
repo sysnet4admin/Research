@@ -2,6 +2,8 @@
 
 [한국어](README_ko.md)
 
+> **This README is a reference sheet for numbers, conditions, and reproduction.** The motivation, market context, and narrative walk-through live in the [blog post](https://kuberneteslab.dev/en/blog/cni-standing-cost/).
+
 A CNI (Container Network Interface, the component that wires pods into the
 network) is something you pick once when you build a cluster and rarely look at
 again. As a result, it is hard to find any organized data on how much CPU and

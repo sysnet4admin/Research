@@ -2,6 +2,8 @@
 
 [English](README.md)
 
+> **이 README는 수치, 조건, 재현 방법의 참조 자료다.** 측정 동기와 시장 배경, 서사형 해설은 [블로그 글](https://kuberneteslab.dev/ko/blog/cni-standing-cost/)에 있다.
+
 CNI(Container Network Interface, 파드에 네트워크를 연결해 주는 구성 요소)는
 클러스터를 만들 때 한 번 고르고 나면 다시 들여다볼 일이 거의 없다. 그러다 보니 CNI의 에이전트와 컨트롤러가 평소에 CPU와 메모리를 얼마나
 쓰는지를 정리한 자료를 찾기 어렵다. 처리량 벤치마크는 많지만 상시 비용을 같은

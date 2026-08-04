@@ -46,7 +46,7 @@ Kubernetes, 클라우드 네이티브, AI에 대한 벤치마크 및 PoC 연구 
 
 CNI 5종(Calico, Cilium, Flannel, Antrea, kube-router)의 상시 자원 비용을 14개 구성과 6개 부하 구간에서 9일 무인 측정합니다. CPU, 메모리, eBPF map 커널 메모리까지 수집했으며, 조건을 가르는 축은 CPU가 아니라 메모리 사용량이라는 것과 kube-proxy를 nftables 모드로 바꾸는 것만으로 메모리 사용량이 70% 줄어든다는 것이 대표 결과입니다.
 
-→ [README (EN)](./cni-benchmark/README.md) | [README (KO)](./cni-benchmark/README_ko.md)
+→ [블로그 포스트](https://kuberneteslab.dev/ko/blog/cni-standing-cost/) | [README (EN)](./cni-benchmark/README.md) | [README (KO)](./cni-benchmark/README_ko.md)
 
 ---
 
