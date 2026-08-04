@@ -11,10 +11,10 @@ CLUSTER_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 KUBE_CONTEXT="AIOps-Agent-Benchmark"
 
 # Control-plane node (first VM defined by the Vagrantfile)
-CP_VM="cp-k8s-1.35.4"
+CP_VM="cp-k8s-1.36.0"
 
 # Worker node names
-WORKER_VMS=("w1-k8s-1.35.4" "w2-k8s-1.35.4" "w3-k8s-1.35.4")
+WORKER_VMS=("w1-k8s-1.36.0" "w2-k8s-1.36.0" "w3-k8s-1.36.0")
 
 # All VMs (CP + workers)
 ALL_VMS=("$CP_VM" "${WORKER_VMS[@]}")
