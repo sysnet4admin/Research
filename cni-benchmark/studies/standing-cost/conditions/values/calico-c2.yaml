@@ -1,0 +1,17 @@
+# C2: operator eBPF 데이터플레인, VXLAN, BGP off, kube-proxy 자동 관리
+installation:
+  enabled: true
+  calicoNetwork:
+    nodeAddressAutodetectionV4:
+      interface: eth1
+    linuxDataplane: BPF
+    bpfNetworkBootstrap: Enabled
+    kubeProxyManagement: Enabled
+    bgp: Disabled
+    ipPools:
+      - name: default-ipv4-ippool
+        blockSize: 26
+        cidr: 172.16.0.0/16
+        encapsulation: VXLAN
+        natOutgoing: Enabled
+        nodeSelector: all()

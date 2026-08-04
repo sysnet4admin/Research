@@ -1,0 +1,18 @@
+# X1: Cilium helm 기본 (veth, VXLAN 터널, Hubble on, KPR off)
+# 공통 통제: IPAM cluster-pool 172.16.0.0/16, BPF map 크기 명시 고정
+# (동적 사이징 0.0025는 노드 메모리 의존이라 비교 안정성 위해 비활성)
+ipam:
+  mode: cluster-pool
+  operator:
+    clusterPoolIPv4PodCIDRList:
+      - 172.16.0.0/16
+kubeProxyReplacement: false
+bpf:
+  mapDynamicSizeRatio: 0.0
+  ctTcpMax: 524288
+  ctAnyMax: 262144
+  natMax: 524288
+  policyMapMax: 16384
+# hubble은 차트 기본(on, relay/ui off)을 그대로 둔다 = 기본 설치의 실제 비용
+operator:
+  replicas: 1

@@ -1,0 +1,14 @@
+# C1: operator 기본 (iptables), VXLAN, BGP off
+installation:
+  enabled: true
+  calicoNetwork:
+    nodeAddressAutodetectionV4:
+      interface: eth1
+    bgp: Disabled
+    ipPools:
+      - name: default-ipv4-ippool
+        blockSize: 26
+        cidr: 172.16.0.0/16
+        encapsulation: VXLAN
+        natOutgoing: Enabled
+        nodeSelector: all()

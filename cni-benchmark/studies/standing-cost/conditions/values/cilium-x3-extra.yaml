@@ -1,0 +1,14 @@
+# X3 추가분: kube-proxy 대체 + native routing (X2 위에 겹침)
+kubeProxyReplacement: true
+k8sServiceHost: 192.168.2.50
+k8sServicePort: 6443
+routingMode: native
+autoDirectNodeRoutes: true
+ipv4NativeRoutingCIDR: 172.16.0.0/16
+bpf:
+  masquerade: true
+  mapDynamicSizeRatio: 0.0
+  ctTcpMax: 524288
+  ctAnyMax: 262144
+  natMax: 524288
+  policyMapMax: 16384
