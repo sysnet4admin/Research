@@ -13,9 +13,9 @@ with replicas scaling and pods being replaced?
 So we measured it. The same workload runs twice: once on an old-spec
 (2025-11-25) session-based server, once ported to the new stateless spec, on
 the same cluster, driven by the same load generator, on the release-week
-stable SDK. After the main run we spent a week widening the sample, so each
-cell below has 13 to 22 observations. This repository holds the harness, the
-ported server, and the numbers.
+stable SDK. After the main run we widened the sample, so the scale-out cells
+below carry 10 to 22 observations each. This repository holds the harness,
+the ported server, and the numbers.
 
 Terms used throughout: rps is requests per second (offered = what the load
 generator attempts, achieved = what actually succeeded). A session loss is a
@@ -27,14 +27,14 @@ new spec when a handle points at state the receiving pod does not have.
 
 - On the old spec, adding replicas makes things worse, not better. At 200 rps
   offered, going from 1 to 4 replicas drops the median achieved throughput
-  from 200 to 33.2 rps, with 37,844 session losses out of 78,000 requests.
+  from 199.9 to 33.2 rps, with 37,844 session losses out of 78,000 requests.
   And repeating the same cell lands anywhere from 22.4 to 57.0 rps, run to
   run.
-- The new spec returned 200.0 rps in all 69 observations, at every replica
-  count, in both connection modes, with zero losses. The observed range is
-  199.7 to 200.0.
-- Killing a pod mid-run cost the old spec 1,922 sessions over six runs (59 to
-  1,072 per run); the new spec went through the same six kills losing nothing.
+- The new spec held a median 200.0 rps across all 69 observations, at every
+  replica count and in both connection modes, with the lowest run at 199.7.
+  Losses were zero in every one of the 69.
+- Killing a pod mid-run cost the old spec 1,922 session losses over six runs
+  (59 to 1,072 per run); the new spec lost nothing in any of its three.
 - Migrating the transport does not migrate the application. Port to the
   stateless spec but keep handle state in pod memory and the old pathology
   comes back: half the offered rate under scale-out, and 13,942 handle losses
@@ -84,11 +84,11 @@ agentgateway. Paths (a) and (c) were measured.
 - **Path (c) gateway**: the same workload through agentgateway v1.4.1, old
   spec with `sessionRouting: Stateful`, new spec with `Stateless`.
 
-After the main run (2026-08-06) we spent a week on follow-up measurement:
-every M1 cell repeated 13 times (22 for conn-reuse at 4 replicas), pod
-replacement extended to six runs, plus session affinity, kube-proxy nftables
-mode, client concurrency 4 to 32, a 30-minute continuous run, pod replacement
-per handle design, and a Redis outage, all on the same harness.
+After the main run (2026-08-06) we continued with follow-up measurement: M1
+repetitions raised to 10 to 22 per cell, old-spec pod replacement extended to
+six runs (three for the new spec), plus session affinity, kube-proxy nftables
+mode, client concurrency 4 to 32 (old spec), a 30-minute continuous run, pod
+replacement per handle design, and a Redis outage, all on the same harness.
 
 ## Environment
 
@@ -127,15 +127,16 @@ per handle design, and a Redis outage, all on the same harness.
 
 Throughput is the median of the repetitions with the observed range in
 parentheses; losses are summed across them. Observation counts differ per
-cell: M1 cells have 13 runs (22 for conn-reuse at 4 replicas), offering
-78,000 requests per cell; handle cells have 3 runs (9,000 requests); pod
-kills have 6 runs (36,000 requests); gateway cells have 3. Every pod kill was
-verified to have actually landed.
+cell: M1 cells have 10 to 22 runs (78,000 requests for a 13-run cell); handle
+cells have 3 runs (9,000 requests); pod kills have 6 runs for the old spec
+(36,000 requests) and 3 for the new (18,000); gateway cells have 3. Rows with
+6 runs or fewer omit the range. Every pod kill was verified to have actually
+landed.
 
 Old-spec cells above one replica vary considerably between runs, because the
 outcome depends on which pods hold the sessions and which pods the
-connections reach. Replicas 1 stays at 196.8 to 200.0 and the new spec
-returned 200.0 in all 69 observations, so the spread is a property of the old
+connections reach. Replicas 1 stays at 196.8 to 200.0 and the new spec's median is 200.0 with a
+low of 199.7 across 69 observations, so the spread is a property of the old
 spec, not measurement noise.
 
 ![Three handle designs under the stateless spec](studies/stateless-scaleout/assets/handles.svg)
@@ -174,7 +175,7 @@ spec, not measurement noise.
 kube-proxy distributes per connection, and on the old spec a session lives in
 one pod's memory. With a new connection per call, every added replica raises
 the chance a request lands on a pod that has never seen its session. The loss
-rate matches the arithmetic: with N replicas a new connection misses the
+rate tracks the arithmetic: with N replicas a new connection misses the
 session pod with probability (N-1)/N, and probing fresh sessions 60 times per
 replica count showed first-connection losses at 50% for 2 replicas (theory
 50%) and 82% for 4 (theory 75%).
@@ -191,28 +192,30 @@ lands anywhere from 22.4 to 57.0 rps over 13 runs, and 95.6 to 190.6 over 22
 runs with connection reuse. Single-replica runs stay at 196.8 to 200.0, so
 this is not measurement noise; it is the old spec's dependence on where
 sessions happen to sit. Old-spec scale-out is not just slower, it is hard to
-predict.
+predict. The degradation also held across client concurrency 4 to 32, so it
+is not an artifact of one client shape.
 
 ### 2. The new spec holds the offered rate in every condition
 
-Same cluster, same load, replicas 1, 2, and 4 in both connection modes: all
-69 runs returned 200.0 rps with zero losses and p50 steady at 6.2ms. There is
+Same cluster, same load, replicas 1, 2, and 4 in both connection modes: the
+median across all 69 runs is 200.0 rps with the lowest at 199.7, zero losses
+in every run, and p50 steady at 6.2ms. There is
 no session for a request to miss, so any pod can serve any request. This is
 the entire architectural argument for the stateless revision, visible in one
 row of numbers.
 
-The result held as we changed the conditions: client concurrency from 4 to
-32, kube-proxy switched to nftables mode, and a 30-minute continuous run all
-produced zero server-side losses. The nftables comparison also confirms that
+The result held as we changed the conditions: kube-proxy switched to nftables
+mode and a 30-minute continuous run both produced zero server-side losses. The nftables comparison also confirms that
 the old spec's session loss comes from per-connection balancing itself, not
 from the dataplane implementation.
 
 ### 3. Pod replacement is only an event on the old spec
 
-We killed a pod during a 60-second run six times. The old spec lost 1,922
-sessions in total, ranging from 59 to 1,072 per run depending on how many
-sessions the killed pod happened to hold. The new spec went through the same
-six kills without losing a request. Rollouts and autoscaling do this to pods
+We killed a pod during a 60-second run six times against the old spec and
+three times against the new. The old spec lost 1,922 requests to session
+loss, ranging from 59 to 1,072 per run depending on how many sessions the
+killed pod happened to hold. The new spec went through its three kills
+without losing a request. Rollouts and autoscaling do this to pods
 constantly, which is why the difference matters outside of benchmarks.
 
 The same test applied to the handle designs: the pod-memory variant lost
@@ -246,8 +249,8 @@ effect will be partial.
 
 The other is a session-terminating gateway. With agentgateway v1.4.1 and
 `sessionRouting: Stateful`, scale-out at 4 replicas ran loss-free, and pod
-replacement ended with 20 failures across five runs against 1,922 across six
-on the direct path, two orders of magnitude apart, because the gateway
+replacement ended with 20 failures across five runs, 4 per run; the same-day
+direct-path control lost 1,255 across three runs, 418 per run. The gateway
 terminates the session and re-pins it to a surviving pod. Note that these
 numbers come from a client that re-initializes on 5xx: behind the gateway a
 lost session surfaces as a 5xx rather than a 400, and a client that does not
@@ -262,8 +265,8 @@ spec posts the same numbers with neither device.
 ### 6. The ecosystem caught up during the release window
 
 In the July pilot, agentgateway v1.4.0-alpha.1 mangled `params._meta`, so
-new-spec traffic could not pass through it end to end. v1.4.1 (released the
-day after the spec) passes it intact, and both SDKs shipped stable 2.0.0.
+new-spec traffic could not pass through it end to end. v1.4.1 (released right
+after the spec) passes it intact, and both SDKs shipped stable 2.0.0.
 Against the release-final spec we also confirmed the changes that could have
 affected this harness (error-code renumbering, required `resultType`,
 `ttlMs`/`cacheScope` on list results) are all filled by the SDK; a server
