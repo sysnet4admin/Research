@@ -219,8 +219,8 @@ We killed a pod during a 60-second run six times against the old spec and
 three times against the new. The old spec lost 1,922 requests to session
 loss, ranging from 59 to 1,072 per run depending on how many sessions the
 killed pod happened to hold. The new spec went through its three kills
-without losing a request. Rollouts and autoscaling do this to pods
-constantly, which is why the difference matters outside of benchmarks.
+without losing a request. Rollouts, node drains, and autoscaler scale-in do this to
+pods constantly, which is why the difference matters outside of benchmarks.
 
 The same test applied to the handle designs: the pod-memory variant lost
 13,942 handles across five kills, because a dying pod takes all of its state
