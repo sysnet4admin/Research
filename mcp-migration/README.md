@@ -2,6 +2,10 @@
 
 [한국어](README_ko.md)
 
+> **This README is the reference for numbers, conditions, and reproduction.**
+> The step-by-step migration walkthrough with verbatim payloads is in the
+> [blog post](https://kuberneteslab.dev/en/blog/mcp-stateless-migration/).
+
 The MCP 2026-07-28 revision is the protocol's largest change since launch:
 protocol-level sessions and the `Mcp-Session-Id` header are gone, every request
 carries what it needs, and anything that used to live in a session now travels

@@ -2,6 +2,9 @@
 
 [English](README.md)
 
+> **이 README는 수치, 조건, 재현 방법의 참조 자료다.** 단계별로 따라가는
+> 마이그레이션 절차와 실제 페이로드는 [블로그 글](https://kuberneteslab.dev/ko/blog/mcp-stateless-migration/)에 있다.
+
 MCP(Model Context Protocol)의 2026-07-28 스테이트리스(stateless) 개정은
 프로토콜이 나온 뒤 가장 큰 변경이다. 프로토콜 수준의 세션과 `Mcp-Session-Id`
 헤더가 사라졌고 요청마다 처리에 필요한 정보를 모두 담아 보내게 됐으며 세션에

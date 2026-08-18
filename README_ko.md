@@ -52,9 +52,9 @@ CNI 5종(Calico, Cilium, Flannel, Antrea, kube-router)의 상시 자원 비용�
 
 ### [mcp-migration](./mcp-migration)
 
-MCP 2026-07-28 스테이트리스 개정이 쿠버네티스 위의 서버에 무엇을 바꾸는지 측정합니다. 세션 기반 서버와 신 스펙으로 포팅한 서버에 같은 워크로드를 주고 스케일아웃, 파드 교체, 핸들 설계 3종을 비교했습니다. 구 스펙은 레플리카를 늘릴수록 처리량이 줄고(레플리카 4에서 200에서 38.3rps로, 세션 유실 8,695건), 신 스펙은 모든 레플리카 수에서 그대로이며, 핸들 상태를 파드 메모리에 둔 채 포팅하면 같은 실패가 HTTP 200 뒤에 숨어 재현된다는 것이 대표 결과입니다.
+MCP 2026-07-28 스테이트리스 개정이 쿠버네티스 위의 서버에 무엇을 바꾸는지 측정합니다. 세션 기반 서버와 신 스펙으로 포팅한 서버에 같은 워크로드를 주고 스케일아웃, 파드 교체, 핸들 설계 3종을 비교했습니다. 구 스펙은 레플리카를 늘릴수록 처리량이 줄고 회차마다 달라지며(레플리카 4에서 중앙값 33.2rps, 요청 78,000건 중 세션 유실 37,844건), 신 스펙은 측정한 모든 조건에서 목표 처리량을 유지하고, 핸들 상태를 파드 메모리에 둔 채 포팅하면 같은 실패가 HTTP 200 뒤에 숨어 재현된다는 것이 대표 결과입니다.
 
-→ [README (EN)](./mcp-migration/README.md) | [README (KO)](./mcp-migration/README_ko.md)
+→ [블로그 포스트](https://kuberneteslab.dev/ko/blog/mcp-stateless-migration/) | [README (EN)](./mcp-migration/README.md) | [README (KO)](./mcp-migration/README_ko.md)
 
 ---
 
