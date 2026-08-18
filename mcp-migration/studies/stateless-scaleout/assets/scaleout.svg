@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 430" font-family="Helvetica, Arial, sans-serif">
+<rect width="700" height="430" fill="white"/>
+<text x="277.0" y="26" font-size="13" fill="#111" text-anchor="middle" font-weight="bold">Scale-out: what gets through at 200 rps offered (median, band = run range)</text>
+<line x1="64" y1="374.0" x2="490" y2="374.0" stroke="#e8e8e8"/>
+<text x="56" y="378.0" font-size="11" fill="#666" text-anchor="end">0</text>
+<line x1="64" y1="300.8181818181818" x2="490" y2="300.8181818181818" stroke="#e8e8e8"/>
+<text x="56" y="304.8181818181818" font-size="11" fill="#666" text-anchor="end">50</text>
+<line x1="64" y1="227.63636363636365" x2="490" y2="227.63636363636365" stroke="#e8e8e8"/>
+<text x="56" y="231.63636363636365" font-size="11" fill="#666" text-anchor="end">100</text>
+<line x1="64" y1="154.45454545454547" x2="490" y2="154.45454545454547" stroke="#e8e8e8"/>
+<text x="56" y="158.45454545454547" font-size="11" fill="#666" text-anchor="end">150</text>
+<line x1="64" y1="81.27272727272731" x2="490" y2="81.27272727272731" stroke="#e8e8e8"/>
+<text x="56" y="85.27272727272731" font-size="11" fill="#666" text-anchor="end">200</text>
+<line x1="64" y1="81.27272727272731" x2="490" y2="81.27272727272731" stroke="#999" stroke-dasharray="5,4"/>
+<text x="484" y="97.27272727272731" font-size="10" fill="#777" text-anchor="end">offered 200 rps</text>
+<rect x="64" y="52" width="426" height="322" fill="none" stroke="#999"/>
+<text x="98.08" y="392" font-size="11" fill="#333" text-anchor="middle">1</text>
+<text x="277.0" y="392" font-size="11" fill="#333" text-anchor="middle">2</text>
+<text x="455.92" y="392" font-size="11" fill="#333" text-anchor="middle">4</text>
+<text x="277.0" y="416" font-size="12" fill="#333" text-anchor="middle">replicas</text>
+<text x="20" y="213.0" font-size="12" fill="#333" text-anchor="middle" transform="rotate(-90 20 213.0)">achieved rps</text>
+<line x1="98.1" y1="86.0" x2="98.1" y2="81.3" stroke="#c1442e" stroke-width="7" opacity="0.22" stroke-linecap="round"/>
+<line x1="277.0" y1="239.5" x2="277.0" y2="147.0" stroke="#c1442e" stroke-width="7" opacity="0.22" stroke-linecap="round"/>
+<line x1="455.9" y1="341.2" x2="455.9" y2="290.6" stroke="#c1442e" stroke-width="7" opacity="0.22" stroke-linecap="round"/>
+<line x1="98.1" y1="224.0" x2="98.1" y2="81.3" stroke="#d98e6a" stroke-width="7" opacity="0.22" stroke-linecap="round"/>
+<line x1="277.0" y1="175.4" x2="277.0" y2="90.9" stroke="#d98e6a" stroke-width="7" opacity="0.22" stroke-linecap="round"/>
+<line x1="455.9" y1="234.1" x2="455.9" y2="95.0" stroke="#d98e6a" stroke-width="7" opacity="0.22" stroke-linecap="round"/>
+<polyline points="98.1,81.4 277.0,203.5 455.9,325.4" fill="none" stroke="#c1442e" stroke-width="2.5"/>
+<circle cx="98.1" cy="81.4" r="5" fill="#c1442e"/>
+<circle cx="277.0" cy="203.5" r="5" fill="#c1442e"/>
+<circle cx="455.9" cy="325.4" r="5" fill="#c1442e"/>
+<polyline points="98.1,81.3 277.0,126.8 455.9,182.6" fill="none" stroke="#d98e6a" stroke-width="2.5" stroke-dasharray="6,4"/>
+<circle cx="98.1" cy="81.3" r="5" fill="#d98e6a"/>
+<circle cx="277.0" cy="126.8" r="5" fill="#d98e6a"/>
+<circle cx="455.9" cy="182.6" r="5" fill="#d98e6a"/>
+<polyline points="98.1,81.3 277.0,81.3 455.9,81.3" fill="none" stroke="#2e6f9e" stroke-width="2.5"/>
+<circle cx="98.1" cy="81.3" r="5" fill="#2e6f9e"/>
+<circle cx="277.0" cy="81.3" r="5" fill="#2e6f9e"/>
+<circle cx="455.9" cy="81.3" r="5" fill="#2e6f9e"/>
+<text x="277.0" y="71.3" font-size="11" fill="#2e6f9e" text-anchor="middle" font-weight="bold">200</text>
+<text x="455.9" y="71.3" font-size="11" fill="#2e6f9e" text-anchor="middle" font-weight="bold">200</text>
+<text x="277.0" y="225.5" font-size="11" fill="#c1442e" text-anchor="middle">116.5</text>
+<text x="277.0" y="239.5" font-size="10" fill="#c1442e" text-anchor="middle">session losses 22,220</text>
+<text x="455.9" y="347.4" font-size="11" fill="#c1442e" text-anchor="middle">33.2</text>
+<text x="455.9" y="361.4" font-size="10" fill="#c1442e" text-anchor="middle">session losses 37,844</text>
+<text x="289.0" y="130.8" font-size="11" fill="#b5764f">168.9</text>
+<text x="467.9" y="186.6" font-size="11" fill="#b5764f">130.8</text>
+<line x1="506" y1="60" x2="528" y2="60" stroke="#c1442e" stroke-width="2.5"/>
+<text x="534" y="64" font-size="11" fill="#333">old spec (new conn per call)</text>
+<line x1="506" y1="82" x2="528" y2="82" stroke="#d98e6a" stroke-width="2.5" stroke-dasharray="6,4"/>
+<text x="534" y="86" font-size="11" fill="#333">old spec (conn reuse)</text>
+<line x1="506" y1="104" x2="528" y2="104" stroke="#2e6f9e" stroke-width="2.5"/>
+<text x="534" y="108" font-size="11" fill="#333">new spec (stateless)</text>
+</svg>

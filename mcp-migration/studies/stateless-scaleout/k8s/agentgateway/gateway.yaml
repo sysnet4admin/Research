@@ -1,0 +1,87 @@
+# 경로 (c): agentgateway proxy + A/B 백엔드 + 라우트
+# - A(구 스펙, 세션): sessionRouting Stateful (selector 타깃 필수)
+# - B(신 스펙, stateless): sessionRouting Stateless
+# 주의: virtual MCP는 투명 프록시가 아님. 클라이언트 세션을 게이트웨이가 종단하므로
+# 결과 해석 시 "게이트웨이 포함 동작"으로 명시한다.
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: agentgateway-proxy
+  namespace: agentgateway-system
+spec:
+  gatewayClassName: agentgateway
+  listeners:
+    - protocol: HTTP
+      port: 80
+      name: http
+      allowedRoutes:
+        namespaces:
+          from: All
+---
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: mcp-a-stateful
+  namespace: mcp-pilot
+spec:
+  mcp:
+    targets:
+      - name: mcp-a
+        selector:
+          services:
+            matchLabels:
+              app: mcp-a
+    sessionRouting: Stateful
+---
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: mcp-b-stateless
+  namespace: mcp-pilot
+spec:
+  mcp:
+    targets:
+      - name: mcp-b
+        selector:
+          services:
+            matchLabels:
+              app: mcp-b
+    sessionRouting: Stateless
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: mcp-a
+  namespace: mcp-pilot
+spec:
+  parentRefs:
+    - name: agentgateway-proxy
+      namespace: agentgateway-system
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /a
+      backendRefs:
+        - name: mcp-a-stateful
+          group: agentgateway.dev
+          kind: AgentgatewayBackend
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: mcp-b
+  namespace: mcp-pilot
+spec:
+  parentRefs:
+    - name: agentgateway-proxy
+      namespace: agentgateway-system
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /b
+      backendRefs:
+        - name: mcp-b-stateless
+          group: agentgateway.dev
+          kind: AgentgatewayBackend

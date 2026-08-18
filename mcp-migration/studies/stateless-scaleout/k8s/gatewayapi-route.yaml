@@ -1,0 +1,69 @@
+# 경로 (b): 일반 Gateway API 구현체 경유 (2026-08-10 추가).
+#
+# 경로 (c)의 agentgateway와 대조하기 위한 것이다. agentgateway는 MCP를 알아서
+# 세션을 종단하고 sessionRouting을 고를 수 있지만, 일반 Gateway API 구현체는
+# MCP를 모르는 L7 프록시라 세션 개념이 없다. 그래서 구 스펙의 세션 유실이
+# 직접 경로와 같게 나타나는지, 프록시가 연결을 모아 쥐면서 달라지는지가 관심사다.
+#
+# gateway-PoC의 nginx Gateway Fabric을 재사용한다(A등급 4종 중 택1).
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: mcp-httproute-gw
+  namespace: mcp-pilot
+spec:
+  gatewayClassName: nginx
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: Same
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: mcp-a-route
+  namespace: mcp-pilot
+spec:
+  parentRefs:
+    - name: mcp-httproute-gw
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /a
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: mcp-a
+          port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: mcp-b-route
+  namespace: mcp-pilot
+spec:
+  parentRefs:
+    - name: mcp-httproute-gw
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /b
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: mcp-b
+          port: 80

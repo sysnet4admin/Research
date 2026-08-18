@@ -50,6 +50,14 @@ Measures the standing resource cost of five CNIs (Calico, Cilium, Flannel, Antre
 
 ---
 
+### [mcp-migration](./mcp-migration)
+
+Measures what the MCP 2026-07-28 stateless revision changes for a server running on Kubernetes. The same workload runs on a session-based server and on a port to the new spec, under scale-out, pod replacement, and three handle designs. Key findings: the old spec loses throughput as replicas are added (200 to 38.3 rps at four replicas, 8,695 session losses), the new spec is flat at every replica count, and a port that leaves handle state in pod memory reproduces the old failure behind HTTP 200.
+
+→ [README (EN)](./mcp-migration/README.md) | [README (KO)](./mcp-migration/README_ko.md)
+
+---
+
 ## Author
 
 **Hoon Jo** / CNCF Ambassador / Kubestronaut / [@sysnet4admin](https://github.com/sysnet4admin) / [kuberneteslab.dev](https://kuberneteslab.dev/en/)

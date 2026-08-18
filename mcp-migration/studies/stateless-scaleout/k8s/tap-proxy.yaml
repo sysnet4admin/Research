@@ -1,0 +1,126 @@
+# 탭 프록시 (2026-08-10 추가). agentgateway와 MCP 서버 사이에 끼워
+# 게이트웨이가 무엇을 넘기는지 기록한다.
+#
+# 쓰는 이유: MCP 2026-07-28 스펙이 `_meta`에 W3C Trace Context(traceparent)를
+# 예약했는데 agentgateway가 이걸 다운스트림까지 잇는지 문서에 없다. 확인하려면
+# 서버가 받은 것을 봐야 하는데, SDK 2.0.0에서 도구가 요청 컨텍스트를 받는 방법을
+# 찾지 못했다(Context 타입 주입은 pydantic 스키마 생성에서 막힌다). 그래서 서버를
+# 고치는 대신 앞에 투명 프록시를 둔다. b-server를 안 건드리므로 재현 검증(V8)이
+# 검증한 구성도 그대로 남는다.
+#
+# 받은 요청의 헤더와 params._meta를 stdout에 한 줄씩 남기고 그대로 전달한다.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tap-proxy-code
+  namespace: mcp-pilot
+data:
+  tap.py: |
+    """게이트웨이가 다운스트림에 무엇을 넘기는지 기록하는 투명 프록시.
+
+    표준 라이브러리만 쓴다. b-server 이미지에 httpx가 없어서다(starlette, uvicorn,
+    anyio는 있다). G5는 요청 몇 건만 보내므로 동기 호출로 충분하다.
+    """
+    import json
+    import os
+    import urllib.error
+    import urllib.request
+
+    import anyio
+    from starlette.applications import Starlette
+    from starlette.responses import Response
+    from starlette.routing import Route
+
+    UPSTREAM = os.environ.get("UPSTREAM", "http://mcp-b/mcp")
+    # 관심 헤더만 남긴다. 전부 찍으면 요청마다 수십 줄이 된다.
+    WATCH = ("traceparent", "tracestate", "baggage", "mcp-method", "mcp-name",
+             "mcp-protocol-version", "mcp-session-id", "authorization",
+             "x-request-id", "x-b3-traceid")
+    DROP = ("host", "content-length", "connection", "transfer-encoding")
+
+    def forward(body, headers):
+        req = urllib.request.Request(UPSTREAM, data=body, method="POST")
+        for k, v in headers:
+            if k.lower() not in DROP:
+                req.add_header(k, v)
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return r.status, r.read(), dict(r.headers)
+        except urllib.error.HTTPError as e:
+            return e.code, e.read(), dict(e.headers)
+        except Exception as e:
+            return 502, json.dumps({"tap_error": str(e)}).encode(), {}
+
+    async def handler(request):
+        body = await request.body()
+        seen = {k: v for k, v in request.headers.items() if k.lower() in WATCH}
+        meta = None
+        try:
+            meta = (json.loads(body).get("params") or {}).get("_meta")
+        except Exception:
+            pass
+        print(json.dumps({"tap": True, "headers": seen, "params_meta": meta},
+                         ensure_ascii=False), flush=True)
+        status, content, hdrs = await anyio.to_thread.run_sync(
+            forward, body, list(request.headers.items()))
+        keep = {k: v for k, v in hdrs.items()
+                if k.lower() in ("content-type", "mcp-session-id", "mcp-protocol-version")}
+        return Response(content=content, status_code=status, headers=keep)
+
+    app = Starlette(routes=[Route("/{path:path}", handler, methods=["POST", "GET", "DELETE"])])
+
+    if __name__ == "__main__":
+        import uvicorn
+        uvicorn.run(app, host="0.0.0.0", port=8000, access_log=False)
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tap-proxy
+  namespace: mcp-pilot
+  labels: { app: tap-proxy }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: tap-proxy }
+  template:
+    metadata:
+      labels: { app: tap-proxy }
+    spec:
+      containers:
+        - name: tap
+          image: docker.io/mcp-pilot/b-server:2.0.0   # httpx, starlette, uvicorn 포함
+          imagePullPolicy: Never
+          command: ["python", "/app/tap.py"]
+          env:
+            - name: UPSTREAM
+              value: "http://mcp-b/mcp"
+          ports:
+            - containerPort: 8000
+          resources:
+            requests: { cpu: 100m, memory: 64Mi }
+            limits: { cpu: 300m, memory: 256Mi }
+          readinessProbe:
+            tcpSocket: { port: 8000 }
+            initialDelaySeconds: 3
+            periodSeconds: 2
+          volumeMounts:
+            - name: code
+              mountPath: /app
+      volumes:
+        - name: code
+          configMap:
+            name: tap-proxy-code
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tap-proxy
+  namespace: mcp-pilot
+  labels: { app: tap-proxy }
+spec:
+  selector: { app: tap-proxy }
+  ports:
+    - port: 80
+      targetPort: 8000
+      appProtocol: agentgateway.dev/mcp

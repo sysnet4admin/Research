@@ -1,0 +1,7 @@
+# Server A: everything 서버 사전 빌드 (npx 런타임 설치 제거)
+# 버전 고정 2026.7.4 = v1 SDK 세션 기반 (PR #4452 병합 후에도 이 버전 유지)
+FROM node:22-slim
+RUN npm install -g @modelcontextprotocol/server-everything@2026.7.4
+ENV PORT=3001
+EXPOSE 3001
+CMD ["mcp-server-everything", "streamableHttp"]

@@ -1,0 +1,52 @@
+# Server B: v2 SDK (2026-07-28 stateless) 포팅 서버
+# 코드는 ConfigMap b-server-code(deploy.sh가 b-server/server.py에서 생성).
+# 이미지 전략: python:3.12-slim + pip 런타임 설치 (mcp==2.0.0 안정 버전 고정).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-b
+  namespace: mcp-pilot
+  labels: { app: mcp-b }
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: mcp-b }
+  template:
+    metadata:
+      labels: { app: mcp-b }
+    spec:
+      containers:
+        - name: server
+          # 사전 빌드 이미지 (의존성만. 코드는 ConfigMap 마운트 유지)
+          image: docker.io/mcp-pilot/b-server:2.0.0
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+          resources:
+            requests: { cpu: 500m, memory: 256Mi }
+            limits: { cpu: 500m, memory: 512Mi }
+          readinessProbe:
+            tcpSocket: { port: 8000 }
+            initialDelaySeconds: 3
+            periodSeconds: 2
+          volumeMounts:
+            - name: code
+              mountPath: /app
+      volumes:
+        - name: code
+          configMap:
+            name: b-server-code
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcp-b
+  namespace: mcp-pilot
+  labels: { app: mcp-b }   # agentgateway selector 타깃용
+spec:
+  type: LoadBalancer
+  selector: { app: mcp-b }
+  ports:
+    - port: 80
+      targetPort: 8000
+      appProtocol: agentgateway.dev/mcp   # 경로 (c)용. 직접 LB 사용에는 무해
