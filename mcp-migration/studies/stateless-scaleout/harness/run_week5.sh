@@ -46,9 +46,10 @@ kubectl --context $CTX -n $NS rollout status deploy/tap-proxy --timeout=180s >> 
 kubectl --context $CTX -n $NS scale deploy/mcp-a --replicas=1 >/dev/null 2>&1
 kubectl --context $CTX -n $NS scale deploy/mcp-b --replicas=1 >/dev/null 2>&1
 sleep 20
-GW=$(kubectl --context $CTX -n $NS get gateway agentgateway-proxy -o jsonpath='{.status.addresses[0].value}' 2>/dev/null)
+GW=$(kubectl --context $CTX -n agentgateway-system get gateway agentgateway-proxy -o jsonpath='{.status.addresses[0].value}' 2>/dev/null)
 log "게이트웨이 주소: ${GW:-없음}"
 [ -z "$GW" ] && { log "[중단] 게이트웨이 주소를 못 받았다"; note "**중단**: 게이트웨이 주소 없음"; exit 1; }
+GW="http://$GW"   # jsonpath는 맨 IP를 주므로 스킴을 붙인다 (httpx, loadgen 모두 완전한 URL 요구)
 
 call() { # call <path> <tool> [extra-header-json]
   "$PY" - "$GW" "$1" "$2" "${3:-{}}" <<'PYEOF'

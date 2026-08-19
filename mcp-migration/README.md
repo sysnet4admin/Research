@@ -224,7 +224,9 @@ pods constantly, which is why the difference matters outside of benchmarks.
 
 The same test applied to the handle designs: the pod-memory variant lost
 13,942 handles across five kills, because a dying pod takes all of its state
-with it, while HMAC and Redis lost none. We also killed Redis itself mid-run:
+with it, while HMAC and Redis lost none. The same
+  rule Kubernetes workloads already follow, keeping session state in an
+  external store, applies to handles as well. We also killed Redis itself mid-run:
 91.7 rps achieved with 24 losses, small because the pod restarts quickly, but
 a reminder that external storage is a dependency you now have to keep alive.
 
