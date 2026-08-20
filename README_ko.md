@@ -58,6 +58,14 @@ MCP 2026-07-28 스테이트리스 개정이 쿠버네티스 위의 서버에 무
 
 ---
 
+### [agentgateway-study](./agentgateway-study)
+
+agentgateway v1.4.1이 MCP 앞단에서 문서에 적힌 대로 강제하고 관측하는지를 실측합니다. 도구 인자 조건을 쓴 인가 정책이 검증을 통과한 채 백엔드 전체를 잠근다는 것(업스트림 #3092로 제보), 정책은 재작명 이전의 원래 이름을 평가한다는 것, traceparent가 헤더와 `_meta` 양쪽으로 전파된다는 것, 게이트웨이 비용이 p50 약 1ms이고 꼬리 지연은 오히려 낮아진다는 것이 대표 결과입니다.
+
+→ [README (EN)](./agentgateway-study/README.md) | [README (KO)](./agentgateway-study/README_ko.md)
+
+---
+
 ## 작성자
 
 **조훈 (Hoon Jo)** / CNCF Ambassador / Kubestronaut / [@sysnet4admin](https://github.com/sysnet4admin) / [kuberneteslab.dev](https://kuberneteslab.dev/ko/)

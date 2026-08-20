@@ -58,6 +58,14 @@ Measures what the MCP 2026-07-28 stateless revision changes for a server running
 
 ---
 
+### [agentgateway-study](./agentgateway-study)
+
+Measures whether agentgateway v1.4.1 actually enforces and observes what its docs say when fronting MCP servers. Key findings: an authorization rule conditioned on tool arguments passes validation yet locks the whole backend (reported upstream as #3092), policies evaluate the original tool name rather than the renamed one, traceparent propagates in both the header and `_meta`, and the gateway costs about 1 ms at p50 while tail latency actually improves.
+
+→ [README (EN)](./agentgateway-study/README.md) | [README (KO)](./agentgateway-study/README_ko.md)
+
+---
+
 ## Author
 
 **Hoon Jo** / CNCF Ambassador / Kubestronaut / [@sysnet4admin](https://github.com/sysnet4admin) / [kuberneteslab.dev](https://kuberneteslab.dev/en/)
