@@ -6,8 +6,9 @@ This study measures the distance between what the agentgateway documentation
 says and what the gateway actually enforces and observes when it fronts MCP
 (Model Context Protocol) servers. Instead of reading feature tables, we
 verified behavior: what CEL authorization policies block, what they silently
-block by mistake, how far trace context travels, and what putting the gateway
-in the path costs. It applies the "declared versus enforced" frame from
+block by mistake, how far trace context travels, what putting the gateway
+in the path costs, and what argument-level control actually takes when the
+policy path cannot do it. It applies the "declared versus enforced" frame from
 [gateway-PoC](../gateway-PoC) to an MCP gateway.
 
 The target is agentgateway v1.4.1 in Kubernetes mode, with the new-spec
@@ -58,13 +59,21 @@ backend.
    identical resource conditions, p50 rose by 0.5 to 0.8 ms while median p99
    was lower through the gateway (table below). Both paths held the offered
    rate with zero errors.
+7. **Argument-level control works through mcpGuardrails (an external gRPC
+   policy server).** A minimal server enforcing "get-sum only when a == 1"
+   passed a=1, denied a=2, and passed unrelated tools; the gateway ships the
+   tool arguments to the gRPC server verbatim. Unlike the authorization
+   path, the denial comes back as HTTP 200 with a JSON-RPC error carrying
+   the server's own reason string, and when the policy server is down the
+   FailClosed default blocks every tools/call. Latency overhead through the
+   guardrail was not measured.
 
 ## What an operator writing policies should know
 
 | Intent | Works? | Caveat |
 |---|---|---|
 | Tool-name allowlist | Yes | List filtering comes with it. Rejection is 400 + "Unknown tool" (-32602), not an authorization error |
-| Argument-based control ("block delete, but only for prod") | No | The config is accepted but the backend locks up entirely. A `has(...)` guard lifts the lockout but silently drops the condition (name-only). The documented candidate is an external processor (mcpGuardrails), which this study did not verify |
+| Argument-based control ("block delete, but only for prod") | Not via policy; yes via guardrail | The policy is accepted while the backend locks up, and a `has(...)` guard drops the condition. mcpGuardrails works but means building a gRPC server yourself, and its denial surfaces as 200 + a JSON-RPC error |
 | Policies under renaming (prefixMode) | Yes | Always write the original name. Using the prefixed name clients see locks everything out |
 | Adding rules and worrying about latency | No need | No difference up to 21 rules |
 | Distributed tracing | Yes | Propagated in both the header and `_meta` (verified with tracing not configured) |
@@ -114,6 +123,9 @@ source.
   (5 probes).
 - **Gateway versus direct (A/B)**: 20 cells against the same backend with
   only the target address changed.
+- **Alternative path for argument control (axis 3)**: a minimal ExtMcp gRPC
+  policy server (`k8s/guardrail/`) verified argument-level enforcement, the
+  denial shape, and FailClosed behavior.
 - Two integrity notes. A mid-run process kill during the rule-count cells
   was resumed for the remaining 6 cells with the gateway and policy
   configuration kept identical. And the first verdict on trace propagation
@@ -125,8 +137,9 @@ source.
 
 - One backend with a small surface (8 tools). List-filtering cost on large
   tool sets was not measured.
-- Alternative paths to argument-level control (extAuthz, extProc,
-  mcpGuardrails and similar external processors) were not tested.
+- Among the alternative paths to argument-level control, mcpGuardrails was
+  verified (finding 7); extAuthz and extProc were not, and neither was the
+  latency overhead through the guardrail.
 - Authentication (MCP Auth) and virtual LLM routing are out of scope.
 - Absolute latency numbers are VirtualBox values.
 - The tracing-enabled path (span export) was not measured.
