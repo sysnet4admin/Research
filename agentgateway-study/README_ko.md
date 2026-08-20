@@ -11,7 +11,8 @@ agentgateway를 MCP(Model Context Protocol) 게이트웨이로 쓸 때 문서에
 [gateway-PoC](../gateway-PoC)에서 쓴 "선언 대 실제 강제" 프레임을 MCP
 게이트웨이에 적용한 것이다.
 
-측정 대상은 agentgateway v1.4.1(Kubernetes 모드)이고 백엔드는
+agentgateway는 리눅스 재단 산하 Agentic AI Foundation(AAIF)의 호스티드
+프로젝트다. 측정 대상은 agentgateway v1.4.1(Kubernetes 모드)이고 백엔드는
 [mcp-migration](../mcp-migration)에서 만든 신 스펙(2026-07-28) MCP 서버를
 그대로 썼다.
 
@@ -119,11 +120,13 @@ v1.4.1, 백엔드 레플리카 1, echo 도구, 30초 close 모드(호출마다 �
 
 ## 한계
 
+- MCP 표면만 쟀다. 같은 게이트웨이가 A2A, LLM 추론, REST, gRPC도 받지만
+  그 경로들은 시험하지 않았다.
 - 시험 대상이 백엔드 1종, 도구 8개로 좁다. 대형 도구 집합에서의 목록 필터링
   비용은 재지 않았다.
 - 인자 단위 통제의 대안 경로 중 mcpGuardrails는 동작을 검증했다(결과 7).
   extAuthz와 extProc 계열, guardrail 경유의 지연 오버헤드는 재지 않았다.
-- 인증(MCP Auth)과 virtual LLM 라우팅은 범위 밖이다.
+- MCP 표면 안에서도 인증(MCP Auth)은 범위 밖이다.
 - 절대 지연 수치는 VirtualBox 환경 값이다.
 - 트레이싱을 켠 조건(스팬 내보내기)은 측정하지 않았다.
 

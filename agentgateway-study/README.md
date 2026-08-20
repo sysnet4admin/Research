@@ -11,7 +11,8 @@ in the path costs, and what argument-level control actually takes when the
 policy path cannot do it. It applies the "declared versus enforced" frame from
 [gateway-PoC](../gateway-PoC) to an MCP gateway.
 
-The target is agentgateway v1.4.1 in Kubernetes mode, with the new-spec
+agentgateway is an Agentic AI Foundation (AAIF) project at the Linux
+Foundation. The target is agentgateway v1.4.1 in Kubernetes mode, with the new-spec
 (2026-07-28) MCP server built in [mcp-migration](../mcp-migration) as the
 backend.
 
@@ -135,12 +136,14 @@ source.
 
 ## Limits
 
-- One backend with a small surface (8 tools). List-filtering cost on large
+- Only the MCP surface was measured. The same gateway also fronts A2A, LLM
+  inference, REST, and gRPC; none of those paths were tested.
+- One backend with a small tool set (8 tools). List-filtering cost on large
   tool sets was not measured.
 - Among the alternative paths to argument-level control, mcpGuardrails was
   verified (finding 7); extAuthz and extProc were not, and neither was the
   latency overhead through the guardrail.
-- Authentication (MCP Auth) and virtual LLM routing are out of scope.
+- Within the MCP surface, authentication (MCP Auth) is also out of scope.
 - Absolute latency numbers are VirtualBox values.
 - The tracing-enabled path (span export) was not measured.
 
