@@ -31,10 +31,10 @@ backend.
    that satisfy the written condition. Under this rule `tools/list` returns an empty
    list, and the natural `has(...)` guard lifts the lockout but
    short-circuits for every call, silently degrading the rule to name-only
-   (`a=2`, which the rule meant to block, passes; measured). So there is no
-   workaround for argument-level control: the operator believes it is in
-   place, and what they actually have is a full outage or a vanished
-   condition.
+   (`a=2`, which the rule meant to block, passes; measured). So within this policy
+   path there is no workaround for argument-level control: the operator
+   believes it is in place, and what they actually have is a full outage
+   or a vanished condition.
 3. **Policies evaluate the original tool name, and renaming is not a
    bypass.** Across all three prefixMode settings, no renamed (prefixed) name such as
    `mcp-b-80_echo` slipped past a block. Two traps instead: writing the policy against the renamed
@@ -64,7 +64,7 @@ backend.
 | Intent | Works? | Caveat |
 |---|---|---|
 | Tool-name allowlist | Yes | List filtering comes with it. Rejection is 400 + "Unknown tool" (-32602), not an authorization error |
-| Argument-based control ("block delete, but only for prod") | No | The config is accepted but the backend locks up entirely. A `has(...)` guard lifts the lockout but silently drops the condition (name-only). Argument-level control needs a separate external processor (mcpGuardrails, a gRPC server you build) |
+| Argument-based control ("block delete, but only for prod") | No | The config is accepted but the backend locks up entirely. A `has(...)` guard lifts the lockout but silently drops the condition (name-only). The documented candidate is an external processor (mcpGuardrails), which this study did not verify |
 | Policies under renaming (prefixMode) | Yes | Always write the original name. Using the prefixed name clients see locks everything out |
 | Adding rules and worrying about latency | No need | No difference up to 21 rules |
 | Distributed tracing | Yes | Propagated in both the header and `_meta` (verified with tracing not configured) |
