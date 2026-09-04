@@ -43,6 +43,25 @@ TEXT = {
         "t_p50": "p50 증분", "t_p99": "p99 증분", "t_x": "백엔드 처리 시간(ms)",
         "t_abs": "p99 절대값: 직접 호출 대 게이트웨이 경유 (로그 눈금)", "t_direct": "직접 호출", "t_gw": "게이트웨이 경유",
         "t_row2": "게이트웨이 경유에서 직접 호출을 뺀 값 (회차별 쌍 차이의 중앙값)",
+        "v_title": "게이트웨이를 사이에 두면 무엇이 더해지고 무엇이 드는가",
+        "v_sub": "이 연구가 v1.5.0에서 실측한 범위. 로고는 agentgateway 프로젝트 저장소의 것(Apache 2.0).",
+        "v_client": "에이전트\n(MCP 클라이언트)", "v_server": "MCP 서버", "v_agent": "A2A 에이전트",
+        "v_proxy": "프록시 v1.5.0 (Rust), Kubernetes 모드",
+        "v_gain_h": "얻는 것 (서버 수정 없이)",
+        "v_gains": ["도구 노출 통제: 화이트리스트 + 목록 필터링", "인자 검사: guardrail gRPC 서버 경유", "트레이스 전파: 헤더와 _meta 양쪽", "A2A: 카드 주소 재작성, JSON-RPC 로그"],
+        "v_cost_h": "내는 것",
+        "v_costs": ["홉 p50 +0.2~0.8ms (연결 방식에 따라)", "p99는 낮아지지 않음. 재사용 + 에코급 백엔드에서만 +몇 ms", "guardrail 검사 호출당 1ms 아래"],
+        "v_direct": "직접 호출 (통제 대조군)", "v_gw": "게이트웨이 경유",
+        "v_caveat": "단서: 정책이 수용돼도 쓴 대로 강제되지 않을 수 있다. 인자 조건 정책은 정상 보고 뒤 백엔드 전체를 잠근다. 켠 뒤 실제 호출로 확인.",
+        "a_title": "측정 구조: 무엇을 어디에 두고 쟀는가",
+        "a_sub": "VirtualBox 3노드 Kubernetes v1.37.0 (M4 Pro). 부하와 프로브는 호스트에서, 두 경로의 차이는 대상 주소뿐.",
+        "a_host": "호스트 (macOS)", "a_loadgen": "부하 생성기\nloadgen.py (100/200rps)", "a_probe": "결정론 프로브\nrv_run_axes.sh 등",
+        "a_cluster": "aaif-benchmark 클러스터 (Kubernetes v1.37.0, Calico)",
+        "a_cp": "agentgateway 컨트롤 플레인\nGateway API + CRD 감시", "a_proxy": "agentgateway 프록시 v1.5.0\nRust 데이터 플레인",
+        "a_policy": "AgentgatewayPolicy\nmcpAuthorization (CEL)\nmcpGuardrails", "a_gr": "guardrail 서버\n(자작 gRPC, k8s/guardrail)",
+        "a_backend": "mcp-b (MCP 서버, SDK 2.0.0)\n도구 8종, 레플리카 1", "a_tap": "탭 프록시\n(트레이스 헤더와 _meta 기록)",
+        "a_direct": "직접 경로 (LoadBalancer)", "a_gw": "게이트웨이 경로 (/b)", "a_grpc": "gRPC 검사 왕복",
+        "a_cap": "직접 경로와 게이트웨이 경로를 회차 안에서 교대로 재고, 정책과 guardrail은 켜고 끄며 같은 백엔드에 붙인다.",
         "t_take": "v1.4.1에서 봤던 \"게이트웨이가 꼬리를 평탄화한다\"는 재현되지 않았다. 매번 새 연결에서는 두 선이 겹치고, 연결 재사용의 꼬리 손해(+5.6ms)는 백엔드가 느려질수록 사라진다. p50 비용은 전 구간 1ms 아래.",
         "r_title": "요청이 거부될 때 클라이언트가 보는 세 가지 형태",
         "r_sub": "거부한 층에 따라 응답 모양이 갈린다. 모양이 곧 진단 단서다.",
@@ -70,6 +89,25 @@ TEXT = {
         "t_p50": "p50 increment", "t_p99": "p99 increment", "t_x": "backend processing time (ms)",
         "t_abs": "p99, absolute: direct versus through the gateway (log scale)", "t_direct": "direct", "t_gw": "through the gateway",
         "t_row2": "through the gateway minus direct (median of pair differences)",
+        "v_title": "What the gateway adds when it sits in the path, and what it costs",
+        "v_sub": "The scope this study measured on v1.5.0. Logo from the agentgateway project repository (Apache 2.0).",
+        "v_client": "agent\n(MCP client)", "v_server": "MCP server", "v_agent": "A2A agent",
+        "v_proxy": "proxy v1.5.0 (Rust), Kubernetes mode",
+        "v_gain_h": "What you get (servers untouched)",
+        "v_gains": ["tool exposure control: allowlist + list filtering", "argument checks: through a guardrail gRPC server", "trace propagation: header and _meta", "A2A: card address rewrite, JSON-RPC logs"],
+        "v_cost_h": "What it costs",
+        "v_costs": ["hop p50 +0.2 to 0.8 ms (by connection mode)", "p99 not lowered; +a few ms only with reuse against an echo-class backend", "guardrail check under 1 ms per call"],
+        "v_direct": "direct call (control arm)", "v_gw": "through the gateway",
+        "v_caveat": "Caveat: an accepted policy is not always enforced as written. An argument-conditioned policy reports healthy, then locks the whole backend. Verify with real calls.",
+        "a_title": "Measurement setup: what sits where",
+        "a_sub": "VirtualBox, 3-node Kubernetes v1.37.0 (M4 Pro). Load and probes run on the host; the two paths differ only in the target address.",
+        "a_host": "host (macOS)", "a_loadgen": "load generator\nloadgen.py (100/200 rps)", "a_probe": "deterministic probes\nrv_run_axes.sh and friends",
+        "a_cluster": "aaif-benchmark cluster (Kubernetes v1.37.0, Calico)",
+        "a_cp": "agentgateway control plane\nwatches Gateway API + CRDs", "a_proxy": "agentgateway proxy v1.5.0\nRust data plane",
+        "a_policy": "AgentgatewayPolicy\nmcpAuthorization (CEL)\nmcpGuardrails", "a_gr": "guardrail server\n(own gRPC, k8s/guardrail)",
+        "a_backend": "mcp-b (MCP server, SDK 2.0.0)\n8 tools, 1 replica", "a_tap": "tap proxy\n(records trace header and _meta)",
+        "a_direct": "direct path (LoadBalancer)", "a_gw": "gateway path (/b)", "a_grpc": "gRPC check round trip",
+        "a_cap": "Direct and gateway paths alternate within each repetition; policies and the guardrail are toggled on the same backend.",
         "t_take": "The v1.4.1 observation that the gateway flattens the tail did not reproduce: with a new connection per call the two lines coincide, and the reuse-mode tail penalty (+5.6 ms) fades as the backend gets slower. The p50 cost stays under 1 ms throughout.",
         "r_title": "Three rejection shapes the client sees",
         "r_sub": "The rejecting layer decides the shape, and the shape is the diagnostic clue.",
@@ -282,6 +320,124 @@ def tail(study, T):
     s.append("</svg>")
     return "\n".join(s)
 
+def value(T):
+    """도입 효과 그림: 경로 안의 게이트웨이(로고), 얻는 것과 내는 것. 로고 = figures/_agentgateway-logo.svg
+    (agentgateway 저장소 ui/public/logo.svg, Apache 2.0)."""
+    import re
+    W, H = 920, 560
+    s = svg_head(W, H)
+    logo_path = os.path.join("figures", "_agentgateway-logo.svg")
+    logo_inner = ""
+    if os.path.exists(logo_path):
+        raw = open(logo_path).read()
+        m = re.search(r"<svg[^>]*>(.*)</svg>", raw, re.S)
+        if m:
+            logo_inner = re.sub(r'<rect[^>]*fill="white"[^>]*/>', "", m.group(1), count=1)
+
+    def box(x, y, w, h, label, fill="#fafafa", stroke="#999", size=11, bold=False):
+        s.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="6" fill="{fill}" stroke="{stroke}" stroke-width="1.4"/>')
+        lines = label.split("\n")
+        y0 = y + h / 2 - (len(lines) - 1) * 8
+        for i, ln in enumerate(lines):
+            fw = ' font-weight="bold"' if (bold and i == 0) else ""
+            s.append(f'<text x="{x + w/2}" y="{y0 + i*16 + 4}" font-size="{size}" fill="#222" text-anchor="middle"{fw}>{ln}</text>')
+
+    def arrow(x1, y1, x2, y2, color="#555", dash=""):
+        import math
+        d = f' stroke-dasharray="{dash}"' if dash else ""
+        s.append(f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{color}" stroke-width="2"{d}/>')
+        ang = math.atan2(y2 - y1, x2 - x1)
+        for da in (2.6, -2.6):
+            s.append(f'<line x1="{x2}" y1="{y2}" x2="{x2 - 9*math.cos(ang+da):.1f}" y2="{y2 - 9*math.sin(ang+da):.1f}" stroke="{color}" stroke-width="2"/>')
+
+    s.append(f'<text x="{W/2}" y="30" font-size="14.5" fill="#111" text-anchor="middle" font-weight="bold">{T["v_title"]}</text>')
+    s.append(f'<text x="{W/2}" y="50" font-size="10.5" fill="#666" text-anchor="middle">{T["v_sub"]}</text>')
+    # 경로: 클라이언트 -> 게이트웨이 -> 서버
+    CY = 250
+    box(40, CY - 32, 150, 64, T["v_client"], fill="#eef3f8", stroke="#2e6f9e", bold=True)
+    gx, gy, gw, gh = 300, CY - 62, 320, 124
+    s.append(f'<rect x="{gx}" y="{gy}" width="{gw}" height="{gh}" rx="10" fill="#f6f3fb" stroke="#6a4b9e" stroke-width="2"/>')
+    if logo_inner:
+        s.append(f'<svg x="{gx + 30}" y="{gy + 14}" width="{gw - 60}" height="{(gw - 60) * 1064 / 4496:.1f}" viewBox="0 0 4496 1064">{logo_inner}</svg>')
+    else:
+        s.append(f'<text x="{gx + gw/2}" y="{gy + 50}" font-size="18" fill="#6a4b9e" text-anchor="middle" font-weight="bold">agentgateway</text>')
+    s.append(f'<text x="{gx + gw/2}" y="{gy + gh - 14}" font-size="10.5" fill="#444" text-anchor="middle">{T["v_proxy"]}</text>')
+    box(730, CY - 62, 150, 52, T["v_server"], fill="#eef7ee", stroke="#3c8d5a", bold=True)
+    box(730, CY + 10, 150, 52, T["v_agent"], fill="#eef7ee", stroke="#3c8d5a", bold=True)
+    arrow(190, CY, 300, CY, color="#2e6f9e")
+    arrow(620, CY - 20, 730, CY - 36, color="#6a4b9e")
+    arrow(620, CY + 20, 730, CY + 36, color="#6a4b9e")
+    s.append(f'<text x="245" y="{CY - 10}" font-size="10" fill="#2e6f9e" text-anchor="middle">{T["v_gw"]}</text>')
+    # 직접 호출(대조군): 게이트웨이 위로 우회하는 점선
+    s.append(f'<path d="M115,{CY - 32} C115,120 805,120 805,{CY - 62}" fill="none" stroke="#8a8f98" stroke-width="1.8" stroke-dasharray="6,4"/>')
+    s.append(f'<text x="460" y="112" font-size="10" fill="#8a8f98" text-anchor="middle">{T["v_direct"]}</text>')
+    # 얻는 것 / 내는 것
+    y = 350
+    s.append(f'<text x="60" y="{y}" font-size="12" fill="#3c8d5a" font-weight="bold">{T["v_gain_h"]}</text>')
+    for i, g in enumerate(T["v_gains"]):
+        s.append(f'<text x="70" y="{y + 22 + i*19}" font-size="11" fill="#222">+ {g}</text>')
+    s.append(f'<text x="500" y="{y}" font-size="12" fill="#c0504d" font-weight="bold">{T["v_cost_h"]}</text>')
+    for i, c in enumerate(T["v_costs"]):
+        s.append(f'<text x="510" y="{y + 22 + i*19}" font-size="11" fill="#222">- {c}</text>')
+    s.append(f'<line x1="40" y1="{H - 62}" x2="{W - 40}" y2="{H - 62}" stroke="#eee"/>')
+    s.append(f'<text x="{W/2}" y="{H - 40}" font-size="10.5" fill="#555" text-anchor="middle">{T["v_caveat"]}</text>')
+    s.append("</svg>")
+    return "\n".join(s)
+
+
+def arch(T):
+    """측정 구조도. 호스트(부하, 프로브) -> 클러스터(게이트웨이, 정책, guardrail, 백엔드, 탭)."""
+    W, H = 920, 520
+    s = svg_head(W, H)
+
+    def box(x, y, w, h, label, fill="#fafafa", stroke="#999", size=11, bold=False, color="#222"):
+        s.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="6" fill="{fill}" stroke="{stroke}" stroke-width="1.4"/>')
+        lines = label.split("\n")
+        y0 = y + h / 2 - (len(lines) - 1) * 8
+        for i, ln in enumerate(lines):
+            fw = ' font-weight="bold"' if (bold and i == 0) else ""
+            s.append(f'<text x="{x + w/2}" y="{y0 + i*16 + 4}" font-size="{size}" fill="{color}" text-anchor="middle"{fw}>{ln}</text>')
+
+    def arrow(x1, y1, x2, y2, color="#555", dash="", label=None, lx=None, ly=None):
+        d = f' stroke-dasharray="{dash}"' if dash else ""
+        s.append(f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{color}" stroke-width="1.8"{d}/>')
+        import math
+        ang = math.atan2(y2 - y1, x2 - x1)
+        for da in (2.6, -2.6):
+            s.append(f'<line x1="{x2}" y1="{y2}" x2="{x2 - 9*math.cos(ang+da):.1f}" y2="{y2 - 9*math.sin(ang+da):.1f}" stroke="{color}" stroke-width="1.8"/>')
+        if label:
+            s.append(f'<text x="{lx}" y="{ly}" font-size="10" fill="{color}" text-anchor="middle">{label}</text>')
+
+    s.append(f'<text x="{W/2}" y="30" font-size="14.5" fill="#111" text-anchor="middle" font-weight="bold">{T["a_title"]}</text>')
+    s.append(f'<text x="{W/2}" y="50" font-size="10.5" fill="#666" text-anchor="middle">{T["a_sub"]}</text>')
+    # 호스트
+    s.append('<rect x="30" y="80" width="200" height="380" rx="8" fill="none" stroke="#bbb" stroke-dasharray="6,4"/>')
+    s.append(f'<text x="130" y="100" font-size="11.5" fill="#444" text-anchor="middle" font-weight="bold">{T["a_host"]}</text>')
+    box(50, 130, 160, 60, T["a_loadgen"], fill="#eef3f8", stroke="#2e6f9e")
+    box(50, 330, 160, 60, T["a_probe"], fill="#eef3f8", stroke="#2e6f9e")
+    # 클러스터
+    s.append('<rect x="270" y="80" width="620" height="380" rx="8" fill="none" stroke="#bbb" stroke-dasharray="6,4"/>')
+    s.append(f'<text x="580" y="100" font-size="11.5" fill="#444" text-anchor="middle" font-weight="bold">{T["a_cluster"]}</text>')
+    box(300, 120, 200, 48, T["a_cp"], fill="#f3f0f8", stroke="#6a4b9e", size=10.5)
+    box(300, 215, 200, 60, T["a_proxy"], fill="#f3f0f8", stroke="#6a4b9e", bold=True)
+    box(300, 330, 200, 66, T["a_policy"], fill="#f3f0f8", stroke="#6a4b9e", size=10.5)
+    box(540, 340, 160, 56, T["a_gr"], fill="#fbf1f1", stroke="#c0504d", size=10.5)
+    box(660, 205, 200, 60, T["a_backend"], fill="#eef7ee", stroke="#3c8d5a", bold=True)
+    box(660, 120, 200, 48, T["a_tap"], fill="#eef7ee", stroke="#3c8d5a", size=10.5)
+    # 화살표
+    arrow(400, 168, 400, 215, color="#6a4b9e", dash="4,3")
+    arrow(400, 330, 400, 275, color="#6a4b9e", dash="4,3")
+    arrow(210, 160, 300, 245, color="#2e6f9e", label=T["a_gw"], lx=250, ly=195)
+    arrow(210, 160, 660, 225, color="#8a8f98", dash="6,4", label=T["a_direct"], lx=470, ly=182)
+    arrow(500, 245, 660, 235, color="#6a4b9e")
+    arrow(500, 363, 540, 368, color="#c0504d", dash="4,3", label=T["a_grpc"], lx=520, ly=420)
+    arrow(210, 360, 300, 260, color="#2e6f9e")
+    arrow(760, 205, 760, 168, color="#3c8d5a", dash="4,3")
+    s.append(f'<text x="{W/2}" y="{H - 22}" font-size="10.5" fill="#555" text-anchor="middle">{T["a_cap"]}</text>')
+    s.append("</svg>")
+    return "\n".join(s)
+
+
 def reject(T):
     W, H = 760, 580
     s = svg_head(W, H)
@@ -367,4 +523,13 @@ if __name__ == "__main__":
     study, kind = sys.argv[1], sys.argv[2]
     lang = sys.argv[3] if len(sys.argv) > 3 else "en"
     T = TEXT[lang]
-    print({"cost": cost, "tail": tail}.get(kind, lambda st, t: reject(t))(study, T) if kind in ("cost", "tail") else reject(T))
+    if kind == "cost":
+        print(cost(study, T))
+    elif kind == "tail":
+        print(tail(study, T))
+    elif kind == "arch":
+        print(arch(T))
+    elif kind == "value":
+        print(value(T))
+    else:
+        print(reject(T))

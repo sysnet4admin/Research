@@ -51,6 +51,8 @@ travels, what the hop costs, and what argument-level control actually
 takes. Adopters are choosing between this and doing the same work inside
 each server; the numbers below are what that choice rests on.
 
+![What the gateway adds when it sits in the path, and what it costs](figures/value-en.svg)
+
 ## What adopting it buys, and what it costs
 
 - **There is no performance gain.** Putting the gateway in front of an MCP
@@ -362,6 +364,8 @@ per call". The v1.4.1 round is preserved on the `agentgateway-study/v1.4.1`
 branch.
 
 ## What was measured
+
+![Measurement setup: what sits where](figures/setup-en.svg)
 
 - **Policy enforcement (P0 to P4)**: no-policy baseline, allowlist
   enforcement and list filtering, three probes against the argument-condition
