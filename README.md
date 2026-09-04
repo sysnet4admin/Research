@@ -66,6 +66,14 @@ Measures whether agentgateway v1.4.1 actually enforces and observes what its doc
 
 ---
 
+### [a2a-study](./a2a-study)
+
+Measures what agentgateway v1.4.1 actually enforces and observes when fronting an A2A agent. Key findings: agent card rewriting is opt-in and a mixed-format card (v0.3 `url` plus v1.0 `supportedInterfaces`) keeps advertising the direct backend address even with the switch on, so discovery can bypass the gateway; the A2A surface has no request-authorization policy (observation without enforcement); JSON-RPC errors ride HTTP 200 but land in the access log; the gateway hop costs +0.5 to 2.5 ms p50 depending on connection mode, with A2A protocol processing itself at +0.6 to 0.8 ms.
+
+→ [README (EN)](./a2a-study/README.md) | [README (KO)](./a2a-study/README_ko.md)
+
+---
+
 ## Author
 
 **Hoon Jo** / CNCF Ambassador / Kubestronaut / [@sysnet4admin](https://github.com/sysnet4admin) / [kuberneteslab.dev](https://kuberneteslab.dev/en/)

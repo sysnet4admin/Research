@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 780" font-family="Helvetica, Arial, sans-serif">
+<rect width="920" height="780" fill="white"/>
+<text x="460.0" y="30" font-size="14.5" fill="#111" text-anchor="middle" font-weight="bold">What happens to the tail (p99) through the gateway, by backend processing time</text>
+<text x="460.0" y="50" font-size="10.5" fill="#666" text-anchor="middle">Direct versus through the gateway, medians of 5 runs. 100 rps, server-side echo delay 0/10/50/200 ms, 30-second cells.</text>
+<text x="460.0" y="78" font-size="12" fill="#111" text-anchor="middle" font-weight="bold">p99, absolute: direct versus through the gateway (log scale)</text>
+<text x="260.0" y="100" font-size="12" fill="#2e6f9e" text-anchor="middle" font-weight="bold">new conn per call</text>
+<line x1="60" y1="330.0" x2="460" y2="330.0" stroke="#eee"/>
+<text x="54" y="334.0" font-size="9.5" fill="#666" text-anchor="end">5ms</text>
+<line x1="60" y1="295.2" x2="460" y2="295.2" stroke="#eee"/>
+<text x="54" y="299.2" font-size="9.5" fill="#666" text-anchor="end">10ms</text>
+<line x1="60" y1="260.4" x2="460" y2="260.4" stroke="#eee"/>
+<text x="54" y="264.4" font-size="9.5" fill="#666" text-anchor="end">20ms</text>
+<line x1="60" y1="214.4" x2="460" y2="214.4" stroke="#eee"/>
+<text x="54" y="218.4" font-size="9.5" fill="#666" text-anchor="end">50ms</text>
+<line x1="60" y1="179.6" x2="460" y2="179.6" stroke="#eee"/>
+<text x="54" y="183.6" font-size="9.5" fill="#666" text-anchor="end">100ms</text>
+<line x1="60" y1="144.8" x2="460" y2="144.8" stroke="#eee"/>
+<text x="54" y="148.8" font-size="9.5" fill="#666" text-anchor="end">200ms</text>
+<text x="100.0" y="348" font-size="10" fill="#333" text-anchor="middle">0</text>
+<text x="206.7" y="348" font-size="10" fill="#333" text-anchor="middle">10</text>
+<text x="313.3" y="348" font-size="10" fill="#333" text-anchor="middle">50</text>
+<text x="420.0" y="348" font-size="10" fill="#333" text-anchor="middle">200</text>
+<text x="260.0" y="364" font-size="10" fill="#666" text-anchor="middle">backend processing time (ms)</text>
+<path d="M100.0,278.3 L206.7,248.8 L313.3,200.6 L420.0,140.9" fill="none" stroke="#2e6f9e" stroke-width="2.2"/>
+<circle cx="100.0" cy="278.3" r="5.0" fill="#2e6f9e" stroke="white" stroke-width="1"/>
+<circle cx="206.7" cy="248.8" r="5.0" fill="#2e6f9e" stroke="white" stroke-width="1"/>
+<circle cx="313.3" cy="200.6" r="5.0" fill="#2e6f9e" stroke="white" stroke-width="1"/>
+<circle cx="420.0" cy="140.9" r="5.0" fill="#2e6f9e" stroke="white" stroke-width="1"/>
+<path d="M100.0,278.7 L206.7,248.8 L313.3,200.5 L420.0,140.7" fill="none" stroke="#8a8f98" stroke-width="2.2" stroke-dasharray="6,4"/>
+<circle cx="100.0" cy="278.7" r="3.2" fill="#8a8f98" stroke="white" stroke-width="1"/>
+<circle cx="206.7" cy="248.8" r="3.2" fill="#8a8f98" stroke="white" stroke-width="1"/>
+<circle cx="313.3" cy="200.5" r="3.2" fill="#8a8f98" stroke="white" stroke-width="1"/>
+<circle cx="420.0" cy="140.7" r="3.2" fill="#8a8f98" stroke="white" stroke-width="1"/>
+<text x="100.0" y="269.3" font-size="9.5" fill="#333" text-anchor="middle">13.9 / 14.0</text>
+<text x="206.7" y="239.8" font-size="9.5" fill="#333" text-anchor="middle">25.2 / 25.2</text>
+<text x="313.3" y="191.5" font-size="9.5" fill="#333" text-anchor="middle">65.9 / 65.8</text>
+<text x="420.0" y="131.7" font-size="9.5" fill="#333" text-anchor="middle">217.2 / 216.3</text>
+<line x1="295" y1="116" x2="313" y2="116" stroke="#8a8f98" stroke-width="2.2" stroke-dasharray="5,3"/>
+<text x="319" y="120" font-size="10" fill="#333">direct</text>
+<line x1="295" y1="132" x2="313" y2="132" stroke="#2e6f9e" stroke-width="2.2"/>
+<text x="319" y="136" font-size="10" fill="#333">through the gateway</text>
+<text x="720.0" y="100" font-size="12" fill="#c0504d" text-anchor="middle" font-weight="bold">connection reuse</text>
+<line x1="520" y1="330.0" x2="920" y2="330.0" stroke="#eee"/>
+<text x="514" y="334.0" font-size="9.5" fill="#666" text-anchor="end">5ms</text>
+<line x1="520" y1="295.2" x2="920" y2="295.2" stroke="#eee"/>
+<text x="514" y="299.2" font-size="9.5" fill="#666" text-anchor="end">10ms</text>
+<line x1="520" y1="260.4" x2="920" y2="260.4" stroke="#eee"/>
+<text x="514" y="264.4" font-size="9.5" fill="#666" text-anchor="end">20ms</text>
+<line x1="520" y1="214.4" x2="920" y2="214.4" stroke="#eee"/>
+<text x="514" y="218.4" font-size="9.5" fill="#666" text-anchor="end">50ms</text>
+<line x1="520" y1="179.6" x2="920" y2="179.6" stroke="#eee"/>
+<text x="514" y="183.6" font-size="9.5" fill="#666" text-anchor="end">100ms</text>
+<line x1="520" y1="144.8" x2="920" y2="144.8" stroke="#eee"/>
+<text x="514" y="148.8" font-size="9.5" fill="#666" text-anchor="end">200ms</text>
+<text x="560.0" y="348" font-size="10" fill="#333" text-anchor="middle">0</text>
+<text x="666.7" y="348" font-size="10" fill="#333" text-anchor="middle">10</text>
+<text x="773.3" y="348" font-size="10" fill="#333" text-anchor="middle">50</text>
+<text x="880.0" y="348" font-size="10" fill="#333" text-anchor="middle">200</text>
+<text x="720.0" y="364" font-size="10" fill="#666" text-anchor="middle">backend processing time (ms)</text>
+<path d="M560.0,270.7 L666.7,250.8 L773.3,203.6 L880.0,141.7" fill="none" stroke="#c0504d" stroke-width="2.2"/>
+<circle cx="560.0" cy="270.7" r="5.0" fill="#c0504d" stroke="white" stroke-width="1"/>
+<circle cx="666.7" cy="250.8" r="5.0" fill="#c0504d" stroke="white" stroke-width="1"/>
+<circle cx="773.3" cy="203.6" r="5.0" fill="#c0504d" stroke="white" stroke-width="1"/>
+<circle cx="880.0" cy="141.7" r="5.0" fill="#c0504d" stroke="white" stroke-width="1"/>
+<path d="M560.0,301.1 L666.7,256.3 L773.3,204.0 L880.0,141.8" fill="none" stroke="#8a8f98" stroke-width="2.2" stroke-dasharray="6,4"/>
+<circle cx="560.0" cy="301.1" r="3.2" fill="#8a8f98" stroke="white" stroke-width="1"/>
+<circle cx="666.7" cy="256.3" r="3.2" fill="#8a8f98" stroke="white" stroke-width="1"/>
+<circle cx="773.3" cy="204.0" r="3.2" fill="#8a8f98" stroke="white" stroke-width="1"/>
+<circle cx="880.0" cy="141.8" r="3.2" fill="#8a8f98" stroke="white" stroke-width="1"/>
+<text x="560.0" y="261.7" font-size="9.5" fill="#c0504d" text-anchor="middle">16.3</text>
+<text x="560.0" y="317.1" font-size="9.5" fill="#8a8f98" text-anchor="middle">8.9</text>
+<text x="666.7" y="241.8" font-size="9.5" fill="#333" text-anchor="middle">21.7 / 24.2</text>
+<text x="773.3" y="194.6" font-size="9.5" fill="#333" text-anchor="middle">61.5 / 62.0</text>
+<text x="880.0" y="132.7" font-size="9.5" fill="#333" text-anchor="middle">212.5 / 212.6</text>
+<line x1="755" y1="116" x2="773" y2="116" stroke="#8a8f98" stroke-width="2.2" stroke-dasharray="5,3"/>
+<text x="779" y="120" font-size="10" fill="#333">direct</text>
+<line x1="755" y1="132" x2="773" y2="132" stroke="#c0504d" stroke-width="2.2"/>
+<text x="779" y="136" font-size="10" fill="#333">through the gateway</text>
+<text x="460.0" y="400" font-size="12" fill="#111" text-anchor="middle" font-weight="bold">through the gateway minus direct (median of pair differences)</text>
+<text x="260.0" y="430" font-size="12" fill="#111" text-anchor="middle" font-weight="bold">p50 increment</text>
+<line x1="60" y1="600.0" x2="460" y2="600.0" stroke="#eee"/>
+<text x="54" y="604.0" font-size="9.5" fill="#666" text-anchor="end">+0ms</text>
+<line x1="60" y1="520.0" x2="460" y2="520.0" stroke="#eee"/>
+<text x="54" y="524.0" font-size="9.5" fill="#666" text-anchor="end">+1ms</text>
+<line x1="60" y1="440.0" x2="460" y2="440.0" stroke="#eee"/>
+<text x="54" y="444.0" font-size="9.5" fill="#666" text-anchor="end">+2ms</text>
+<line x1="60" y1="600.0" x2="460" y2="600.0" stroke="#999" stroke-width="1.2"/>
+<text x="100.0" y="698" font-size="10" fill="#333" text-anchor="middle">0</text>
+<text x="206.7" y="698" font-size="10" fill="#333" text-anchor="middle">10</text>
+<text x="313.3" y="698" font-size="10" fill="#333" text-anchor="middle">50</text>
+<text x="420.0" y="698" font-size="10" fill="#333" text-anchor="middle">200</text>
+<text x="260.0" y="714" font-size="10" fill="#666" text-anchor="middle">backend processing time (ms)</text>
+<path d="M100.0,552.0 L206.7,568.0 L313.3,568.0 L420.0,568.0" fill="none" stroke="#2e6f9e" stroke-width="2.2"/>
+<circle cx="100.0" cy="552.0" r="4.5" fill="#2e6f9e"/>
+<text x="100.0" y="543.0" font-size="9.5" fill="#2e6f9e" text-anchor="middle">+0.6</text>
+<circle cx="206.7" cy="568.0" r="4.5" fill="#2e6f9e"/>
+<text x="206.7" y="584.0" font-size="9.5" fill="#2e6f9e" text-anchor="middle">+0.4</text>
+<circle cx="313.3" cy="568.0" r="4.5" fill="#2e6f9e"/>
+<text x="313.3" y="559.0" font-size="9.5" fill="#2e6f9e" text-anchor="middle">+0.4</text>
+<circle cx="420.0" cy="568.0" r="4.5" fill="#2e6f9e"/>
+<text x="420.0" y="559.0" font-size="9.5" fill="#2e6f9e" text-anchor="middle">+0.4</text>
+<path d="M100.0,552.0 L206.7,528.0 L313.3,592.0 L420.0,592.0" fill="none" stroke="#c0504d" stroke-width="2.2"/>
+<circle cx="100.0" cy="552.0" r="4.5" fill="#c0504d"/>
+<text x="100.0" y="568.0" font-size="9.5" fill="#c0504d" text-anchor="middle">+0.6</text>
+<circle cx="206.7" cy="528.0" r="4.5" fill="#c0504d"/>
+<text x="206.7" y="519.0" font-size="9.5" fill="#c0504d" text-anchor="middle">+0.9</text>
+<circle cx="313.3" cy="592.0" r="4.5" fill="#c0504d"/>
+<text x="313.3" y="608.0" font-size="9.5" fill="#c0504d" text-anchor="middle">+0.1</text>
+<circle cx="420.0" cy="592.0" r="4.5" fill="#c0504d"/>
+<text x="420.0" y="608.0" font-size="9.5" fill="#c0504d" text-anchor="middle">+0.1</text>
+<line x1="310" y1="446" x2="328" y2="446" stroke="#2e6f9e" stroke-width="2.2"/>
+<text x="334" y="450" font-size="10" fill="#333">new conn per call</text>
+<line x1="310" y1="462" x2="328" y2="462" stroke="#c0504d" stroke-width="2.2"/>
+<text x="334" y="466" font-size="10" fill="#333">connection reuse</text>
+<text x="720.0" y="430" font-size="12" fill="#111" text-anchor="middle" font-weight="bold">p99 increment</text>
+<line x1="520" y1="650.0" x2="920" y2="650.0" stroke="#eee"/>
+<text x="514" y="654.0" font-size="9.5" fill="#666" text-anchor="end">+0ms</text>
+<line x1="520" y1="590.0" x2="920" y2="590.0" stroke="#eee"/>
+<text x="514" y="594.0" font-size="9.5" fill="#666" text-anchor="end">+2ms</text>
+<line x1="520" y1="530.0" x2="920" y2="530.0" stroke="#eee"/>
+<text x="514" y="534.0" font-size="9.5" fill="#666" text-anchor="end">+4ms</text>
+<line x1="520" y1="470.0" x2="920" y2="470.0" stroke="#eee"/>
+<text x="514" y="474.0" font-size="9.5" fill="#666" text-anchor="end">+6ms</text>
+<line x1="520" y1="650.0" x2="920" y2="650.0" stroke="#999" stroke-width="1.2"/>
+<text x="560.0" y="698" font-size="10" fill="#333" text-anchor="middle">0</text>
+<text x="666.7" y="698" font-size="10" fill="#333" text-anchor="middle">10</text>
+<text x="773.3" y="698" font-size="10" fill="#333" text-anchor="middle">50</text>
+<text x="880.0" y="698" font-size="10" fill="#333" text-anchor="middle">200</text>
+<text x="720.0" y="714" font-size="10" fill="#666" text-anchor="middle">backend processing time (ms)</text>
+<path d="M560.0,644.0 L666.7,647.0 L773.3,653.0 L880.0,662.0" fill="none" stroke="#2e6f9e" stroke-width="2.2"/>
+<circle cx="560.0" cy="644.0" r="4.5" fill="#2e6f9e"/>
+<text x="560.0" y="660.0" font-size="9.5" fill="#2e6f9e" text-anchor="middle">+0.2</text>
+<circle cx="666.7" cy="647.0" r="4.5" fill="#2e6f9e"/>
+<text x="666.7" y="663.0" font-size="9.5" fill="#2e6f9e" text-anchor="middle">+0.1</text>
+<circle cx="773.3" cy="653.0" r="4.5" fill="#2e6f9e"/>
+<text x="773.3" y="669.0" font-size="9.5" fill="#2e6f9e" text-anchor="middle">-0.1</text>
+<circle cx="880.0" cy="662.0" r="4.5" fill="#2e6f9e"/>
+<text x="880.0" y="678.0" font-size="9.5" fill="#2e6f9e" text-anchor="middle">-0.4</text>
+<path d="M560.0,482.0 L666.7,560.0 L773.3,614.0 L880.0,644.0" fill="none" stroke="#c0504d" stroke-width="2.2"/>
+<circle cx="560.0" cy="482.0" r="4.5" fill="#c0504d"/>
+<text x="560.0" y="473.0" font-size="9.5" fill="#c0504d" text-anchor="middle">+5.6</text>
+<circle cx="666.7" cy="560.0" r="4.5" fill="#c0504d"/>
+<text x="666.7" y="551.0" font-size="9.5" fill="#c0504d" text-anchor="middle">+3.0</text>
+<circle cx="773.3" cy="614.0" r="4.5" fill="#c0504d"/>
+<text x="773.3" y="605.0" font-size="9.5" fill="#c0504d" text-anchor="middle">+1.2</text>
+<circle cx="880.0" cy="644.0" r="4.5" fill="#c0504d"/>
+<text x="880.0" y="635.0" font-size="9.5" fill="#c0504d" text-anchor="middle">+0.2</text>
+<line x1="770" y1="446" x2="788" y2="446" stroke="#2e6f9e" stroke-width="2.2"/>
+<text x="794" y="450" font-size="10" fill="#333">new conn per call</text>
+<line x1="770" y1="462" x2="788" y2="462" stroke="#c0504d" stroke-width="2.2"/>
+<text x="794" y="466" font-size="10" fill="#333">connection reuse</text>
+<text x="460.0" y="758" font-size="10.5" fill="#555" text-anchor="middle">The v1.4.1 observation that the gateway flattens the tail did not reproduce: with a new connection per call the two lines coincide, and the reuse-mode tail penalty (+5.6 ms) fades as the backend gets slower. The p50 cost stays under 1 ms throughout.</text>
+</svg>

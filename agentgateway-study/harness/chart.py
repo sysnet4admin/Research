@@ -31,13 +31,19 @@ def med(study, rel_prefix):
 TEXT = {
     "ko": {
         "c_title": "무엇을 더하면 지연이 얼마나 느는가 (p50 중앙값의 차이, 각 5회)",
-        "c_sub": "각 행 = 같은 날 잰 통제 쌍. 점 = 실측 p50 절대값, 오른쪽 = 중앙값 차이(본문 표의 증분은 짝 평균). 절대값 비교는 행 안에서만(측정일 상이). p99는 본문 표.",
+        "c_sub": "각 행 = 같은 날 잰 통제 쌍. 점 = 실측 p50 절대값, 오른쪽 = 뒤 값에서 앞 값을 뺀 중앙값 차이(본문 표의 증분은 짝 평균). 절대값 비교는 행 안에서만(측정일 상이). p99는 본문 표.",
         "q1": "질문 1. 게이트웨이를 거치면?", "q1sub": "직접 호출 대 게이트웨이 경유",
         "q2": "질문 2. guardrail 인자 검사를 켜면?", "q2sub": "호출마다 인자 검사 서버로 가는 gRPC 왕복이 추가된다",
         "close": "연결 매번 새로", "reuse": "연결 재사용", "arrow": "->",
         "b1": "직접", "a1": "게이트웨이 경유", "b2": "검사 없음", "a2": "검사 켬(+gRPC 왕복)",
-        "take1": "홉 비용 +0.5~1.6ms. 연결을 재사용할수록 상대적으로 크게 보인다",
-        "take2": "인자 검사 비용은 호출당 약 0.5ms로 측정 조건 전반에서 대체로 일정",
+        "take1": "홉 비용 +0.2~0.8ms. 연결을 재사용할수록 상대적으로 크게 보인다",
+        "take2": "인자 검사 비용은 호출당 1ms 아래(여기 +0.1~0.5ms. README 표의 포화 400rps 행은 0.7ms)",
+        "t_title": "게이트웨이를 거치면 꼬리(p99)가 어떻게 되는가: 백엔드 처리 시간별",
+        "t_sub": "직접 호출과 게이트웨이 경유, 각 5회 중앙값. 100rps, 서버 쪽 echo 지연 0/10/50/200ms, 30초 셀.",
+        "t_p50": "p50 증분", "t_p99": "p99 증분", "t_x": "백엔드 처리 시간(ms)",
+        "t_abs": "p99 절대값: 직접 호출 대 게이트웨이 경유 (로그 눈금)", "t_direct": "직접 호출", "t_gw": "게이트웨이 경유",
+        "t_row2": "게이트웨이 경유에서 직접 호출을 뺀 값 (회차별 쌍 차이의 중앙값)",
+        "t_take": "v1.4.1에서 봤던 \"게이트웨이가 꼬리를 평탄화한다\"는 재현되지 않았다. 매번 새 연결에서는 두 선이 겹치고, 연결 재사용의 꼬리 손해(+5.6ms)는 백엔드가 느려질수록 사라진다. p50 비용은 전 구간 1ms 아래.",
         "r_title": "요청이 거부될 때 클라이언트가 보는 세 가지 형태",
         "r_sub": "거부한 층에 따라 응답 모양이 갈린다. 모양이 곧 진단 단서다.",
         "p_client": "클라이언트", "p_gw": "게이트웨이", "p_authz": "인가 정책 (mcpAuthorization)",
@@ -57,8 +63,14 @@ TEXT = {
         "q2": "Q2. Turning on guardrail argument checks?", "q2sub": "adds a per-call gRPC round trip to the check server",
         "close": "new conn per call", "reuse": "connection reuse", "arrow": "->",
         "b1": "direct", "a1": "via gateway", "b2": "no check", "a2": "check on (+gRPC round trip)",
-        "take1": "Hop cost +0.5 to 1.6 ms; looms larger when clients reuse connections",
-        "take2": "Argument checking costs about 0.5 ms per call, roughly constant across the measured conditions",
+        "take1": "Hop cost +0.2 to 0.8 ms; looms larger when clients reuse connections",
+        "take2": "Argument checking costs under 1 ms per call (+0.1 to 0.5 ms here; 0.7 ms in the README's saturated 400 rps row)",
+        "t_title": "What happens to the tail (p99) through the gateway, by backend processing time",
+        "t_sub": "Direct versus through the gateway, medians of 5 runs. 100 rps, server-side echo delay 0/10/50/200 ms, 30-second cells.",
+        "t_p50": "p50 increment", "t_p99": "p99 increment", "t_x": "backend processing time (ms)",
+        "t_abs": "p99, absolute: direct versus through the gateway (log scale)", "t_direct": "direct", "t_gw": "through the gateway",
+        "t_row2": "through the gateway minus direct (median of pair differences)",
+        "t_take": "The v1.4.1 observation that the gateway flattens the tail did not reproduce: with a new connection per call the two lines coincide, and the reuse-mode tail penalty (+5.6 ms) fades as the backend gets slower. The p50 cost stays under 1 ms throughout.",
         "r_title": "Three rejection shapes the client sees",
         "r_sub": "The rejecting layer decides the shape, and the shape is the diagnostic clue.",
         "p_client": "client", "p_gw": "gateway", "p_authz": "authorization policy (mcpAuthorization)",
@@ -81,9 +93,9 @@ def svg_head(w, h):
 
 
 def cost(study, T):
-    ab = os.path.join("runs", "ab-0819")
-    wk = os.path.join("runs", "weekend-0820")
-    gr = os.path.join("runs", "grm-0826")
+    ab = os.path.join("runs", "rv-ab-0902")
+    wk = os.path.join("runs", "rv-abr-0903")
+    gr = os.path.join("runs", "rv-grm-0902")
     # 패널마다 질문 하나. 행 = (연결 방식, rps, 기준 프리픽스, 추가 프리픽스)
     panels = [
         (T["q1"], T["q1sub"], "#2e6f9e", T["b1"], T["a1"], [
@@ -155,6 +167,120 @@ def cost(study, T):
     s.append("</svg>")
     return "\n".join(s)
 
+
+def tail(study, T):
+    """tail 보강 그림. 1행 = p99 절대값(직접 대 게이트웨이, 연결 방식별, 로그 눈금),
+    2행 = 홉 증분(p50, p99, 쌍 차이 중앙값). 원자료 runs/rv-tail-0903."""
+    import math
+    base = os.path.join(study, "runs", "rv-tail-0903")
+    delays = [0, 10, 50, 200]
+    modes = [("close", T["close"], "#2e6f9e"), ("reuse", T["reuse"], "#c0504d")]
+
+    def med_abs(d, mode, arm, key):
+        vals = [json.load(open(os.path.join(base, f"tail-d{d}-{mode}-{arm}-n{n}.json")))["latency_ms"][key]
+                for n in range(1, 6) if os.path.exists(os.path.join(base, f"tail-d{d}-{mode}-{arm}-n{n}.json"))]
+        return statistics.median(vals) if vals else 0.0
+
+    def pair_med(d, mode, key):
+        vals = []
+        for n in range(1, 6):
+            fd = os.path.join(base, f"tail-d{d}-{mode}-direct-n{n}.json")
+            fg = os.path.join(base, f"tail-d{d}-{mode}-gw-n{n}.json")
+            if os.path.exists(fd) and os.path.exists(fg):
+                vals.append(json.load(open(fg))["latency_ms"][key] - json.load(open(fd))["latency_ms"][key])
+        return statistics.median(vals) if vals else 0.0
+
+    W, H = 920, 780
+    PANW, PX0 = 400, 60
+    s = svg_head(W, H)
+    s.append(f'<text x="{W/2}" y="30" font-size="14.5" fill="#111" text-anchor="middle" font-weight="bold">{T["t_title"]}</text>')
+    s.append(f'<text x="{W/2}" y="50" font-size="10.5" fill="#666" text-anchor="middle">{T["t_sub"]}</text>')
+
+    def xpos(px, i):
+        return px + 40 + i * (PANW - 80) / (len(delays) - 1)
+
+    def xaxis(px, bot):
+        for i, d in enumerate(delays):
+            s.append(f'<text x="{xpos(px, i):.1f}" y="{bot + 18}" font-size="10" fill="#333" text-anchor="middle">{d}</text>')
+        s.append(f'<text x="{px + PANW/2}" y="{bot + 34}" font-size="10" fill="#666" text-anchor="middle">{T["t_x"]}</text>')
+
+    # ── 1행: p99 절대값, 직접 대 게이트웨이 (로그 눈금) ──
+    s.append(f'<text x="{W/2}" y="78" font-size="12" fill="#111" text-anchor="middle" font-weight="bold">{T["t_abs"]}</text>')
+    TOP1, BOT1 = 110, 330
+    lo, hi = math.log10(5), math.log10(400)
+    arms = [("gw", T["t_gw"], None), ("direct", T["t_direct"], "#8a8f98")]  # 점선(직접)을 위에 그린다
+    for pi, (mode, mlabel, color) in enumerate(modes):
+        px = PX0 + pi * (PANW + 60)
+        s.append(f'<text x="{px + PANW/2}" y="{TOP1 - 10}" font-size="12" fill="{color}" text-anchor="middle" font-weight="bold">{mlabel}</text>')
+
+        def Y(v):
+            return BOT1 - (math.log10(v) - lo) / (hi - lo) * (BOT1 - TOP1)
+        for t in (5, 10, 20, 50, 100, 200):
+            s.append(f'<line x1="{px}" y1="{Y(t):.1f}" x2="{px + PANW}" y2="{Y(t):.1f}" stroke="#eee"/>')
+            s.append(f'<text x="{px - 6}" y="{Y(t) + 4:.1f}" font-size="9.5" fill="#666" text-anchor="end">{t}ms</text>')
+        xaxis(px, BOT1)
+        series = {}
+        for arm, alabel, acolor in arms:
+            c = acolor or color
+            series[arm] = [med_abs(d, mode, arm, "p99") for d in delays]
+            pts = [(xpos(px, i), Y(v), v) for i, v in enumerate(series[arm])]
+            path = " ".join(f'{"M" if i == 0 else "L"}{x:.1f},{y:.1f}' for i, (x, y, _) in enumerate(pts))
+            dash = ' stroke-dasharray="6,4"' if arm == "direct" else ""
+            s.append(f'<path d="{path}" fill="none" stroke="{c}" stroke-width="2.2"{dash}/>')
+            for x, y, v in pts:
+                r = 3.2 if arm == "direct" else 5.0
+                s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{c}" stroke="white" stroke-width="1"/>')
+        for i in range(len(delays)):
+            dv, gv = series["direct"][i], series["gw"][i]
+            x = xpos(px, i)
+            # 두 값이 가까우면 한 줄에 "직접/게이트웨이"로, 멀면 각자 위아래
+            if abs(math.log10(gv) - math.log10(dv)) < 0.06:
+                s.append(f'<text x="{x:.1f}" y="{Y(max(dv, gv)) - 9:.1f}" font-size="9.5" fill="#333" text-anchor="middle">{dv:.1f} / {gv:.1f}</text>')
+            else:
+                hi_v, hi_c = (gv, color) if gv > dv else (dv, "#8a8f98")
+                lo_v, lo_c = (dv, "#8a8f98") if gv > dv else (gv, color)
+                s.append(f'<text x="{x:.1f}" y="{Y(hi_v) - 9:.1f}" font-size="9.5" fill="{hi_c}" text-anchor="middle">{hi_v:.1f}</text>')
+                s.append(f'<text x="{x:.1f}" y="{Y(lo_v) + 16:.1f}" font-size="9.5" fill="{lo_c}" text-anchor="middle">{lo_v:.1f}</text>')
+        lx, ly = px + PANW - 165, TOP1 + 6
+        s.append(f'<line x1="{lx}" y1="{ly}" x2="{lx + 18}" y2="{ly}" stroke="#8a8f98" stroke-width="2.2" stroke-dasharray="5,3"/>')
+        s.append(f'<text x="{lx + 24}" y="{ly + 4}" font-size="10" fill="#333">{T["t_direct"]}</text>')
+        s.append(f'<line x1="{lx}" y1="{ly + 16}" x2="{lx + 18}" y2="{ly + 16}" stroke="{color}" stroke-width="2.2"/>')
+        s.append(f'<text x="{lx + 24}" y="{ly + 20}" font-size="10" fill="#333">{T["t_gw"]}</text>')
+
+    # ── 2행: 증분 ──
+    s.append(f'<text x="{W/2}" y="400" font-size="12" fill="#111" text-anchor="middle" font-weight="bold">{T["t_row2"]}</text>')
+    TOP2, BOT2 = 440, 680
+    panels = [("p50", T["t_p50"], -1.0, 2.0, [0.0, 1.0, 2.0]), ("p99", T["t_p99"], -1.0, 7.0, [0.0, 2.0, 4.0, 6.0])]
+    for pi, (key, label, ymin, ymax, ticks) in enumerate(panels):
+        px = PX0 + pi * (PANW + 60)
+        s.append(f'<text x="{px + PANW/2}" y="{TOP2 - 10}" font-size="12" fill="#111" text-anchor="middle" font-weight="bold">{label}</text>')
+
+        def Y(v):
+            return BOT2 - (v - ymin) / (ymax - ymin) * (BOT2 - TOP2)
+        for t in ticks:
+            s.append(f'<line x1="{px}" y1="{Y(t):.1f}" x2="{px + PANW}" y2="{Y(t):.1f}" stroke="#eee"/>')
+            s.append(f'<text x="{px - 6}" y="{Y(t) + 4:.1f}" font-size="9.5" fill="#666" text-anchor="end">{t:+.0f}ms</text>')
+        s.append(f'<line x1="{px}" y1="{Y(0):.1f}" x2="{px + PANW}" y2="{Y(0):.1f}" stroke="#999" stroke-width="1.2"/>')
+        xaxis(px, BOT2)
+        vals = {mode: [pair_med(d, mode, key) for d in delays] for mode, _, _ in modes}
+        for mode, mlabel, color in modes:
+            other = "close" if mode == "reuse" else "reuse"
+            pts = [(xpos(px, i), Y(v), v) for i, v in enumerate(vals[mode])]
+            path = " ".join(f'{"M" if i == 0 else "L"}{x:.1f},{y:.1f}' for i, (x, y, _) in enumerate(pts))
+            s.append(f'<path d="{path}" fill="none" stroke="{color}" stroke-width="2.2"/>')
+            for i, (x, y, v) in enumerate(pts):
+                s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4.5" fill="{color}"/>')
+                above = v > vals[other][i] or (v == vals[other][i] and mode == "reuse")
+                dy = -9 if above else 16
+                s.append(f'<text x="{x:.1f}" y="{y + dy:.1f}" font-size="9.5" fill="{color}" text-anchor="middle">{v:+.1f}</text>')
+        ly = TOP2 + 6
+        for mi, (mode, mlabel, color) in enumerate(modes):
+            lx = px + PANW - 150
+            s.append(f'<line x1="{lx}" y1="{ly + mi*16}" x2="{lx + 18}" y2="{ly + mi*16}" stroke="{color}" stroke-width="2.2"/>')
+            s.append(f'<text x="{lx + 24}" y="{ly + mi*16 + 4}" font-size="10" fill="#333">{mlabel}</text>')
+    s.append(f'<text x="{W/2}" y="{H - 22}" font-size="10.5" fill="#555" text-anchor="middle">{T["t_take"]}</text>')
+    s.append("</svg>")
+    return "\n".join(s)
 
 def reject(T):
     W, H = 760, 580
@@ -241,4 +367,4 @@ if __name__ == "__main__":
     study, kind = sys.argv[1], sys.argv[2]
     lang = sys.argv[3] if len(sys.argv) > 3 else "en"
     T = TEXT[lang]
-    print(cost(study, T) if kind == "cost" else reject(T))
+    print({"cost": cost, "tail": tail}.get(kind, lambda st, t: reject(t))(study, T) if kind in ("cost", "tail") else reject(T))

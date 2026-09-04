@@ -1,0 +1,87 @@
+# 혼합 백엔드(head-of-line) 보강용 느린 백엔드. b-server.yaml의 사본에 이름과
+# 라벨(mcp-b-slow), 지연 env(B_DELAY_MS), 코드 ConfigMap(b-server-code-slow =
+# k8s/b-server-delay/server.py)만 바꿨다. 라우트는 /bslow. 측정 후 rv_mixed.sh가 제거한다.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-b-slow
+  namespace: mcp-pilot
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: mcp-b-slow }
+  template:
+    metadata:
+      labels: { app: mcp-b-slow }
+    spec:
+      containers:
+        - name: server
+          image: docker.io/mcp-pilot/b-server:2.0.0
+          imagePullPolicy: Never
+          env:
+            - name: B_DELAY_MS
+              value: "200"
+          ports:
+            - containerPort: 8000
+          resources:
+            requests: { cpu: 500m, memory: 256Mi }
+            limits: { cpu: 500m, memory: 512Mi }
+          readinessProbe:
+            tcpSocket: { port: 8000 }
+            initialDelaySeconds: 3
+            periodSeconds: 2
+          volumeMounts:
+            - name: code
+              mountPath: /app
+      volumes:
+        - name: code
+          configMap:
+            name: b-server-code-slow
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcp-b-slow
+  namespace: mcp-pilot
+  labels: { app: mcp-b-slow }
+spec:
+  type: LoadBalancer
+  selector: { app: mcp-b-slow }
+  ports:
+    - port: 80
+      targetPort: 8000
+      appProtocol: agentgateway.dev/mcp
+---
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: mcp-b-slow-stateless
+  namespace: mcp-pilot
+spec:
+  mcp:
+    targets:
+      - name: mcp-b-slow
+        selector:
+          services:
+            matchLabels:
+              app: mcp-b-slow
+    sessionRouting: Stateless
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: mcp-b-slow
+  namespace: mcp-pilot
+spec:
+  parentRefs:
+    - name: agentgateway-proxy
+      namespace: agentgateway-system
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /bslow
+      backendRefs:
+        - name: mcp-b-slow-stateless
+          group: agentgateway.dev
+          kind: AgentgatewayBackend

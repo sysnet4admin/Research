@@ -1,0 +1,27 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='920' height='386' viewBox='0 0 920 386'>
+<rect width='920' height='386' fill='white'/>
+<text x='24' y='34' font-family='Helvetica,Arial,sans-serif' font-size='19' font-weight='bold' fill='#222'>에이전트 카드 재작성: 옵트인, 그리고 병기 형식 누설</text>
+<text x='24' y='56' font-family='Helvetica,Arial,sans-serif' font-size='12' fill='#666'>게이트웨이 경유로 조회한 카드가 광고하는 주소 (v1.5.0, 결정론 프로브)</text>
+<text x='440' y='86' font-family='Helvetica,Arial,sans-serif' font-size='13' font-weight='bold' fill='#222' text-anchor='middle'>appProtocol 있음</text>
+<text x='700' y='86' font-family='Helvetica,Arial,sans-serif' font-size='13' font-weight='bold' fill='#222' text-anchor='middle'>appProtocol 없음</text>
+<text x='296' y='133' font-family='Helvetica,Arial,sans-serif' font-size='12' fill='#222' text-anchor='end'>v0.3 카드 (최상위 url)</text>
+<rect x='313' y='99' width='254' height='60' fill='#e8f0e8' stroke='#bbb' stroke-width='1' rx='6'/>
+<text x='440' y='133' font-family='Helvetica,Arial,sans-serif' font-size='11' fill='#222' text-anchor='middle'>게이트웨이 주소</text>
+<rect x='573' y='99' width='254' height='60' fill='#f7e3dc' stroke='#bbb' stroke-width='1' rx='6'/>
+<text x='700' y='133' font-family='Helvetica,Arial,sans-serif' font-size='11' fill='#222' text-anchor='middle'>직접 주소</text>
+<text x='296' y='199' font-family='Helvetica,Arial,sans-serif' font-size='12' fill='#222' text-anchor='end'>v1.0 카드 (supportedInterfaces)</text>
+<rect x='313' y='165' width='254' height='60' fill='#e8f0e8' stroke='#bbb' stroke-width='1' rx='6'/>
+<text x='440' y='199' font-family='Helvetica,Arial,sans-serif' font-size='11' fill='#222' text-anchor='middle'>게이트웨이 주소</text>
+<rect x='573' y='165' width='254' height='60' fill='#f7e3dc' stroke='#bbb' stroke-width='1' rx='6'/>
+<text x='700' y='199' font-family='Helvetica,Arial,sans-serif' font-size='11' fill='#222' text-anchor='middle'>직접 주소</text>
+<text x='296' y='265' font-family='Helvetica,Arial,sans-serif' font-size='12' fill='#222' text-anchor='end'>병기 카드 (전환기)</text>
+<rect x='313' y='231' width='254' height='60' fill='#f7e3dc' stroke='#b0563a' stroke-width='2' rx='6'/>
+<text x='440' y='257' font-family='Helvetica,Arial,sans-serif' font-size='11' fill='#222' text-anchor='middle'>url: 직접 주소</text>
+<text x='440' y='273' font-family='Helvetica,Arial,sans-serif' font-size='11' fill='#222' text-anchor='middle'>supportedInterfaces: 게이트웨이 주소</text>
+<rect x='573' y='231' width='254' height='60' fill='#f7e3dc' stroke='#bbb' stroke-width='1' rx='6'/>
+<text x='700' y='265' font-family='Helvetica,Arial,sans-serif' font-size='11' fill='#222' text-anchor='middle'>직접 주소</text>
+<line x1='440' y1='291' x2='440' y2='312' stroke='#b0563a' stroke-width='2' stroke-dasharray='5,3'/>
+<text x='440' y='328' font-family='Helvetica,Arial,sans-serif' font-size='12' font-weight='bold' fill='#b0563a' text-anchor='middle'>v0.3 필드 누설:</text>
+<text x='440' y='344' font-family='Helvetica,Arial,sans-serif' font-size='12' font-weight='bold' fill='#b0563a' text-anchor='middle'>v0.3 독자는 게이트웨이 우회</text>
+<text x='24' y='370' font-family='Helvetica,Arial,sans-serif' font-size='12' fill='#666'>직접 호출은 정책과 로그를 건너뜀 (5/5)</text>
+</svg>

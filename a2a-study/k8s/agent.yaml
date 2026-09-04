@@ -1,0 +1,98 @@
+# 본측정용 A2A 에이전트 배선. 스파이크판에서 승격.
+# - Service 2개(appProtocol 유무)가 축 A의 변수 1, 축 C의 gw-a2a/gw-plain 팔.
+# - LoadBalancer svc가 축 C의 direct 팔 (호스트에서 직접 도달).
+# - 코드는 configmap a2a-echo-code (probes.sh가 server.py로 생성).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: a2a-echo
+  namespace: mcp-pilot
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: a2a-echo}
+  template:
+    metadata:
+      labels: {app: a2a-echo}
+    spec:
+      containers:
+        - name: agent
+          image: python:3.12-slim
+          command: ["python", "/app/server.py"]
+          env:
+            - {name: CARD_FORMAT, value: "v03"}
+          ports: [{containerPort: 9999}]
+          volumeMounts: [{name: code, mountPath: /app}]
+      volumes:
+        - name: code
+          configMap: {name: a2a-echo-code}
+---
+# appProtocol 있음: 게이트웨이가 A2A로 인식 (카드 재작성 + protocol=a2a)
+apiVersion: v1
+kind: Service
+metadata:
+  name: a2a-echo
+  namespace: mcp-pilot
+spec:
+  selector: {app: a2a-echo}
+  ports:
+    - name: a2a
+      port: 9999
+      targetPort: 9999
+      appProtocol: agentgateway.dev/a2a
+---
+# appProtocol 없음: 일반 HTTP 백엔드로 취급 (통제)
+apiVersion: v1
+kind: Service
+metadata:
+  name: a2a-echo-plain
+  namespace: mcp-pilot
+spec:
+  selector: {app: a2a-echo}
+  ports:
+    - name: http
+      port: 9999
+      targetPort: 9999
+---
+# direct 팔: 호스트에서 게이트웨이를 안 거치고 도달 (MetalLB 풀 .230~.250)
+apiVersion: v1
+kind: Service
+metadata:
+  name: a2a-echo-lb
+  namespace: mcp-pilot
+spec:
+  type: LoadBalancer
+  selector: {app: a2a-echo}
+  ports:
+    - name: http
+      port: 9999
+      targetPort: 9999
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: a2a-echo
+  namespace: mcp-pilot
+spec:
+  parentRefs:
+    - name: agentgateway-proxy
+      namespace: agentgateway-system
+  rules:
+    - matches:
+        - path: {type: PathPrefix, value: /agent-plain}
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path: {type: ReplacePrefixMatch, replacePrefixMatch: /}
+      backendRefs:
+        - name: a2a-echo-plain
+          port: 9999
+    - matches:
+        - path: {type: PathPrefix, value: /agent}
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path: {type: ReplacePrefixMatch, replacePrefixMatch: /}
+      backendRefs:
+        - name: a2a-echo
+          port: 9999
