@@ -19,6 +19,38 @@ Kubernetes v1.37.0, with the new-spec (2026-07-28) MCP server built in
 `agentgateway-study/v1.4.1` branch): every deterministic finding reproduced
 unchanged, and the latency tables were replaced with the new stack's numbers.
 
+## What agentgateway is, and why measure it
+
+agentgateway is an open-source proxy for the traffic that agentic AI systems
+generate: agents calling tools over MCP, agents calling agents over A2A,
+applications calling LLM providers, and plain HTTP and gRPC. Solo.io created
+it (repository opened 2025-03-18, first release v0.0.2 on 2025-03-27, Rust,
+Apache 2.0), contributed it to the Linux Foundation on 2025-08-25, and it
+became a hosted project of the Agentic AI Foundation on 2026-06-04. The
+stated reason for its existence is that infrastructure built for web traffic
+lacks the governance, observability, routing and security controls that
+agent traffic needs, so one gateway should provide them for all of those
+protocols without changing the servers behind it. Version 1.0.0 shipped on
+2026-03-16; the versions measured here are v1.4.1 (2026-07-29) and v1.5.0
+(2026-08-27).
+
+It runs in two modes. As a standalone binary it is configured by file. On
+Kubernetes, which is the mode measured here, a built-in control plane
+watches Gateway API resources plus its own CRDs (`AgentgatewayBackend` for
+the target servers, `AgentgatewayPolicy` for what to enforce on them) and
+programs the Rust data plane. For MCP the data plane understands the
+protocol: it parses JSON-RPC, can merge several servers into one endpoint,
+optionally renames tools with a prefix, and evaluates CEL authorization
+rules per tool; guardrails let an external gRPC server inspect each call.
+For A2A it rewrites agent cards and parses JSON-RPC for logging.
+
+That is a long list of declared capabilities, and this study measures the
+distance between the list and what actually happens on the wire: what a
+policy blocks, what it silently blocks by mistake, how far trace context
+travels, what the hop costs, and what argument-level control actually
+takes. Adopters are choosing between this and doing the same work inside
+each server; the numbers below are what that choice rests on.
+
 ## What adopting it buys, and what it costs
 
 - **There is no performance gain.** Putting the gateway in front of an MCP

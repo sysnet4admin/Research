@@ -26,28 +26,54 @@ were replaced, and the earlier numbers are quoted below where they differ.
 All numbers are from a virtualized lab: read them as relative comparisons
 between conditions, not as absolute performance claims.
 
-## TL;DR
+## What A2A is, what the gateway does with it, and why measure it
 
-- **Agent card rewriting is opt-in, and mixed-version cards leak.** With
-  `appProtocol` set, a v0.3-style card (top-level `url`) and a v1.0-style
-  card (`supportedInterfaces[].url`) are both rewritten to the gateway
-  address. But a transitional card that carries both fields gets only its
-  `supportedInterfaces` rewritten; the top-level `url` keeps advertising the
-  backend's direct address, and a v0.3 reader will bypass the gateway. The
-  cause is an if/else in the card-rewrite path
-  (`a2a/mod.rs::apply_to_response`, unchanged from v1.4.1 through the
-  v1.5.0 release). Direct calls to the advertised address succeed, skipping
-  policy and observation entirely (5/5).
-- **There is no request authorization surface for A2A in v1.5.0.** MCP gets
-  CEL rules (`mcpAuthorization`); A2A gets none: the data-plane `A2aPolicy`
-  is an empty struct and `appProtocol` only enables card rewriting, JSON-RPC
-  parsing, and log fields. Observation exists; enforcement does not.
-- **The cost splits cleanly.** Against a direct connection, the gateway hop
-  costs +3.0ms p50 when the client opens a connection per call, +0.8 to
-  1.1ms when it reuses connections. A2A protocol processing on top of plain
-  HTTP proxying adds +0.1 to 0.2ms p50 in reuse mode; in close mode the
-  20-round median is +0.00ms, not distinguishable from zero. Numbers are
-  medians over 20 rounds per condition.
+A2A (Agent2Agent) is a protocol for one agent to call another as an opaque
+peer: the callee publishes an agent card (`/.well-known/agent.json`) that
+advertises its endpoint, skills and interfaces, and the caller sends
+JSON-RPC messages to that endpoint, optionally as long-running tasks with
+streaming. Google published it in 2025; specification v1.0 shipped on
+2026-03-12 and changed the card's endpoint field from a top-level `url` to
+`supportedInterfaces[]`, and the project joined the Agentic AI Foundation
+on 2026-08-19. agentgateway's A2A support is a switch on the Kubernetes
+Service (`appProtocol: agentgateway.dev/a2a`): with it on, the gateway
+rewrites the card's endpoint to its own address and parses the JSON-RPC
+exchange for its access log. There is no A2A-specific policy beyond that
+(measured below), which is itself the first thing an adopter should know.
+
+This study measures that surface the same way the MCP study did: what the
+gateway rewrites, what it enforces (nothing, as it turns out), what it
+observes, and what the hop costs, on the versions named above.
+
+## What adopting it buys, and what it costs
+
+- **There is no performance gain.** Putting the gateway in front of an A2A
+  agent does not make calls faster or steady the tail; against this trivial
+  echo agent the gateway's p99 sits 3 to 6 ms above the direct path in
+  every condition.
+- **The cost is one hop plus a little protocol work.** The hop costs
+  +3.0 ms at p50 when the client opens a connection per call and +0.8 to
+  1.1 ms when it reuses connections. Turning on A2A handling
+  (`appProtocol`) adds +0.1 to 0.2 ms in reuse mode and nothing measurable
+  in close mode. Against real agent work (an LLM call, a tool run) all of
+  this disappears.
+- **What you get is discovery control and observation, not authorization.**
+  With `appProtocol` set, the agent card is rewritten to point at the
+  gateway so clients that discover the agent through the card stay on your
+  routing layer, and the access log carries A2A fields (method, outcome,
+  JSON-RPC error code) that status-code monitoring misses. There is no
+  request authorization for A2A in v1.5.0: the data-plane `A2aPolicy` is an
+  empty struct. Observation exists; enforcement does not.
+- **Two caveats before relying on it.** Card rewriting is opt-in, and a
+  transitional card that carries both the v0.3 `url` and the v1.0
+  `supportedInterfaces` gets only the latter rewritten; a v0.3 reader is
+  handed the backend's direct address and walks around the gateway (5/5
+  bypass calls succeeded). Fetch the card through the gateway and read what
+  it actually advertises.
+
+In one sentence: for A2A the gateway is a discovery and observation layer
+today, not a policy layer; its price is a hop, and whether it is even in
+the path is decided by one Service field and by what the card says.
 
 ## Findings
 
@@ -182,6 +208,34 @@ columns do not add exactly.
 4. The gateway costs what a hop costs. With connection reuse the whole
    detour is +0.9 to 1.35ms p50 against a trivial backend; against real agent work
    (LLM calls, tool execution) this disappears.
+
+## v1.4.1 round versus v1.5.0 round
+
+First measured on agentgateway v1.4.1 (Kubernetes v1.36.2, 2026-08-27),
+re-measured on v1.5.0 (Kubernetes v1.37.0, a fresh cluster, 2026-09-02 to
+09-03). Every deterministic probe gave the same result:
+
+| Probe | v1.4.1 | v1.5.0 |
+|---|---|---|
+| Card matrix (appProtocol x v0.3 / v1.0 / both) | mixed-format card keeps the direct `url` | same |
+| Bypass via the advertised direct address | 5/5 reach the agent | same |
+| A2A request authorization | none (`A2aPolicy` empty) | same |
+| traceparent | trace-id kept, gateway span-id, no body injection (5/5) | same |
+| Error shape and access log | HTTP 200 + -32601, logged as `a2a.response.error_code` (3/3) | same |
+
+The latency numbers moved, but the gateway version and the cluster changed
+together, so the differences are not attributed to either. The v1.5.0
+column is canonical.
+
+| Quantity (p50, medians over 20 rounds) | v1.4.1 round | v1.5.0 round |
+|---|---|---|
+| Proxy hop, new connection per call | +2.3 to 2.5 ms | +3.0 ms |
+| Proxy hop, connection reuse | +0.5 to 1.0 ms | +0.8 to 1.1 ms |
+| A2A processing, connection reuse | +0.6 to 0.8 ms | +0.1 to 0.2 ms |
+| A2A processing, new connection per call | +0.00 to +0.05 ms | +0.00 ms |
+| Gateway p99 versus direct | higher (by 5 to 10 ms) | higher (by 3 to 6 ms) |
+
+No reading changed between the rounds.
 
 ## Reproduction
 
