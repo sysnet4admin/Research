@@ -66,11 +66,11 @@ agentgateway v1.4.1이 MCP 앞단에서 문서에 적힌 대로 강제하고 관
 
 ---
 
-### [a2a-study](./a2a-study)
+### [agentgateway-study/a2a](./agentgateway-study/a2a)
 
 agentgateway v1.4.1이 A2A 에이전트 앞단에서 실제로 강제하고 관측하는 것을 실측합니다. 에이전트 카드 재작성이 옵트인이고 병기 형식 카드(v0.3 `url` + v1.0 `supportedInterfaces`)는 스위치를 켜도 직접 주소를 광고해 디스커버리가 게이트웨이를 우회할 수 있다는 것, A2A 표면에는 요청 인가 정책이 없다는 것(강제 없는 관측), JSON-RPC 오류가 HTTP 200에 실리지만 액세스 로그에는 남는다는 것, 게이트웨이 홉 비용이 연결 방식에 따라 p50 +0.5~2.5ms이고 A2A 프로토콜 처리 자체는 +0.6~0.8ms라는 것이 대표 결과입니다.
 
-→ [README (EN)](./a2a-study/README.md) | [README (KO)](./a2a-study/README_ko.md)
+→ [README (EN)](./agentgateway-study/a2a/README.md) | [README (KO)](./agentgateway-study/a2a/README_ko.md)
 
 ---
 

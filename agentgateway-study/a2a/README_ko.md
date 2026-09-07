@@ -1,11 +1,13 @@
-# agentgateway가 A2A에 실제로 강제하고 관측하는 것
+# agentgateway의 A2A 표면: 실제로 강제하고 관측하는 것
 
 [English](README.md)
 
+> [agentgateway-study](../README_ko.md)의 A2A 절이다. 2026-09-04에 `a2a-study`라는 이름으로 따로 공개했다가 2026-09-07에 여기로 접었다. `a2a-study`는 이제 A2A 프로토콜 자체를 다루는 별도 연구(진행 중)의 이름이다.
+
 [agentgateway](https://agentgateway.dev)를 A2A(Agent2Agent protocol) 백엔드
 앞에 뒀을 때, 문서에 적힌 것과 실제로 강제되고 관측되는 것의 거리를
-실측한다. [Gateway API 구현체 비교](../gateway-PoC/)와
-[agentgateway의 MCP 표면](../agentgateway-study/)에 이은 같은 질문의
+실측한다. [Gateway API 구현체 비교](../../gateway-PoC/)와
+[agentgateway의 MCP 표면](../README_ko.md)에 이은 같은 질문의
 세 번째 적용이다. 선언된 기능과 강제되는 기능은 다르다.
 
 요약하면 A2A에 대한 게이트웨이의 프로토콜 처리는 옵트인이고 그 스위치
@@ -97,6 +99,16 @@ apply_to_response. v1.4.1부터 v1.5.0 릴리스까지 같은 분기).
 
 우회는 가설이 아니다. 광고된 직접 주소로 message/send를 보내면 5/5
 에이전트에 도달했고 게이트웨이의 정책과 로그는 아무것도 남기지 않았다.
+
+공식 SDK로 재현했다(2026-09-07, agentgateway v1.5.0). a2a-python 1.1.2의
+표준 라우트로 만든 서버(`samples/hello_world_agent.py`)는 기본으로 병기
+카드를 낸다. `agent_card_to_dict()`가 v1.0 카드에 v0.3 호환 필드를 항상
+합치기 때문이다. 게이트웨이를 거치면 `supportedInterfaces[].url`은
+재작성되고 `url`과 `additionalInterfaces[].url`은 백엔드 주소 그대로였다.
+1.1.2 클라이언트는 재작성된 인터페이스를 따라 게이트웨이로 갔고 0.3.26
+클라이언트는 `url`을 읽어 백엔드 주소로 직접 요청을 보냈다. SDK 태스크의
+액세스 로그에는 `trace.id`/`span.id`와 함께 `a2a.task.state`,
+`a2a.context.id`가 남았다.
 
 ### 2. A2A 요청 인가 없음 (강제 없는 관측)
 
@@ -213,9 +225,9 @@ v1.5.0(Kubernetes v1.37.0, 새 클러스터, 2026-09-02~03)에서 다시 쟀다.
 ## 재현
 
 측정은 `aaif-benchmark` 클러스터(Kubernetes v1.37.0,
-`../agentgateway-study/test-cluster/`로 구축)와
-`../agentgateway-study/harness/`의 게이트웨이 설치 스크립트를 썼다.
-v1.4.1 회차는 [mcp-migration](../mcp-migration/) 클러스터였다. A2A
+`../test-cluster/`로 구축)와
+`../harness/`의 게이트웨이 설치 스크립트를 썼다.
+v1.4.1 회차는 [mcp-migration](../../mcp-migration/) 클러스터였다. A2A
 고유분은 이 저장소에 있다.
 
 - `k8s/server.py`: 최소 A2A 에코 에이전트(표준 라이브러리만. `CARD_FORMAT`
@@ -240,9 +252,9 @@ v1.4.1 회차는 [mcp-migration](../mcp-migration/) 클러스터였다. A2A
 
 ## 한계
 
-- 백엔드는 공식 A2A SDK 서버가 아니라 목적 제작한 최소 에이전트다.
-  게이트웨이가 검사하는 표면(카드 GET, JSON-RPC POST)은 구현했지만 SDK
-  고유의 카드 구성은 다를 수 있다.
+- 측정한 백엔드는 목적 제작한 최소 에이전트다. 카드 재작성 발견은 뒤에
+  공식 a2a-python 1.1.2 서버로 재현했고(위), 비용 수치와 나머지 프로브는
+  최소 에이전트 기준이다.
 - 가상 환경이므로 상대 비교만 유효하다.
 - 전 구간 agentgateway v1.5.0 고정. 비용 수치는 이 스택에 고정된 값이다
   (앞선 v1.4.1 회차는 차이가 나는 자리에 함께 적었다).

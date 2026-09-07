@@ -60,8 +60,8 @@ each server; the numbers below are what that choice rests on.
   v1.4.1 round had suggested a tail benefit; the v1.5.0 re-measurement
   across backend processing times from 0 to 200 ms and a 30-minute
   sustained window found none.
-- **The cost is one hop.** 0.2 to 0.8 ms at p50 depending on how clients
-  connect, plus a few milliseconds at p99 only when clients reuse
+- **The cost is one hop.** 0.2 to 0.8 ms at p50 on `tools/call` (1 to 3 ms
+  on `tools/list`) depending on how clients connect, plus a few milliseconds at p99 only when clients reuse
   connections against a backend that does almost nothing. Once a tool does
   real work (tens of milliseconds or more) the hop disappears in the noise.
   Argument checks through a guardrail add under 1 ms per call on top.
@@ -69,7 +69,7 @@ each server; the numbers below are what that choice rests on.
   per-client tool exposure (allowlist with list filtering), argument-level
   control (through a guardrail server you write yourself), trace context
   carried into the server, and, on the A2A side, agent-card rewriting and
-  A2A-aware logs ([a2a-study](../a2a-study)).
+  A2A-aware logs ([the A2A surface](a2a/README.md)).
 - **One caveat before relying on it.** Some policies are accepted without
   being enforced as written: an argument-conditioned policy locks the whole
   backend while reporting healthy. Turn a policy on, then verify it with
@@ -90,6 +90,13 @@ call has confirmed it.
    It is a deliberate design that makes blocked
    tools look nonexistent (anti-enumeration, discussed in upstream #758). The
    cost is that a client cannot tell "no permission" from "no such tool".
+   Filtering itself is free at the gateway and saves nothing in latency:
+   with 8, 100 and 500 tools on the server, `tools/list` through a policy
+   that leaves one tool costs the same as through no policy (within
+   0.7 ms at p50), because the gateway fetches the full list from the
+   server before filtering; only the bytes sent to the client shrink
+   (181 KB to 467 B at 500 tools). The list's own cost grows with the tool
+   count on both paths (table below).
 2. **A policy that conditions on tool arguments is accepted, then locks the
    whole backend.** This is the core finding. A rule like
    `mcp.tool.arguments.a == 1` passes validation (`Accepted`) and reports
@@ -160,6 +167,13 @@ call has confirmed it.
    modes (zero gateway errors in every cell; table below), and the `Full`
    phase setting routes both the request and the response body
    through the gRPC server.
+8. **On the A2A surface the gateway rewrites, observes and costs a hop, but
+   enforces nothing.** Card rewriting is opt-in per Service; a card that
+   carries both v0.3 and v1.0 endpoint fields (the official Python SDK's
+   default) gets only the v1.0 field rewritten, so a v0.3 client is handed
+   the backend's direct address; there is no A2A authorization policy;
+   trace context and JSON-RPC error codes reach the access log. Details,
+   tables and figures: [the A2A surface](a2a/README.md).
 
 ## What an operator writing policies should know
 
@@ -169,6 +183,7 @@ call has confirmed it.
 | Argument-based control ("block delete, but only for prod") | Not via policy; yes via guardrail | The policy is accepted while the backend locks up, and a `has(...)` guard drops the condition. mcpGuardrails works but means building a gRPC server yourself, adds under 1 ms at p50 per call, and its denial surfaces as 200 + a JSON-RPC error |
 | Policies under renaming (prefixMode) | Yes | Always write the original name. Using the prefixed name clients see locks everything out |
 | Adding rules and worrying about latency | No need | No difference up to 21 rules |
+| Hiding a large tool set behind an allowlist | Yes | The client gets a short list, but `tools/list` still costs what the server's full list costs; the gateway filters after fetching all of it |
 | Distributed tracing | Yes | Propagated in both the header and `_meta` (verified with tracing not configured) |
 
 ![Three rejection shapes](figures/rejection-shapes-en.svg)
@@ -289,6 +304,33 @@ need paired interleaving, not sequential arms.
 
 ![What each addition costs in latency: before and after per controlled pair](figures/path-cost-en.svg)
 
+Tool count and list filtering (2026-09-05). `tools/list` measured against
+the server with 8, 100 and 500 tools (responses of 3.0 KB, 36 KB and
+181 KB), on three arms: direct, through the gateway with no policy, and
+through the gateway with an allowlist that leaves one tool. 20 rps with
+8 in flight (at 100 rps the 500-tool list saturated the server's 0.5 CPU
+and the generator), 5 alternated repetitions of 30 s. Medians of 5 runs;
+the two increment columns are medians of per-repetition pair differences:
+
+| Tools | Connection | direct p50 / p99 | gateway, no policy | gateway, allowlist (1 tool) | hop | filtering |
+|---|---|---|---|---|---|---|
+| 8 | new per call | 10.8 / 20.5 ms | 13.0 / 22.5 ms | 13.1 / 21.8 ms | +2.0 ms | +0.1 ms |
+| 8 | reuse | 6.3 / 11.9 ms | 9.2 / 17.4 ms | 8.7 / 21.3 ms | +3.0 ms | -0.5 ms |
+| 100 | new per call | 12.7 / 39.4 ms | 13.6 / 32.2 ms | 13.9 / 38.2 ms | +1.1 ms | +0.3 ms |
+| 100 | reuse | 9.5 / 33.4 ms | 11.4 / 32.4 ms | 11.1 / 32.3 ms | +1.8 ms | -0.2 ms |
+| 500 | new per call | 15.4 / 36.9 ms | 16.4 / 34.9 ms | 16.4 / 36.1 ms | +1.0 ms | +0.0 ms |
+| 500 | reuse | 12.2 / 34.2 ms | 13.7 / 33.6 ms | 13.2 / 32.6 ms | +1.2 ms | -0.7 ms |
+
+All 90 cells held 20 rps with zero errors. Three readings. Filtering costs
+nothing at the gateway. It also saves nothing: the allowlisted list is
+467 bytes at 500 tools, but its latency equals the unfiltered one because
+the gateway receives the server's whole list first, so a slow `tools/list`
+on a large server stays slow behind the gateway. And the gateway hop on
+`tools/list` is 1 to 3 ms, larger than on `tools/call`, without growing
+with the list size (the 8-tool rows are the largest; at 20 rps the
+repetition spread is wide, so read the hop column as an order of
+magnitude).
+
 Backend processing time and sustained load (follow-up, 2026-09-03 to
 09-04). The echo tool was given a server-side delay (`k8s/b-server-delay/`,
 `B_DELAY_MS`), gateway installed throughout with no policy, 100 rps, direct
@@ -323,10 +365,62 @@ Zero errors in all 8 cells, and the two repetitions agree within 0.1 ms, so
 nothing drifted over 30 minutes. The reading: the hop's p50 cost does not
 depend on backend time, the gateway never lowers p99, and its reuse-mode
 p99 penalty is a fixed few milliseconds that becomes invisible once the
-backend itself takes tens of milliseconds. Mixing fast and slow backends
-behind one gateway (head-of-line effects) was not measured.
+backend itself takes tens of milliseconds.
 
 ![What happens to the tail through the gateway, by backend processing time](figures/tail-effect-en.svg)
+
+The same 30-minute window at 0 ms (where the reuse-mode penalty is largest)
+and with the guardrail policy on gave the 30-second numbers again: 0 ms
+direct 7.2 / 13.6 ms versus gateway 7.7 / 14.2 ms per call in close mode,
+4.4 / 9.5 versus 5.0 / 16.3 ms under reuse (run 1 quoted; the two
+repetitions agree within 0.1 ms at p50 and 0.7 ms at p99, zero errors);
+guardrail on adds +0.5 ms at p50 over 30 minutes in both connection modes
+with p99 no worse (1.0 to 1.1 ms lower, within noise).
+
+Mixed backends (2026-09-04 to 09-05). A second backend with 200 ms of
+server-side delay was placed behind the same gateway (its own Deployment,
+Service and route), and the fast backend was measured at 100 rps while the
+slow one received 100 rps at the same time, on both paths (direct and
+through the gateway), close and reuse, 5 alternated repetitions of 30 s.
+Fast-backend medians:
+
+| Connection | Cell | p50 | p99 | Mixed minus alone (pair median) p50 / p99 |
+|---|---|---|---|---|
+| new per call | direct, alone | 7.2 ms | 14.0 ms | |
+| new per call | direct, mixed | 5.3 ms | 8.5 ms | -1.9 / -5.5 ms |
+| new per call | gateway, alone | 7.7 ms | 14.1 ms | |
+| new per call | gateway, mixed | 5.9 ms | 9.4 ms | -1.8 / -4.7 ms |
+| reuse | direct, alone | 4.2 ms | 9.7 ms | |
+| reuse | direct, mixed | 3.3 ms | 7.8 ms | -0.9 / -1.9 ms |
+| reuse | gateway, alone | 4.9 ms | 15.5 ms | |
+| reuse | gateway, mixed | 3.7 ms | 8.2 ms | -1.2 / -6.5 ms |
+
+All 40 cells held their rate with zero errors. Load on the slow backend did
+not degrade the fast one through the gateway; the fast backend was in fact
+0.9 to 1.9 ms faster at p50 (1.9 to 6.5 ms at p99) with the slow one busy, on
+both paths alike, which reads
+as the host warming up under concurrent load rather than anything the
+gateway does. The gateway hop itself stayed at +0.6 ms (close) and +0.4 ms
+(reuse) in the mixed cells. At this load there is no head-of-line effect.
+
+The 30-minute version of the same mix behaved differently in one cell. With
+connection reuse, the 30-minute mixed window matched the 30-second cells
+(fast backend 4.1 / 9.1 ms, 180,000 requests, nothing shed). With a new
+connection per call, both load generators shed requests over the 30
+minutes (fast arm 21.8%, slow arm 15.3%), the slow arm's p99 reached 3.2 s,
+and the gateway reported zero errors while the requests that completed
+stayed fast (fast arm p95 7.9 ms). The 30-second mixed cells and the
+30-minute single-backend close window (100 new connections per second)
+showed none of this, so the variable is 200 new connections per second
+sustained for 30 minutes. The control run settled where it comes from: the
+same 30-minute mix on the direct path, with no gateway in either arm, shed
+the same amounts (fast arm 21.8%, slow arm 15.2%, slow-arm p99 3.2 s), and
+a repeat through the gateway matched it again (one HTTP 500 in 140,577
+completed requests). The limit is the lab's sustained connection-setup rate, on the
+host generator or the nodes, not the gateway; between the two paths the
+fast arm differed by +0.7 ms at p50, the usual hop. So within this load
+range the gateway did not give out under sustained mixed load; the lab
+did first.
 
 ## v1.4.1 round versus v1.5.0 round
 
@@ -341,7 +435,7 @@ The study was first measured on agentgateway v1.4.1 (Kubernetes v1.36.2,
 | prefixMode x policy name (3 modes, plus actual `mcp-b-80_` prefix) | original name evaluated, renamed-name policy locks out, no bypass | same |
 | traceparent | trace-id kept, gateway span-id, also in `_meta` (5/5) | same |
 | Guardrail: a=1 pass, a=2 deny, FailClosed, FailOpen | as documented, deny as 200 + -32001 reason | same |
-| A2A card, bypass, trace, error log ([a2a-study](../a2a-study)) | mixed-format card leaks, no A2A authz | same |
+| A2A card, bypass, trace, error log ([the A2A surface](a2a/README.md)) | mixed-format card leaks, no A2A authz | same |
 
 The latency numbers moved, but the gateway version and the cluster changed
 together, so the differences below are not attributed to either. The v1.5.0
@@ -396,6 +490,16 @@ branch.
   gateway-versus-direct comparison repeated at four server-side delays
   (40 cells) and in 30-minute continuous runs (8 cells), all behind the
   same gate.
+- **Tool count and list filtering (2026-09-05)**: `tools/list` at 8, 100
+  and 500 tools on three arms (direct, gateway, gateway with allowlist),
+  90 cells at 20 rps.
+- **Mixed backends and more sustained windows (2026-09-04 to 09-05)**: a
+  200 ms backend beside the 0 ms one behind the same gateway, fast backend
+  measured with and without load on the slow one (40 cells plus four
+  30-minute cells), then 30-minute windows at 0 ms (8 cells) and with the
+  guardrail on and off (4 cells), and a two-cell control repeat of the
+  30-minute close mix on the direct path and through the gateway
+  (2026-09-05).
 - Two integrity notes from the v1.4.1 round. A mid-run process kill during the rule-count cells
   was resumed for the remaining 6 cells with the gateway and policy
   configuration kept identical. And the first verdict on trace propagation
@@ -410,16 +514,20 @@ branch.
 
 - Only the MCP surface was measured. The same gateway also fronts A2A, LLM
   inference, REST, and gRPC; none of those paths were tested.
-- One backend with a small tool set (8 tools). List-filtering cost on large
-  tool sets was not measured.
+- One backend implementation (a trivial echo server, run in a 0 ms and a
+  200 ms variant), and tool sets up to 500 dummy tools for the `tools/list`
+  measurement, at 20 rps only (the 500-tool list saturates this cluster's
+  server, which runs with a 0.5 CPU limit, and the load generator at
+  100 rps).
 - Among the alternative paths to argument-level control, mcpGuardrails was
   verified (finding 7); extAuthz and extProc were not.
 - Within the MCP surface, authentication (MCP Auth) is also out of scope.
 - Absolute latency numbers are VirtualBox values.
 - The tracing-enabled path (span export) was not measured.
-- Backends of mixed speed behind one gateway (whether a slow backend
-  degrades a fast one's tail) were not measured; the delay sweep varied one
-  backend at a time.
+- Backends of mixed speed were measured at one load (100 rps each). The
+  30-minute close-mode mixed window shed requests on both arms on both
+  paths, so it measures the lab's sustained connection-setup limit (about
+  200 new connections per second), not the gateway's.
 
 ## Reproduction
 

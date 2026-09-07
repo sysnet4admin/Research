@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 780" font-family="Helvetica, Arial, sans-serif">
-<rect width="920" height="780" fill="white"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 430" font-family="Helvetica, Arial, sans-serif">
+<rect width="920" height="430" fill="white"/>
 <text x="460.0" y="30" font-size="14.5" fill="#111" text-anchor="middle" font-weight="bold">게이트웨이를 거치면 꼬리(p99)가 어떻게 되는가: 백엔드 처리 시간별</text>
 <text x="460.0" y="50" font-size="10.5" fill="#666" text-anchor="middle">직접 호출과 게이트웨이 경유, 각 5회 중앙값. 100rps, 서버 쪽 echo 지연 0/10/50/200ms, 30초 셀.</text>
 <text x="460.0" y="78" font-size="12" fill="#111" text-anchor="middle" font-weight="bold">p99 절대값: 직접 호출 대 게이트웨이 경유 (로그 눈금)</text>
@@ -76,78 +76,5 @@
 <text x="779" y="120" font-size="10" fill="#333">직접 호출</text>
 <line x1="755" y1="132" x2="773" y2="132" stroke="#c0504d" stroke-width="2.2"/>
 <text x="779" y="136" font-size="10" fill="#333">게이트웨이 경유</text>
-<text x="460.0" y="400" font-size="12" fill="#111" text-anchor="middle" font-weight="bold">게이트웨이 경유에서 직접 호출을 뺀 값 (회차별 쌍 차이의 중앙값)</text>
-<text x="260.0" y="430" font-size="12" fill="#111" text-anchor="middle" font-weight="bold">p50 증분</text>
-<line x1="60" y1="600.0" x2="460" y2="600.0" stroke="#eee"/>
-<text x="54" y="604.0" font-size="9.5" fill="#666" text-anchor="end">+0ms</text>
-<line x1="60" y1="520.0" x2="460" y2="520.0" stroke="#eee"/>
-<text x="54" y="524.0" font-size="9.5" fill="#666" text-anchor="end">+1ms</text>
-<line x1="60" y1="440.0" x2="460" y2="440.0" stroke="#eee"/>
-<text x="54" y="444.0" font-size="9.5" fill="#666" text-anchor="end">+2ms</text>
-<line x1="60" y1="600.0" x2="460" y2="600.0" stroke="#999" stroke-width="1.2"/>
-<text x="100.0" y="698" font-size="10" fill="#333" text-anchor="middle">0</text>
-<text x="206.7" y="698" font-size="10" fill="#333" text-anchor="middle">10</text>
-<text x="313.3" y="698" font-size="10" fill="#333" text-anchor="middle">50</text>
-<text x="420.0" y="698" font-size="10" fill="#333" text-anchor="middle">200</text>
-<text x="260.0" y="714" font-size="10" fill="#666" text-anchor="middle">백엔드 처리 시간(ms)</text>
-<path d="M100.0,552.0 L206.7,568.0 L313.3,568.0 L420.0,568.0" fill="none" stroke="#2e6f9e" stroke-width="2.2"/>
-<circle cx="100.0" cy="552.0" r="4.5" fill="#2e6f9e"/>
-<text x="100.0" y="543.0" font-size="9.5" fill="#2e6f9e" text-anchor="middle">+0.6</text>
-<circle cx="206.7" cy="568.0" r="4.5" fill="#2e6f9e"/>
-<text x="206.7" y="584.0" font-size="9.5" fill="#2e6f9e" text-anchor="middle">+0.4</text>
-<circle cx="313.3" cy="568.0" r="4.5" fill="#2e6f9e"/>
-<text x="313.3" y="559.0" font-size="9.5" fill="#2e6f9e" text-anchor="middle">+0.4</text>
-<circle cx="420.0" cy="568.0" r="4.5" fill="#2e6f9e"/>
-<text x="420.0" y="559.0" font-size="9.5" fill="#2e6f9e" text-anchor="middle">+0.4</text>
-<path d="M100.0,552.0 L206.7,528.0 L313.3,592.0 L420.0,592.0" fill="none" stroke="#c0504d" stroke-width="2.2"/>
-<circle cx="100.0" cy="552.0" r="4.5" fill="#c0504d"/>
-<text x="100.0" y="568.0" font-size="9.5" fill="#c0504d" text-anchor="middle">+0.6</text>
-<circle cx="206.7" cy="528.0" r="4.5" fill="#c0504d"/>
-<text x="206.7" y="519.0" font-size="9.5" fill="#c0504d" text-anchor="middle">+0.9</text>
-<circle cx="313.3" cy="592.0" r="4.5" fill="#c0504d"/>
-<text x="313.3" y="608.0" font-size="9.5" fill="#c0504d" text-anchor="middle">+0.1</text>
-<circle cx="420.0" cy="592.0" r="4.5" fill="#c0504d"/>
-<text x="420.0" y="608.0" font-size="9.5" fill="#c0504d" text-anchor="middle">+0.1</text>
-<line x1="310" y1="446" x2="328" y2="446" stroke="#2e6f9e" stroke-width="2.2"/>
-<text x="334" y="450" font-size="10" fill="#333">연결 매번 새로</text>
-<line x1="310" y1="462" x2="328" y2="462" stroke="#c0504d" stroke-width="2.2"/>
-<text x="334" y="466" font-size="10" fill="#333">연결 재사용</text>
-<text x="720.0" y="430" font-size="12" fill="#111" text-anchor="middle" font-weight="bold">p99 증분</text>
-<line x1="520" y1="650.0" x2="920" y2="650.0" stroke="#eee"/>
-<text x="514" y="654.0" font-size="9.5" fill="#666" text-anchor="end">+0ms</text>
-<line x1="520" y1="590.0" x2="920" y2="590.0" stroke="#eee"/>
-<text x="514" y="594.0" font-size="9.5" fill="#666" text-anchor="end">+2ms</text>
-<line x1="520" y1="530.0" x2="920" y2="530.0" stroke="#eee"/>
-<text x="514" y="534.0" font-size="9.5" fill="#666" text-anchor="end">+4ms</text>
-<line x1="520" y1="470.0" x2="920" y2="470.0" stroke="#eee"/>
-<text x="514" y="474.0" font-size="9.5" fill="#666" text-anchor="end">+6ms</text>
-<line x1="520" y1="650.0" x2="920" y2="650.0" stroke="#999" stroke-width="1.2"/>
-<text x="560.0" y="698" font-size="10" fill="#333" text-anchor="middle">0</text>
-<text x="666.7" y="698" font-size="10" fill="#333" text-anchor="middle">10</text>
-<text x="773.3" y="698" font-size="10" fill="#333" text-anchor="middle">50</text>
-<text x="880.0" y="698" font-size="10" fill="#333" text-anchor="middle">200</text>
-<text x="720.0" y="714" font-size="10" fill="#666" text-anchor="middle">백엔드 처리 시간(ms)</text>
-<path d="M560.0,644.0 L666.7,647.0 L773.3,653.0 L880.0,662.0" fill="none" stroke="#2e6f9e" stroke-width="2.2"/>
-<circle cx="560.0" cy="644.0" r="4.5" fill="#2e6f9e"/>
-<text x="560.0" y="660.0" font-size="9.5" fill="#2e6f9e" text-anchor="middle">+0.2</text>
-<circle cx="666.7" cy="647.0" r="4.5" fill="#2e6f9e"/>
-<text x="666.7" y="663.0" font-size="9.5" fill="#2e6f9e" text-anchor="middle">+0.1</text>
-<circle cx="773.3" cy="653.0" r="4.5" fill="#2e6f9e"/>
-<text x="773.3" y="669.0" font-size="9.5" fill="#2e6f9e" text-anchor="middle">-0.1</text>
-<circle cx="880.0" cy="662.0" r="4.5" fill="#2e6f9e"/>
-<text x="880.0" y="678.0" font-size="9.5" fill="#2e6f9e" text-anchor="middle">-0.4</text>
-<path d="M560.0,482.0 L666.7,560.0 L773.3,614.0 L880.0,644.0" fill="none" stroke="#c0504d" stroke-width="2.2"/>
-<circle cx="560.0" cy="482.0" r="4.5" fill="#c0504d"/>
-<text x="560.0" y="473.0" font-size="9.5" fill="#c0504d" text-anchor="middle">+5.6</text>
-<circle cx="666.7" cy="560.0" r="4.5" fill="#c0504d"/>
-<text x="666.7" y="551.0" font-size="9.5" fill="#c0504d" text-anchor="middle">+3.0</text>
-<circle cx="773.3" cy="614.0" r="4.5" fill="#c0504d"/>
-<text x="773.3" y="605.0" font-size="9.5" fill="#c0504d" text-anchor="middle">+1.2</text>
-<circle cx="880.0" cy="644.0" r="4.5" fill="#c0504d"/>
-<text x="880.0" y="635.0" font-size="9.5" fill="#c0504d" text-anchor="middle">+0.2</text>
-<line x1="770" y1="446" x2="788" y2="446" stroke="#2e6f9e" stroke-width="2.2"/>
-<text x="794" y="450" font-size="10" fill="#333">연결 매번 새로</text>
-<line x1="770" y1="462" x2="788" y2="462" stroke="#c0504d" stroke-width="2.2"/>
-<text x="794" y="466" font-size="10" fill="#333">연결 재사용</text>
-<text x="460.0" y="758" font-size="10.5" fill="#555" text-anchor="middle">v1.4.1에서 봤던 "게이트웨이가 꼬리를 평탄화한다"는 재현되지 않았다. 매번 새 연결에서는 두 선이 겹치고, 연결 재사용의 꼬리 손해(+5.6ms)는 백엔드가 느려질수록 사라진다. p50 비용은 전 구간 1ms 아래.</text>
+<text x="460.0" y="408" font-size="10.5" fill="#555" text-anchor="middle">v1.4.1에서 봤던 "게이트웨이가 꼬리를 평탄화한다"는 재현되지 않았다. 매번 새 연결에서는 두 선이 겹치고 연결 재사용의 꼬리 손해(0ms에서 8.9 대 16.3ms)는 백엔드가 느려질수록 사라진다. p50 비용은 본문 표에서 전 구간 1ms 아래다.</text>
 </svg>

@@ -62,7 +62,7 @@ TEXT = {
         "a_backend": "mcp-b (MCP 서버, SDK 2.0.0)\n도구 8종, 레플리카 1", "a_tap": "탭 프록시\n(트레이스 헤더와 _meta 기록)",
         "a_direct": "직접 경로 (LoadBalancer)", "a_gw": "게이트웨이 경로 (/b)", "a_grpc": "gRPC 검사 왕복",
         "a_cap": "직접 경로와 게이트웨이 경로를 회차 안에서 교대로 재고, 정책과 guardrail은 켜고 끄며 같은 백엔드에 붙인다.",
-        "t_take": "v1.4.1에서 봤던 \"게이트웨이가 꼬리를 평탄화한다\"는 재현되지 않았다. 매번 새 연결에서는 두 선이 겹치고, 연결 재사용의 꼬리 손해(+5.6ms)는 백엔드가 느려질수록 사라진다. p50 비용은 전 구간 1ms 아래.",
+        "t_take": "v1.4.1에서 봤던 \"게이트웨이가 꼬리를 평탄화한다\"는 재현되지 않았다. 매번 새 연결에서는 두 선이 겹치고 연결 재사용의 꼬리 손해(0ms에서 8.9 대 16.3ms)는 백엔드가 느려질수록 사라진다. p50 비용은 본문 표에서 전 구간 1ms 아래다.",
         "r_title": "요청이 거부될 때 클라이언트가 보는 세 가지 형태",
         "r_sub": "거부한 층에 따라 응답 모양이 갈린다. 모양이 곧 진단 단서다.",
         "p_client": "클라이언트", "p_gw": "게이트웨이", "p_authz": "인가 정책 (mcpAuthorization)",
@@ -108,7 +108,7 @@ TEXT = {
         "a_backend": "mcp-b (MCP server, SDK 2.0.0)\n8 tools, 1 replica", "a_tap": "tap proxy\n(records trace header and _meta)",
         "a_direct": "direct path (LoadBalancer)", "a_gw": "gateway path (/b)", "a_grpc": "gRPC check round trip",
         "a_cap": "Direct and gateway paths alternate within each repetition; policies and the guardrail are toggled on the same backend.",
-        "t_take": "The v1.4.1 observation that the gateway flattens the tail did not reproduce: with a new connection per call the two lines coincide, and the reuse-mode tail penalty (+5.6 ms) fades as the backend gets slower. The p50 cost stays under 1 ms throughout.",
+        "t_take": "The v1.4.1 observation that the gateway flattens the tail did not reproduce: with a new connection per call the two lines coincide, and the reuse-mode tail penalty (8.9 versus 16.3 ms at 0 ms) fades as the backend gets slower. The p50 cost, in the table above, stays under 1 ms throughout.",
         "r_title": "Three rejection shapes the client sees",
         "r_sub": "The rejecting layer decides the shape, and the shape is the diagnostic clue.",
         "p_client": "client", "p_gw": "gateway", "p_authz": "authorization policy (mcpAuthorization)",
@@ -207,8 +207,8 @@ def cost(study, T):
 
 
 def tail(study, T):
-    """tail 보강 그림. 1행 = p99 절대값(직접 대 게이트웨이, 연결 방식별, 로그 눈금),
-    2행 = 홉 증분(p50, p99, 쌍 차이 중앙값). 원자료 runs/rv-tail-0903."""
+    """tail 보강 그림: p99 절대값(직접 대 게이트웨이, 연결 방식별, 로그 눈금). 원자료 runs/rv-tail-0903.
+    (증분 행은 2026-09-07 사용자 판정으로 뺐다. 증분은 본문 표에 있다.)"""
     import math
     base = os.path.join(study, "runs", "rv-tail-0903")
     delays = [0, 10, 50, 200]
@@ -228,7 +228,7 @@ def tail(study, T):
                 vals.append(json.load(open(fg))["latency_ms"][key] - json.load(open(fd))["latency_ms"][key])
         return statistics.median(vals) if vals else 0.0
 
-    W, H = 920, 780
+    W, H = 920, 430
     PANW, PX0 = 400, 60
     s = svg_head(W, H)
     s.append(f'<text x="{W/2}" y="30" font-size="14.5" fill="#111" text-anchor="middle" font-weight="bold">{T["t_title"]}</text>')
@@ -285,37 +285,6 @@ def tail(study, T):
         s.append(f'<line x1="{lx}" y1="{ly + 16}" x2="{lx + 18}" y2="{ly + 16}" stroke="{color}" stroke-width="2.2"/>')
         s.append(f'<text x="{lx + 24}" y="{ly + 20}" font-size="10" fill="#333">{T["t_gw"]}</text>')
 
-    # ── 2행: 증분 ──
-    s.append(f'<text x="{W/2}" y="400" font-size="12" fill="#111" text-anchor="middle" font-weight="bold">{T["t_row2"]}</text>')
-    TOP2, BOT2 = 440, 680
-    panels = [("p50", T["t_p50"], -1.0, 2.0, [0.0, 1.0, 2.0]), ("p99", T["t_p99"], -1.0, 7.0, [0.0, 2.0, 4.0, 6.0])]
-    for pi, (key, label, ymin, ymax, ticks) in enumerate(panels):
-        px = PX0 + pi * (PANW + 60)
-        s.append(f'<text x="{px + PANW/2}" y="{TOP2 - 10}" font-size="12" fill="#111" text-anchor="middle" font-weight="bold">{label}</text>')
-
-        def Y(v):
-            return BOT2 - (v - ymin) / (ymax - ymin) * (BOT2 - TOP2)
-        for t in ticks:
-            s.append(f'<line x1="{px}" y1="{Y(t):.1f}" x2="{px + PANW}" y2="{Y(t):.1f}" stroke="#eee"/>')
-            s.append(f'<text x="{px - 6}" y="{Y(t) + 4:.1f}" font-size="9.5" fill="#666" text-anchor="end">{t:+.0f}ms</text>')
-        s.append(f'<line x1="{px}" y1="{Y(0):.1f}" x2="{px + PANW}" y2="{Y(0):.1f}" stroke="#999" stroke-width="1.2"/>')
-        xaxis(px, BOT2)
-        vals = {mode: [pair_med(d, mode, key) for d in delays] for mode, _, _ in modes}
-        for mode, mlabel, color in modes:
-            other = "close" if mode == "reuse" else "reuse"
-            pts = [(xpos(px, i), Y(v), v) for i, v in enumerate(vals[mode])]
-            path = " ".join(f'{"M" if i == 0 else "L"}{x:.1f},{y:.1f}' for i, (x, y, _) in enumerate(pts))
-            s.append(f'<path d="{path}" fill="none" stroke="{color}" stroke-width="2.2"/>')
-            for i, (x, y, v) in enumerate(pts):
-                s.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4.5" fill="{color}"/>')
-                above = v > vals[other][i] or (v == vals[other][i] and mode == "reuse")
-                dy = -9 if above else 16
-                s.append(f'<text x="{x:.1f}" y="{y + dy:.1f}" font-size="9.5" fill="{color}" text-anchor="middle">{v:+.1f}</text>')
-        ly = TOP2 + 6
-        for mi, (mode, mlabel, color) in enumerate(modes):
-            lx = px + PANW - 150
-            s.append(f'<line x1="{lx}" y1="{ly + mi*16}" x2="{lx + 18}" y2="{ly + mi*16}" stroke="{color}" stroke-width="2.2"/>')
-            s.append(f'<text x="{lx + 24}" y="{ly + mi*16 + 4}" font-size="10" fill="#333">{mlabel}</text>')
     s.append(f'<text x="{W/2}" y="{H - 22}" font-size="10.5" fill="#555" text-anchor="middle">{T["t_take"]}</text>')
     s.append("</svg>")
     return "\n".join(s)
