@@ -457,6 +457,32 @@ increment is constant and does not fit queueing" is reduced to "under 1 ms
 per call". The v1.4.1 round is preserved on the `agentgateway-study/v1.4.1`
 branch.
 
+### After v1.5.0: PR #3301 (measured 2026-09-07 on a dev build)
+
+Upstream merged PR #3301 ("Parse MCP context for CEL early") on 2026-09-03,
+after v1.5.0, and no release carries it yet. It parses the MCP request body
+before route-level (`traffic`) policies run, so `mcp.tool.name` and
+`mcp.tool.arguments` become available to a route `authorization` policy. I
+checked it on this cluster with the proxy image swapped to the dev build
+`v0.0.0-alpha.748b38b2` (9 commits past the merge, controller kept at
+v1.5.0) and restored v1.5.0 afterwards:
+
+| Policy form | v1.5.0 | dev build with #3301 |
+|---|---|---|
+| Route `traffic.authorization`, Deny `mcp.tool.name == "get-sum" && mcp.tool.arguments.a != 1` | Accepted, no effect (a=2 passes) | a=2 403 "authorization failed", a=1 200, `echo` 200, list 8 tools |
+| Route `traffic.authorization`, Allow `!has(mcp.tool) \|\| mcp.tool.name != "get-sum" \|\| mcp.tool.arguments.a == 1` | Accepted, no effect | same as the row above |
+| Backend `mcpAuthorization` `mcp.tool.name == "get-sum" && mcp.tool.arguments.a == 1` (#3092) | deny-all, empty list | deny-all, empty list (unchanged) |
+
+So once a release carries #3301, argument-level control has a second home
+besides the guardrail server (finding 7), with a different rejection shape:
+the route policy answers a plain HTTP 403 body, not a JSON-RPC error. The gap
+reported in #3092 is unchanged: the `mcpAuthorization` context stays
+identity-only by design (`architecture/cel.md` on main still says payload
+fields are absent during RBAC evaluation), the argument-conditioned rule is
+still accepted, and the admission warning PR #3127 is still open. On v1.5.0
+the route form is accepted and does nothing, which is the same kind of silent
+no-op. Script `harness/rv_3301.sh`, record `runs/pr3301-0907/`.
+
 ## What was measured
 
 ![Measurement setup: what sits where](figures/setup-en.svg)
@@ -560,3 +586,5 @@ scripts under `studies/stateless-scaleout/k8s/agentgateway/`.
   the authorization context), #2904 (span-parenting defect in the
   tracing-enabled path, fix merged). Finding 2 was reported by this study as
   [#3092](https://github.com/agentgateway/agentgateway/issues/3092).
+  PR #3301 (merged 2026-09-03, unreleased) makes `mcp.*` available to
+  route-level policies; see "After v1.5.0" above.

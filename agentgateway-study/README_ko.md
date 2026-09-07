@@ -406,6 +406,30 @@ Deployment, Service, 라우트)를 같은 게이트웨이 뒤에 두고 느린 �
 다르다"는 "호출당 1ms 아래"로 낮췄다. v1.4.1 회차는
 `agentgateway-study/v1.4.1` 브랜치에 보존돼 있다.
 
+### v1.5.0 이후: PR #3301 (2026-09-07 dev 빌드로 측정)
+
+업스트림은 v1.5.0 뒤인 2026-09-03에 PR #3301("Parse MCP context for CEL
+early")을 병합했고 아직 이것이 들어간 릴리스는 없다. 라우트 수준(`traffic`)
+정책이 실행되기 전에 MCP 요청 본문을 해석해서 `mcp.tool.name`과
+`mcp.tool.arguments`를 라우트 `authorization` 정책에서 쓸 수 있게 한다. 이
+클러스터에서 프록시 이미지만 dev 빌드 `v0.0.0-alpha.748b38b2`(병합 뒤 9커밋,
+컨트롤러는 v1.5.0 유지)로 바꿔 확인하고 v1.5.0으로 원복했다:
+
+| 정책 형태 | v1.5.0 | #3301 포함 dev 빌드 |
+|---|---|---|
+| 라우트 `traffic.authorization`, Deny `mcp.tool.name == "get-sum" && mcp.tool.arguments.a != 1` | 수용, 효과 없음(a=2 통과) | a=2 403 "authorization failed", a=1 200, `echo` 200, 목록 8개 |
+| 라우트 `traffic.authorization`, Allow `!has(mcp.tool) \|\| mcp.tool.name != "get-sum" \|\| mcp.tool.arguments.a == 1` | 수용, 효과 없음 | 위 행과 같음 |
+| 백엔드 `mcpAuthorization` `mcp.tool.name == "get-sum" && mcp.tool.arguments.a == 1`(#3092) | 전부 차단, 빈 목록 | 전부 차단, 빈 목록(변화 없음) |
+
+따라서 #3301이 들어간 릴리스부터는 인자 단위 통제를 guardrail 서버(결과 7)
+말고 라우트 정책으로도 걸 수 있고 거부 형태는 다르다. 라우트 정책은 JSON-RPC
+오류가 아니라 HTTP 403 본문으로 답한다. #3092로 보고한 공백은 그대로다.
+`mcpAuthorization` 컨텍스트는 설계상 신원 정보만 담고(main의
+`architecture/cel.md`도 RBAC 평가 시점에는 페이로드 필드가 없다고 적고 있다)
+인자 조건 규칙은 여전히 수용되며 admission 경고 PR #3127은 아직 열려 있다.
+v1.5.0에서 라우트 형태가 수용되고 아무 효과가 없는 것도 같은 종류의 조용한
+무효다. 스크립트 `harness/rv_3301.sh`, 기록 `runs/pr3301-0907/`.
+
 ## 무엇을 측정했나
 
 ![측정 구조: 무엇을 어디에 두고 쟀는가](figures/setup-ko.svg)
@@ -490,3 +514,5 @@ v1.37.0, VirtualBox)와 `harness/deploy_backends.sh`의 신 스펙 서버
 - 업스트림 이슈: #758(거절 형태 논의), #2713(인가 컨텍스트의 이름 불일치),
   #2904(트레이싱 활성 조건의 스팬 부모 결함, 수정 병합됨). 결과 2는 이 연구가
   [#3092](https://github.com/agentgateway/agentgateway/issues/3092)로 제보했다.
+  PR #3301(2026-09-03 병합, 미릴리스)은 `mcp.*`를 라우트 정책에서 쓸 수 있게
+  한다. 위 "v1.5.0 이후" 참조.
