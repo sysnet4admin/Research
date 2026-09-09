@@ -1,0 +1,41 @@
+# ext_auth(HTTP 모드) 서버. 코드는 ConfigMap(extauth-code)으로 마운트하고
+# python:3.12-slim을 그대로 쓴다(표준 라이브러리만 쓰므로 pip 설치가 없다).
+# ConfigMap은 러너가 --from-file로 만든다.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: extauth
+  namespace: mcp-pilot
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: extauth }
+  template:
+    metadata:
+      labels: { app: extauth }
+    spec:
+      containers:
+        - name: server
+          image: docker.io/library/python:3.12-slim
+          command: ["python", "/app/server.py"]
+          ports:
+            - containerPort: 8000
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits: { cpu: 500m, memory: 256Mi }
+          volumeMounts:
+            - { name: code, mountPath: /app }
+      volumes:
+        - name: code
+          configMap: { name: extauth-code }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: extauth
+  namespace: mcp-pilot
+spec:
+  selector: { app: extauth }
+  ports:
+    - port: 8000
+      targetPort: 8000

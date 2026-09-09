@@ -32,7 +32,7 @@ note() { echo "$*" >> "$OUT/FINDINGS.md"; }
 echo "# A/B 측정: 게이트웨이 유무 (자동 생성)" > "$OUT/FINDINGS.md"
 note ""
 note "실행 $(date '+%Y-%m-%d %H:%M'). arm-direct = mcp-b LB 직접, arm-gw = agentgateway 경유."
-note "자원 통제: **게이트웨이(컨트롤 플레인 + 프록시)를 설치한 채로 두 arm을 모두 쟀다.**"
+note "자원 통제: **게이트웨이(컨트롤 플레인 + 프록시)를 설치한 채로 두 arm을 모두 측정했다.**"
 note "arm 간 차이는 부하 생성기의 대상 주소뿐이다. 부하는 100/200rps x 5회 x 30초"
 note "close 모드, 셀 간 쿨다운 ${COOLDOWN}초, 회차 안에서 direct -> gw 교대 실행."
 note ""

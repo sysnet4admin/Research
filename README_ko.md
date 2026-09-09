@@ -60,7 +60,7 @@ MCP 2026-07-28 스테이트리스 개정이 쿠버네티스 위의 서버에 무
 
 ### [agentgateway-study](./agentgateway-study)
 
-agentgateway v1.4.1이 MCP 앞단에서 문서에 적힌 대로 강제하고 관측하는지를 실측합니다. 도구 인자 조건을 쓴 인가 정책이 검증을 통과한 채 백엔드 전체를 잠근다는 것(업스트림 #3092로 제보), 정책은 재작명 이전의 원래 이름을 평가한다는 것, traceparent가 헤더와 `_meta` 양쪽으로 전파된다는 것, 게이트웨이 비용이 p50 약 1ms이고 꼬리 지연은 오히려 낮아진다는 것이 대표 결과입니다.
+agentgateway(v1.5.0, Kubernetes 1.37. 첫 회차는 v1.4.1)가 MCP 앞단에서 문서에 적힌 대로 강제하고 관측하는지를 실측합니다. 도구 인자 조건을 쓴 인가 정책이 검증을 통과한 채 모든 호출을 막는다는 것(업스트림 #3092로 제보), 정책은 접두사가 붙기 전의 원래 이름을 평가한다는 것, traceparent가 헤더와 `_meta` 양쪽으로 전파된다는 것, 게이트웨이 비용이 도구 호출당 p50 1ms 아래이고 어떤 백엔드 처리 시간에서도 꼬리 지연을 낮추지는 않는다는 것, 화이트리스트로 `tools/list`를 거르는 비용은 게이트웨이에서 0이지만 지연을 줄여 주지도 않는다는 것이 대표 결과입니다. A2A 표면(카드 주소 변경, A2A 인가 없음)은 같은 연구의 한 절입니다.
 
 → [README (EN)](./agentgateway-study/README.md) | [README (KO)](./agentgateway-study/README_ko.md)
 
@@ -68,7 +68,7 @@ agentgateway v1.4.1이 MCP 앞단에서 문서에 적힌 대로 강제하고 관
 
 ### [agentgateway-study/a2a](./agentgateway-study/a2a)
 
-agentgateway v1.4.1이 A2A 에이전트 앞단에서 실제로 강제하고 관측하는 것을 실측합니다. 에이전트 카드 재작성이 옵트인이고 병기 형식 카드(v0.3 `url` + v1.0 `supportedInterfaces`)는 스위치를 켜도 직접 주소를 광고해 디스커버리가 게이트웨이를 우회할 수 있다는 것, A2A 표면에는 요청 인가 정책이 없다는 것(강제 없는 관측), JSON-RPC 오류가 HTTP 200에 실리지만 액세스 로그에는 남는다는 것, 게이트웨이 홉 비용이 연결 방식에 따라 p50 +0.5~2.5ms이고 A2A 프로토콜 처리 자체는 +0.6~0.8ms라는 것이 대표 결과입니다.
+agentgateway(v1.5.0)가 A2A 에이전트 앞단에서 실제로 강제하고 관측하는 것을 실측합니다. 에이전트 카드의 주소 변경이 옵트인이고 병기 형식 카드(v0.3 `url` + v1.0 `supportedInterfaces`, 공식 파이썬 SDK의 기본)는 스위치를 켜도 직접 주소를 내보내 v0.3 클라이언트가 게이트웨이를 우회한다는 것, A2A 표면에는 요청 인가 정책이 없다는 것(강제 없는 관측), JSON-RPC 오류가 HTTP 200에 실리지만 액세스 로그에는 남는다는 것, 게이트웨이 홉 비용이 연결 방식에 따라 p50 +0.8~3.0ms이고 A2A 프로토콜 처리 자체는 +0.0~0.2ms라는 것이 대표 결과입니다.
 
 → [README (EN)](./agentgateway-study/a2a/README.md) | [README (KO)](./agentgateway-study/a2a/README_ko.md)
 

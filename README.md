@@ -60,7 +60,7 @@ Measures what the MCP 2026-07-28 stateless revision changes for a server running
 
 ### [agentgateway-study](./agentgateway-study)
 
-Measures whether agentgateway v1.4.1 actually enforces and observes what its docs say when fronting MCP servers. Key findings: an authorization rule conditioned on tool arguments passes validation yet locks the whole backend (reported upstream as #3092), policies evaluate the original tool name rather than the renamed one, traceparent propagates in both the header and `_meta`, and the gateway costs about 1 ms at p50 while tail latency actually improves.
+Measures whether agentgateway (v1.5.0 on Kubernetes 1.37; first round on v1.4.1) actually enforces and observes what its docs say when fronting MCP servers. Key findings: an authorization rule conditioned on tool arguments passes validation yet locks the whole backend (reported upstream as #3092), policies evaluate the original tool name rather than the renamed one, traceparent propagates in both the header and `_meta`, the gateway costs under 1 ms at p50 per tool call and does not lower the tail at any backend processing time, and allowlist filtering of `tools/list` is free at the gateway but saves no latency. The A2A surface (card rewriting, no A2A authorization) is a section of the same study.
 
 → [README (EN)](./agentgateway-study/README.md) | [README (KO)](./agentgateway-study/README_ko.md)
 
@@ -68,7 +68,7 @@ Measures whether agentgateway v1.4.1 actually enforces and observes what its doc
 
 ### [agentgateway-study/a2a](./agentgateway-study/a2a)
 
-Measures what agentgateway v1.4.1 actually enforces and observes when fronting an A2A agent. Key findings: agent card rewriting is opt-in and a mixed-format card (v0.3 `url` plus v1.0 `supportedInterfaces`) keeps advertising the direct backend address even with the switch on, so discovery can bypass the gateway; the A2A surface has no request-authorization policy (observation without enforcement); JSON-RPC errors ride HTTP 200 but land in the access log; the gateway hop costs +0.5 to 2.5 ms p50 depending on connection mode, with A2A protocol processing itself at +0.6 to 0.8 ms.
+Measures what agentgateway (v1.5.0) actually enforces and observes when fronting an A2A agent. Key findings: agent card rewriting is opt-in and a mixed-format card (v0.3 `url` plus v1.0 `supportedInterfaces`, the official Python SDK's default) keeps advertising the direct backend address even with the switch on, so a v0.3 client bypasses the gateway; the A2A surface has no request-authorization policy (observation without enforcement); JSON-RPC errors ride HTTP 200 but land in the access log; the gateway hop costs +0.8 to 3.0 ms p50 depending on connection mode, with A2A protocol processing itself at +0.0 to 0.2 ms.
 
 → [README (EN)](./agentgateway-study/a2a/README.md) | [README (KO)](./agentgateway-study/a2a/README_ko.md)
 

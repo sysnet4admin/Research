@@ -202,6 +202,12 @@ retry. A guardrail's denial reason therefore works as input the LLM reads,
 in effect a prompt. Agent behavior itself was not measured in this study;
 this paragraph is the interpretation I act on.
 
+- The v1.5.0 release note's "guardrails for tool calls" is the LLM prompt
+  guard (`spec.backend.ai.promptGuard` with `scope: [ToolInput, ToolOutput]`),
+  which inspects tool_calls inside LLM traffic. It is not a rename of
+  `mcpGuardrails`. Attached to an MCP backend it is accepted and has no
+  effect on tools/call (a=2 still passes, checked 2026-09-09).
+
 ## Numbers
 
 Environment: 3-node VirtualBox Kubernetes v1.37.0 (MacBook Pro M4 Pro),
@@ -586,5 +592,5 @@ scripts under `studies/stateless-scaleout/k8s/agentgateway/`.
   the authorization context), #2904 (span-parenting defect in the
   tracing-enabled path, fix merged). Finding 2 was reported by this study as
   [#3092](https://github.com/agentgateway/agentgateway/issues/3092).
-  PR #3301 (merged 2026-09-03, unreleased) makes `mcp.*` available to
-  route-level policies; see "After v1.5.0" above.
+  PR #3301 (merged 2026-09-03, unreleased as of 2026-09-09) makes `mcp.*`
+  available to route-level policies; see "After v1.5.0" above.

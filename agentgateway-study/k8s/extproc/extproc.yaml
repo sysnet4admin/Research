@@ -1,0 +1,44 @@
+# ext_proc 서버. 이미지 빌드 없이 재현하려고 emptyDir에 바이너리를 넣고 기다렸다
+# 실행한다. 러너가 `kubectl cp`로 extproc-linux-arm64를 /work에 넣는다.
+# 파드가 다시 만들어지면 바이너리가 사라지므로 러너가 매번 넣는다.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: extproc
+  namespace: mcp-pilot
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: extproc }
+  template:
+    metadata:
+      labels: { app: extproc }
+    spec:
+      containers:
+        - name: server
+          image: docker.io/library/debian:12-slim
+          command: ["sh", "-c"]
+          args:
+            - 'while [ ! -x /work/extproc ]; do sleep 2; done; exec /work/extproc'
+          ports:
+            - containerPort: 18080
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits: { cpu: 500m, memory: 256Mi }
+          volumeMounts:
+            - { name: work, mountPath: /work }
+      volumes:
+        - name: work
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: extproc
+  namespace: mcp-pilot
+spec:
+  selector: { app: extproc }
+  ports:
+    - port: 18080
+      targetPort: 18080
+      appProtocol: kubernetes.io/h2c

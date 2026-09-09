@@ -129,7 +129,7 @@ kubectl --context $CTX -n $NS scale deploy/mcp-b --replicas=1 >/dev/null 2>&1
 guardrail_deploy
 note "## 1부. guardrail 오버헤드 (echo, close 모드, 쿨다운 ${COOLDOWN}초)"
 note ""
-note "자원 통제: guardrail 파드와 게이트웨이를 설치한 채로 두 조건을 모두 쟀다."
+note "자원 통제: guardrail 파드와 게이트웨이를 설치한 채로 두 조건을 모두 측정했다."
 note "차이는 guardrail 정책(tools/call: Request, FailClosed)의 유무뿐이다."
 note ""
 for arm in off on; do
