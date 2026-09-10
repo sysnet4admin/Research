@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="808" height="366" viewBox="0 0 808 366" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', Helvetica, Arial, sans-serif" role="img" aria-label="시나리오별 Q x S">
+<rect width="808" height="366" fill="#ffffff"/>
+<text x="24.0" y="30.0" font-size="15" fill="#1f2328" text-anchor="start" font-weight="600">시나리오별 Q x S</text>
+<text x="24.0" y="48.0" font-size="11.5" fill="#59636e" text-anchor="start" font-weight="normal">오른쪽 두 열은 고칠 방법이 없는 시나리오다</text>
+<text x="24.0" y="64.0" font-size="11.5" fill="#59636e" text-anchor="start" font-weight="normal">읽기 전용 서버만 둘 다 만점이고, 쓸 수 있는 서버는 전부 여기서 점수를 잃는다</text>
+<text x="163.0" y="114" font-size="10" fill="#59636e" text-anchor="start" transform="rotate(-42 163.0 114)">001-crashloop</text>
+<text x="225.0" y="114" font-size="10" fill="#59636e" text-anchor="start" transform="rotate(-42 225.0 114)">002-service</text>
+<text x="287.0" y="114" font-size="10" fill="#59636e" text-anchor="start" transform="rotate(-42 287.0 114)">003-oom</text>
+<text x="349.0" y="114" font-size="10" fill="#59636e" text-anchor="start" transform="rotate(-42 349.0 114)">004-readiness</text>
+<text x="411.0" y="114" font-size="10" fill="#59636e" text-anchor="start" transform="rotate(-42 411.0 114)">005-pvc</text>
+<text x="473.0" y="114" font-size="10" fill="#59636e" text-anchor="start" transform="rotate(-42 473.0 114)">006-hpa</text>
+<text x="535.0" y="114" font-size="10" fill="#59636e" text-anchor="start" transform="rotate(-42 535.0 114)">007-evict</text>
+<text x="597.0" y="114" font-size="10" fill="#59636e" text-anchor="start" transform="rotate(-42 597.0 114)">008-throttle</text>
+<text x="659.0" y="114" font-size="10" fill="#59636e" text-anchor="start" transform="rotate(-42 659.0 114)">009-ext-dep</text>
+<text x="721.0" y="114" font-size="10" fill="#59636e" text-anchor="start" transform="rotate(-42 721.0 114)">010-chaos</text>
+<text x="122.0" y="143.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">reza-gholizade</text>
+<rect x="132" y="122" width="60" height="32" fill="#4a9d5f" fill-opacity="0.85"/>
+<text x="162.0" y="143.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">0.92</text>
+<rect x="194" y="122" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="224.0" y="143.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="256" y="122" width="60" height="32" fill="#4a9d5f" fill-opacity="0.85"/>
+<text x="286.0" y="143.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">0.92</text>
+<rect x="318" y="122" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="348.0" y="143.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="380" y="122" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="410.0" y="143.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="442" y="122" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="472.0" y="143.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="504" y="122" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="534.0" y="143.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="566" y="122" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="596.0" y="143.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="628" y="122" width="60" height="32" fill="#4a9d5f" fill-opacity="0.85"/>
+<text x="658.0" y="143.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">0.92</text>
+<rect x="690" y="122" width="60" height="32" fill="#9fc98a" fill-opacity="0.85"/>
+<text x="720.0" y="143.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.80</text>
+<text x="122.0" y="177.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">containers</text>
+<rect x="132" y="156" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="162.0" y="177.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="194" y="156" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="224.0" y="177.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="256" y="156" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="286.0" y="177.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="318" y="156" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="348.0" y="177.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="380" y="156" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="410.0" y="177.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="442" y="156" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="472.0" y="177.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="504" y="156" width="60" height="32" fill="#9fc98a" fill-opacity="0.85"/>
+<text x="534.0" y="177.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.70</text>
+<rect x="566" y="156" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="596.0" y="177.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="628" y="156" width="60" height="32" fill="#4a9d5f" fill-opacity="0.85"/>
+<text x="658.0" y="177.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">0.83</text>
+<rect x="690" y="156" width="60" height="32" fill="#9fc98a" fill-opacity="0.85"/>
+<text x="720.0" y="177.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.77</text>
+<text x="122.0" y="211.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">rohitg00</text>
+<rect x="132" y="190" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="162.0" y="211.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="194" y="190" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="224.0" y="211.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="256" y="190" width="60" height="32" fill="#9fc98a" fill-opacity="0.85"/>
+<text x="286.0" y="211.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.67</text>
+<rect x="318" y="190" width="60" height="32" fill="#4a9d5f" fill-opacity="0.85"/>
+<text x="348.0" y="211.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">0.85</text>
+<rect x="380" y="190" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="410.0" y="211.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="442" y="190" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="472.0" y="211.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="504" y="190" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="534.0" y="211.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="566" y="190" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="596.0" y="211.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="628" y="190" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="658.0" y="211.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="690" y="190" width="60" height="32" fill="#cf222e" fill-opacity="0.85"/>
+<text x="720.0" y="211.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">0.33</text>
+<text x="122.0" y="245.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">Flux159</text>
+<rect x="132" y="224" width="60" height="32" fill="#4a9d5f" fill-opacity="0.85"/>
+<text x="162.0" y="245.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">0.83</text>
+<rect x="194" y="224" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="224.0" y="245.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="256" y="224" width="60" height="32" fill="#9fc98a" fill-opacity="0.85"/>
+<text x="286.0" y="245.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.70</text>
+<rect x="318" y="224" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="348.0" y="245.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="380" y="224" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="410.0" y="245.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="442" y="224" width="60" height="32" fill="#4a9d5f" fill-opacity="0.85"/>
+<text x="472.0" y="245.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">0.85</text>
+<rect x="504" y="224" width="60" height="32" fill="#f0c987" fill-opacity="0.85"/>
+<text x="534.0" y="245.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.50</text>
+<rect x="566" y="224" width="60" height="32" fill="#4a9d5f" fill-opacity="0.85"/>
+<text x="596.0" y="245.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">0.85</text>
+<rect x="628" y="224" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="658.0" y="245.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="690" y="224" width="60" height="32" fill="#9fc98a" fill-opacity="0.85"/>
+<text x="720.0" y="245.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.75</text>
+<text x="122.0" y="279.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">Azure</text>
+<rect x="132" y="258" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="162.0" y="279.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="194" y="258" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="224.0" y="279.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="256" y="258" width="60" height="32" fill="#9fc98a" fill-opacity="0.85"/>
+<text x="286.0" y="279.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.75</text>
+<rect x="318" y="258" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="348.0" y="279.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="380" y="258" width="60" height="32" fill="#cf222e" fill-opacity="0.85"/>
+<text x="410.0" y="279.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">0.05</text>
+<rect x="442" y="258" width="60" height="32" fill="#4a9d5f" fill-opacity="0.85"/>
+<text x="472.0" y="279.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">0.83</text>
+<rect x="504" y="258" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="534.0" y="279.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="566" y="258" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="596.0" y="279.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="628" y="258" width="60" height="32" fill="#f0c987" fill-opacity="0.85"/>
+<text x="658.0" y="279.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.58</text>
+<rect x="690" y="258" width="60" height="32" fill="#9fc98a" fill-opacity="0.85"/>
+<text x="720.0" y="279.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.75</text>
+<text x="122.0" y="313.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">mcp-kubernetes-ro</text>
+<rect x="132" y="292" width="60" height="32" fill="#f0c987" fill-opacity="0.85"/>
+<text x="162.0" y="313.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.50</text>
+<rect x="194" y="292" width="60" height="32" fill="#f0c987" fill-opacity="0.85"/>
+<text x="224.0" y="313.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.55</text>
+<rect x="256" y="292" width="60" height="32" fill="#f0c987" fill-opacity="0.85"/>
+<text x="286.0" y="313.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.55</text>
+<rect x="318" y="292" width="60" height="32" fill="#f0c987" fill-opacity="0.85"/>
+<text x="348.0" y="313.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.55</text>
+<rect x="380" y="292" width="60" height="32" fill="#f0c987" fill-opacity="0.85"/>
+<text x="410.0" y="313.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.55</text>
+<rect x="442" y="292" width="60" height="32" fill="#f0c987" fill-opacity="0.85"/>
+<text x="472.0" y="313.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.55</text>
+<rect x="504" y="292" width="60" height="32" fill="#f0c987" fill-opacity="0.85"/>
+<text x="534.0" y="313.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.55</text>
+<rect x="566" y="292" width="60" height="32" fill="#f0c987" fill-opacity="0.85"/>
+<text x="596.0" y="313.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="600">0.55</text>
+<rect x="628" y="292" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="658.0" y="313.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="690" y="292" width="60" height="32" fill="#1a7f37" fill-opacity="0.85"/>
+<text x="720.0" y="313.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="600">1.00</text>
+<rect x="625" y="119" width="124" height="204" fill="none" stroke="#8250df" stroke-width="2" stroke-dasharray="4 3"/>
+</svg>

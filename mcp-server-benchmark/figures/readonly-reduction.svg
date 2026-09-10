@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="330" viewBox="0 0 880 330" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', Helvetica, Arial, sans-serif" role="img" aria-label="Does read-only shrink the tool list?">
+<rect width="880" height="330" fill="#ffffff"/>
+<text x="24.0" y="30.0" font-size="15" fill="#1f2328" text-anchor="start" font-weight="600">Does read-only shrink the tool list?</text>
+<text x="24.0" y="48.0" font-size="11.5" fill="#59636e" text-anchor="start" font-weight="normal">if the list does not shrink, every tool definition still costs input tokens</text>
+<text x="150.0" y="70.0" font-size="11" fill="#59636e" text-anchor="start" font-weight="normal">default</text>
+<text x="300.0" y="70.0" font-size="11" fill="#1a7f37" text-anchor="start" font-weight="normal">read-only</text>
+<text x="140.0" y="99.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">rohitg00</text>
+<rect x="150" y="87" width="400.0" height="9" fill="#8c959f" fill-opacity="0.55"/>
+<rect x="150" y="98" width="400.0" height="9" fill="#cf222e" fill-opacity="0.8"/>
+<text x="560.0" y="100.0" font-size="11" fill="#cf222e" text-anchor="start" font-weight="normal">275 to 275   no reduction</text>
+<text x="140.0" y="129.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">Flux159</text>
+<rect x="150" y="117" width="33.5" height="9" fill="#8c959f" fill-opacity="0.55"/>
+<rect x="150" y="128" width="11.6" height="9" fill="#1a7f37" fill-opacity="0.8"/>
+<text x="193.5" y="130.0" font-size="11" fill="#59636e" text-anchor="start" font-weight="normal">23 to 8   -65%</text>
+<text x="140.0" y="159.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">reza-gholizade</text>
+<rect x="150" y="147" width="32.0" height="9" fill="#8c959f" fill-opacity="0.55"/>
+<rect x="150" y="158" width="18.9" height="9" fill="#1a7f37" fill-opacity="0.8"/>
+<text x="192.0" y="160.0" font-size="11" fill="#59636e" text-anchor="start" font-weight="normal">22 to 13   -41%</text>
+<text x="140.0" y="189.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">containers</text>
+<rect x="150" y="177" width="29.1" height="9" fill="#8c959f" fill-opacity="0.55"/>
+<rect x="150" y="188" width="20.4" height="9" fill="#1a7f37" fill-opacity="0.8"/>
+<text x="189.1" y="190.0" font-size="11" fill="#59636e" text-anchor="start" font-weight="normal">20 to 14   -30%</text>
+<text x="140.0" y="219.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">mcp-kubernetes-ro</text>
+<rect x="150" y="207" width="14.5" height="9" fill="#8c959f" fill-opacity="0.55"/>
+<rect x="150" y="218" width="14.5" height="9" fill="#cf222e" fill-opacity="0.8"/>
+<text x="174.5" y="220.0" font-size="11" fill="#cf222e" text-anchor="start" font-weight="normal">10 to 10   no reduction</text>
+<text x="140.0" y="249.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">Azure</text>
+<rect x="150" y="237" width="2.0" height="9" fill="#8c959f" fill-opacity="0.55"/>
+<rect x="150" y="248" width="2.0" height="9" fill="#cf222e" fill-opacity="0.8"/>
+<text x="162.0" y="250.0" font-size="11" fill="#cf222e" text-anchor="start" font-weight="normal">1 to 1   no reduction</text>
+<text x="24.0" y="312.0" font-size="11.5" fill="#cf222e" text-anchor="start" font-weight="normal">rohitg00 keeps all 275 definitions in read-only: safe, but the token bill is unchanged</text>
+</svg>

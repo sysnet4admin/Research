@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="430" viewBox="0 0 760 430" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', Helvetica, Arial, sans-serif" role="img" aria-label="Quality x Safety against input token cost">
+<rect width="760" height="430" fill="#ffffff"/>
+<rect x="78" y="56" width="652" height="312" fill="#fafbfc" stroke="#d8dee4"/>
+<line x1="78" y1="333.3" x2="730" y2="333.3" stroke="#d8dee4"/>
+<text x="68.0" y="337.3" font-size="11" fill="#59636e" text-anchor="end" font-weight="normal">0.6</text>
+<line x1="78" y1="264.0" x2="730" y2="264.0" stroke="#d8dee4"/>
+<text x="68.0" y="268.0" font-size="11" fill="#59636e" text-anchor="end" font-weight="normal">0.7</text>
+<line x1="78" y1="194.7" x2="730" y2="194.7" stroke="#d8dee4"/>
+<text x="68.0" y="198.7" font-size="11" fill="#59636e" text-anchor="end" font-weight="normal">0.8</text>
+<line x1="78" y1="125.3" x2="730" y2="125.3" stroke="#d8dee4"/>
+<text x="68.0" y="129.3" font-size="11" fill="#59636e" text-anchor="end" font-weight="normal">0.9</text>
+<line x1="78" y1="56.0" x2="730" y2="56.0" stroke="#d8dee4"/>
+<text x="68.0" y="60.0" font-size="11" fill="#59636e" text-anchor="end" font-weight="normal">1.0</text>
+<line x1="78.0" y1="56" x2="78.0" y2="368" stroke="#d8dee4"/>
+<text x="78.0" y="386.0" font-size="11" fill="#59636e" text-anchor="middle" font-weight="normal">0K</text>
+<line x1="183.2" y1="56" x2="183.2" y2="368" stroke="#d8dee4"/>
+<text x="183.2" y="386.0" font-size="11" fill="#59636e" text-anchor="middle" font-weight="normal">50K</text>
+<line x1="288.3" y1="56" x2="288.3" y2="368" stroke="#d8dee4"/>
+<text x="288.3" y="386.0" font-size="11" fill="#59636e" text-anchor="middle" font-weight="normal">100K</text>
+<line x1="393.5" y1="56" x2="393.5" y2="368" stroke="#d8dee4"/>
+<text x="393.5" y="386.0" font-size="11" fill="#59636e" text-anchor="middle" font-weight="normal">150K</text>
+<line x1="498.6" y1="56" x2="498.6" y2="368" stroke="#d8dee4"/>
+<text x="498.6" y="386.0" font-size="11" fill="#59636e" text-anchor="middle" font-weight="normal">200K</text>
+<line x1="603.8" y1="56" x2="603.8" y2="368" stroke="#d8dee4"/>
+<text x="603.8" y="386.0" font-size="11" fill="#59636e" text-anchor="middle" font-weight="normal">250K</text>
+<line x1="709.0" y1="56" x2="709.0" y2="368" stroke="#d8dee4"/>
+<text x="709.0" y="386.0" font-size="11" fill="#59636e" text-anchor="middle" font-weight="normal">300K</text>
+<text x="86.0" y="74.0" font-size="11" fill="#8250df" text-anchor="start" font-weight="normal">cheaper and better</text>
+<path d="M 228 70 L 196 70 M 202 65 L 196 70 L 202 75" stroke="#8250df" fill="none" stroke-width="1.4"/>
+<rect x="78" y="113.8" width="652" height="254.2" fill="#cf222e" fill-opacity="0.05"/>
+<text x="720" y="354" font-size="10.5" fill="#cf222e" text-anchor="end">below the baseline: more tokens than shell, less quality</text>
+<line x1="78" y1="113.8" x2="730" y2="113.8" stroke="#9a6700" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="86.0" y="128.8" font-size="10.5" fill="#9a6700" text-anchor="start" font-weight="normal">plain shell quality baseline: 0.9167 (v16, same runtime)</text>
+<line x1="158.4" y1="56" x2="158.4" y2="368" stroke="#9a6700" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="164.4" y="358" font-size="10.5" fill="#9a6700" text-anchor="start">shell reference: 38K (only ro-only comes in under it)</text>
+<circle cx="317.7" cy="87.2" r="7.7" fill="#0969da" fill-opacity="0.18" stroke="#0969da" stroke-width="1.6"/>
+<text x="334.4" y="81.2" font-size="12" fill="#1f2328" text-anchor="start" font-weight="600">reza-gholizade</text>
+<text x="334.4" y="96.2" font-size="10.5" fill="#59636e" text-anchor="start" font-weight="normal">0.955 / 3 unsafe</text>
+<circle cx="228.6" cy="104.5" r="11.5" fill="#cf222e" fill-opacity="0.18" stroke="#cf222e" stroke-width="1.6"/>
+<text x="249.1" y="132.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="600">containers</text>
+<text x="249.1" y="147.0" font-size="10.5" fill="#59636e" text-anchor="start" font-weight="normal">0.930 / 10 unsafe</text>
+<circle cx="705.0" cy="135.7" r="13.2" fill="#cf222e" fill-opacity="0.18" stroke="#cf222e" stroke-width="1.6"/>
+<text x="682.9" y="90.6" font-size="12" fill="#1f2328" text-anchor="end" font-weight="600">rohitg00</text>
+<text x="682.9" y="105.6" font-size="10.5" fill="#59636e" text-anchor="end" font-weight="normal">0.885 / 13 unsafe</text>
+<circle cx="244.9" cy="161.2" r="7.7" fill="#0969da" fill-opacity="0.18" stroke="#0969da" stroke-width="1.6"/>
+<text x="261.6" y="155.2" font-size="12" fill="#1f2328" text-anchor="start" font-weight="600">Flux159</text>
+<text x="261.6" y="170.2" font-size="10.5" fill="#59636e" text-anchor="start" font-weight="normal">0.848 / 3 unsafe</text>
+<circle cx="164.6" cy="197.0" r="7.7" fill="#0969da" fill-opacity="0.18" stroke="#0969da" stroke-width="1.6"/>
+<text x="181.3" y="191.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="600">Azure</text>
+<text x="181.3" y="206.0" font-size="10.5" fill="#59636e" text-anchor="start" font-weight="normal">0.797 / 3 unsafe</text>
+<circle cx="155.9" cy="309.1" r="6.0" fill="#1a7f37" fill-opacity="0.18" stroke="#1a7f37" stroke-width="1.6"/>
+<text x="170.9" y="303.1" font-size="12" fill="#1f2328" text-anchor="start" font-weight="600">mcp-kubernetes-ro</text>
+<text x="170.9" y="318.1" font-size="10.5" fill="#59636e" text-anchor="start" font-weight="normal">0.635 / 0 unsafe</text>
+<text x="78.0" y="24.0" font-size="15" fill="#1f2328" text-anchor="start" font-weight="600">Quality x Safety against input token cost</text>
+<text x="78.0" y="41.0" font-size="11.5" fill="#59636e" text-anchor="start" font-weight="normal">circle size = unsafe actions; green 0, red 10+</text>
+<text x="404.0" y="414.0" font-size="12" fill="#59636e" text-anchor="middle" font-weight="normal">input tokens per run (median)</text>
+<text x="20" y="212" font-size="12" fill="#59636e" text-anchor="middle" transform="rotate(-90 20 212)">Q x S</text>
+</svg>

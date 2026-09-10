@@ -135,10 +135,14 @@ call has confirmed it.
    downstream server receives a traceparent header with the client's trace-id
    preserved and the gateway's own span-id, and the same value injected into
    `params._meta.traceparent`, the spot the MCP spec reserves (5 out of 5
-   probes). I did not find this behavior in the documentation. I measured
-   with gateway tracing not configured; the span-parenting issue in the
-   tracing-enabled path was reported upstream as #2904 and fixed after
-   v1.4.1, and that path was not measured here.
+   probes). I did not find this behavior in the documentation. The
+   tracing-enabled path was measured on v1.5.0 as well: with an OTel
+   collector receiving 100% of spans, three traces through the MCP route and
+   three through a plain HTTP route all showed the gateway's outgoing span
+   nested under the incoming one. The span-parenting issue reported upstream
+   as #2904 does not reproduce on either route, which matches the fix in
+   #3059. Exporting spans cost under 0.2 ms at p50 at 100 rps, within
+   measurement noise.
 6. **The gateway costs 0.2 to 0.8 ms at p50 depending on how clients
    connect, and it does not lower the tail.** With a new connection per
    call, p50 rose by 0.2 to 0.3 ms and median p99 was equal (200 rps) or
@@ -167,7 +171,18 @@ call has confirmed it.
    modes (zero gateway errors in every cell; table below), and the `Full`
    phase setting routes both the request and the response body
    through the gRPC server.
-8. **On the A2A surface the gateway rewrites, observes and costs a hop, but
+8. **Argument-level control also works through extAuth and extProc.** The
+   same rule ("get-sum only when a == 1") was enforced by an external
+   authorization server (extAuth in HTTP mode) and by an Envoy ext_proc gRPC
+   server. Both denied a=2 with 403 and passed a=1, unrelated tools and
+   `tools/list`. The denial shape differs: extAuth returns the check
+   server's own body verbatim, extProc prefixes `denied by ext_proc:`. So
+   does the failure mode: with the check server down, extAuth returns 403
+   under FailClosed and passes under FailOpen, while extProc returns 500
+   under FailClosed. The hop costs +0.4 to 0.5 ms at p50, the same order as
+   mcpGuardrails (table below). Three argument-control paths work; only the
+   authorization policy path does not.
+9. **On the A2A surface the gateway rewrites, observes and costs a hop, but
    enforces nothing.** Card rewriting is opt-in per Service; a card that
    carries both v0.3 and v1.0 endpoint fields (the official Python SDK's
    default) gets only the v1.0 field rewritten, so a v0.3 client is handed
@@ -180,11 +195,11 @@ call has confirmed it.
 | Intent | Works? | Caveat |
 |---|---|---|
 | Tool-name allowlist | Yes | List filtering comes with it. Rejection is 400 + "Unknown tool" (-32602), not an authorization error |
-| Argument-based control ("block delete, but only for prod") | Not via policy; yes via guardrail | The policy is accepted while the backend locks up, and a `has(...)` guard drops the condition. mcpGuardrails works but means building a gRPC server yourself, adds under 1 ms at p50 per call, and its denial surfaces as 200 + a JSON-RPC error |
+| Argument-based control ("block delete, but only for prod") | Not via authorization policy; yes via three check-server paths | The policy is accepted while the backend locks up, and a `has(...)` guard drops the condition. mcpGuardrails, extAuth and extProc all work but mean building the server yourself and add under 1 ms at p50 per call. Their denial shapes and their behavior when the check server is down all differ (table below) |
 | Policies under renaming (prefixMode) | Yes | Always write the original name. Using the prefixed name clients see locks everything out |
 | Adding rules and worrying about latency | No need | No difference up to 21 rules |
 | Hiding a large tool set behind an allowlist | Yes | The client gets a short list, but `tools/list` still costs what the server's full list costs; the gateway filters after fetching all of it |
-| Distributed tracing | Yes | Propagated in both the header and `_meta` (verified with tracing not configured) |
+| Distributed tracing | Yes | Propagated in both the header and `_meta`. With gateway tracing enabled, span parenting is correct as well, and exporting 100% of spans costs within noise |
 
 ![Three rejection shapes](figures/rejection-shapes-en.svg)
 
@@ -428,6 +443,40 @@ fast arm differed by +0.7 ms at p50, the usual hop. So within this load
 range the gateway did not give out under sustained mixed load; the lab
 did first.
 
+### The tracing-enabled path (2026-09-09)
+
+An OTel Collector (0.160.0) in the same cluster received spans over OTLP gRPC
+4317 at 100% sampling, configured through the `tracing` field of an
+`AgentgatewayPolicy`. 100 rps, 30-second cells, tracing on and off alternating
+five times, zero errors.
+
+| Mode | Off p50 | On p50 | On - off | Off p99 | On p99 |
+|---|---|---|---|---|---|
+| New connection per call | 7.5 | 7.5 | +0.0 | 14.2 | 14.2 |
+| Connection reuse | 4.7 | 4.5 | -0.2 | 13.0 | 12.5 |
+
+Values are medians of five cells in ms; per-round differences range from
+-0.4 to +0.1 ms and change sign. A remote collector may behave differently.
+
+Span parenting was checked separately with three traces through the MCP route
+and three through a plain HTTP route. In all six the outgoing span was nested
+under the incoming one.
+
+### The three argument-control paths (2026-09-09)
+
+The same rule ("get-sum only when a == 1") enforced three ways. Cost is 100 rps,
+30-second cells, policy on and off alternating five times per path, zero errors.
+
+| Path | Denial shape | Check server down | New connection | Reuse |
+|---|---|---|---|---|
+| mcpGuardrails | 200 + JSON-RPC error with reason | FailClosed blocks all calls | +0.1 to 0.7 | +0.1 to 0.7 |
+| extAuth (HTTP) | 403 + check server's body verbatim | 403 under FailClosed, passes under FailOpen | +0.5 | +0.4 |
+| extProc (gRPC) | 403 + `denied by ext_proc:` | 500 under FailClosed | +0.4 | +0.5 |
+
+Units are ms, as the difference in median p50 between cells with the policy on
+and off. Because extAuth returns the check server's body to the client, keep
+internal details out of the reason string.
+
 ## v1.4.1 round versus v1.5.0 round
 
 The study was first measured on agentgateway v1.4.1 (Kubernetes v1.36.2,
@@ -532,6 +581,12 @@ no-op. Script `harness/rv_3301.sh`, record `runs/pr3301-0907/`.
   guardrail on and off (4 cells), and a two-cell control repeat of the
   30-minute close mix on the direct path and through the gateway
   (2026-09-05).
+- **The tracing-enabled path (2026-09-09)**: span parenting checked on two
+  routes (six traces) with an in-cluster OTel collector at 100% sampling, then
+  cost measured with tracing on and off alternating five times (20 cells).
+- **extAuth and extProc (2026-09-09)**: the same argument rule enforced by two
+  check servers I wrote, recording the denial shape and the behavior with the
+  check server down, then cost measured on and off alternating (40 cells).
 - Two integrity notes from the v1.4.1 round. A mid-run process kill during the rule-count cells
   was resumed for the remaining 6 cells with the gateway and policy
   configuration kept identical. And the first verdict on trace propagation
@@ -551,11 +606,14 @@ no-op. Script `harness/rv_3301.sh`, record `runs/pr3301-0907/`.
   measurement, at 20 rps only (the 500-tool list saturates this cluster's
   server, which runs with a 0.5 CPU limit, and the load generator at
   100 rps).
-- Among the alternative paths to argument-level control, mcpGuardrails was
-  verified (finding 7); extAuthz and extProc were not.
+- All three argument-control paths (mcpGuardrails, extAuth, extProc) were
+  measured with minimal check servers I wrote. A real policy engine would
+  cost differently.
 - Within the MCP surface, authentication (MCP Auth) is also out of scope.
 - Absolute latency numbers are VirtualBox values.
-- The tracing-enabled path (span export) was not measured.
+- Tracing was measured with the collector in the same cluster and 100%
+  sampling only. A remote collector, lower sampling rates and higher loads
+  were not tested.
 - Backends of mixed speed were measured at one load (100 rps each). The
   30-minute close-mode mixed window shed requests on both arms on both
   paths, so it measures the lab's sustained connection-setup limit (about
