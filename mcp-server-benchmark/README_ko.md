@@ -391,7 +391,11 @@ mcp-kubernetes-ro)은 전부 `mark3labs/mcp-go` v1.0.0-beta.1 아래 버전인�
   환경변수에서 이 값을 뺀다.
 - **stdin 수명.** 이 서버들은 stdin이 닫히는 즉시 종료하므로
   `subprocess.run(input=...)`으로는 응답을 못 받는다. 파이프를 열어 두거나 파일에서
-  리다이렉트해야 한다.
+  리다이렉트해야 한다. 프로브는 `Popen`으로 파이프를 열어 둔 채 응답을 읽는다.
+- **rohitg00의 의존성 고정 (2026-09-09 확인).** 지금 그대로 설치하면 uvx가 `mcp`
+  2.x를 끌어오는데 이 패키지는 v1 API(`mcp.server.fastmcp`)를 써서 기동에 실패한다.
+  `uvx --from kubectl-mcp-server --with 'mcp<2' kubectl-mcp-serve serve --transport stdio`로
+  고정해야 측정 당시와 같은 구성이 뜬다.
 
 </details>
 
@@ -407,7 +411,7 @@ mcp-server-benchmark/
     FINDINGS.md            측정 정본
     MCP_SCORES_FINAL.json  정본 점수. 240런 전부의 런별 레코드 포함
     MCP_SCORES.md / .json  2026-08-20 시점의 중간 집계 (ro-only 행은 서버 미기동 상태의 무효값)
-    SAFETY_PROBE.md/.json  도구 목록 계수와, 4종에 대해서는 사라진 도구 이름
+    SAFETY_PROBE.md/.json  도구 목록 계수와 사라진 도구 이름 (6종 전부)
     PROGRESS.md            측정 로그, 2026-08-10 ~ 08-20 (재측정 로그는 비공개)
 ```
 

@@ -10,8 +10,9 @@ Benchmarks and proof-of-concept studies on Kubernetes, Cloud Native, and AI, the
 
 **[KubernetesLab](https://kuberneteslab.dev/en/)** is a research, consulting, and education platform focused on Kubernetes, Cloud Native, and AI. Each project in this repository is a hands-on study published as a blog post on the site. The research covers three areas:
 
-- **AI / AIOps**: benchmarking AI coding agents on real Kubernetes operations and incident-response tasks
-- **Kubernetes**: Gateway API implementations, cluster optimization, observability
+- **AI / AIOps**: benchmarking AI coding agents, open-weight models, and agent harnesses on real Kubernetes operations and incident-response tasks
+- **Agent protocols**: what MCP, A2A, and the gateways in front of them actually enforce, observe, and cost, measured rather than read off the spec
+- **Kubernetes**: Gateway API implementations, CNI standing cost, cluster optimization, observability
 - **FinOps**: cost reduction studies on EKS and AKS (49% and 48% savings)
 
 ---
@@ -58,6 +59,14 @@ Measures what the MCP 2026-07-28 stateless revision changes for a server running
 
 ---
 
+### [mcp-server-benchmark](./mcp-server-benchmark)
+
+Compares six Kubernetes MCP servers on one scale: the probe model, the ten incident scenarios, the harness, the cluster, and the scoring are held fixed and only the MCP server is swapped, over 240 runs. Key findings: plugging in an MCP server is not free quality, since four of the six score below the plain-shell baseline (0.9167), and every general-purpose server costs more tokens than shell because tool definitions ship into the context window. The top two are close enough that cost, not score, should decide.
+
+→ [README (EN)](./mcp-server-benchmark/README.md) | [README (KO)](./mcp-server-benchmark/README_ko.md)
+
+---
+
 ### [agentgateway-study](./agentgateway-study)
 
 Measures whether agentgateway (v1.5.0 on Kubernetes 1.37; first round on v1.4.1) actually enforces and observes what its docs say when fronting MCP servers. Key findings: an authorization rule conditioned on tool arguments passes validation yet locks the whole backend (reported upstream as #3092), policies evaluate the original tool name rather than the renamed one, traceparent propagates in both the header and `_meta`, the gateway costs under 1 ms at p50 per tool call and does not lower the tail at any backend processing time, and allowlist filtering of `tools/list` is free at the gateway but saves no latency. The A2A surface (card rewriting, no A2A authorization) is a section of the same study.
@@ -74,6 +83,14 @@ Measures what agentgateway (v1.5.0) actually enforces and observes when fronting
 
 ---
 
+### [a2a-study](./a2a-study)
+
+Asks when and how A2A is actually useful, rather than what the spec says. Stage 1 measures three things: what the spec declares against what the official SDK does by default, how A2A compares with MCP and with plain HTTP for the same handoff, and what the protocol itself costs. Stage 2 will cover interoperability across the two generations and passing through a gateway. This is a separate study from the A2A surface of agentgateway above, which measures what a gateway enforces; this one measures the protocol.
+
+→ [README (EN)](./a2a-study/README.md) | [README (KO)](./a2a-study/README_ko.md)
+
+---
+
 ## Author
 
-**Hoon Jo** / CNCF Ambassador / Kubestronaut / [@sysnet4admin](https://github.com/sysnet4admin) / [kuberneteslab.dev](https://kuberneteslab.dev/en/)
+**Hoon Jo** / CNCF Ambassador / AAIF Ambassador / Kubestronaut / [@sysnet4admin](https://github.com/sysnet4admin) / [kuberneteslab.dev](https://kuberneteslab.dev/en/)

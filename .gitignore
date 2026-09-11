@@ -28,3 +28,8 @@ AIOps-Agent-Benchmark/_INTERNAL_NOTES/oss-phase1/*.yaml
 
 # ext_proc 빌드 산출물(13MB)은 커밋하지 않는다
 agentgateway-study/k8s/extproc/extproc-linux-arm64
+
+# 캠페인 실행 중 표식 (중복 기동 차단용). 저장소에 남으면 안 된다.
+*.lock
+.campaign.lock
+.pilot*.lock

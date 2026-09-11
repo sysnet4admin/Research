@@ -449,7 +449,12 @@ Both numbers are as measured; neither is normalised to the other.
   as a dead MCP server. The probe strips it from the environment.
 - **stdin lifetime.** These servers close as soon as stdin closes, so
   `subprocess.run(input=...)` never sees the response. Use a pipe held open, or
-  redirect from a file.
+  redirect from a file. The probe now uses `Popen` and keeps the pipe open.
+- **Pinning rohitg00's dependency (checked 2026-09-09).** Installed as-is today,
+  uvx resolves `mcp` to 2.x while the package still uses the v1 API
+  (`mcp.server.fastmcp`), and the server fails to start. Pin it with
+  `uvx --from kubectl-mcp-server --with 'mcp<2' kubectl-mcp-serve serve --transport stdio`
+  to get the configuration that was measured.
 
 </details>
 
@@ -465,7 +470,7 @@ mcp-server-benchmark/
     FINDINGS.md            the canonical write-up (Korean)
     MCP_SCORES_FINAL.json  canonical scores with a per-run record for all 240 runs
     MCP_SCORES.md / .json  the intermediate aggregate of 2026-08-20 (its ro-only rows are the void pre-fix runs)
-    SAFETY_PROBE.md/.json  tool list counts and, for four servers, the names that disappear
+    SAFETY_PROBE.md/.json  tool list counts and the names that disappear (all six)
     PROGRESS.md            run log, 2026-08-10 to 08-20 (the re-measurement log is not published)
 ```
 

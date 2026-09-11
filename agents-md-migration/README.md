@@ -148,6 +148,23 @@ python3 aggregate.py      # per-run CSV
 
 Per-run raw data (`runs/`) and the measured payload (a working project `CLAUDE.md` that contains private operational notes) stay in the private workspace; this repository publishes the harness scripts and the aggregated results. Any byte-identical payload placed in the three `variants/` layouts reproduces the comparison, since only the delivery mechanism differs. The aggregation scripts (`aggregate.py`, `report_sweep.py`) import the AIOps benchmark's parser, which is not published; treat them as method documentation.
 
+## Import path boundary (2026-09-01)
+
+This study covers the case where `CLAUDE.md` and `AGENTS.md` sit in the **same
+working directory**. A follow-up measured what happens when the import target is
+**outside** that directory, which is the shape you get when global instructions
+live in a separate repository.
+
+**Imports that resolve outside the project tree are refused, silently.** Relative,
+absolute, and home-relative paths all failed the canary, as did a symlink inside
+the project pointing out of it. A symlink pointing to a file inside the tree loaded
+normally, so the block is on the resolved path, not on symlinks.
+
+A `CLAUDE.md` that is itself a symlink is not affected, for the same reason
+condition C above is a control: the filesystem resolves it at open time.
+
+Details, method, and what was not verified: [studies/import-path-boundary](studies/import-path-boundary/RESULTS.md).
+
 ## Limitations
 
 - Accuracy and safety scoring (Ops_Score, deterministic audit-based unsafe-action count) were not part of this pass; the study answers the speed and token-cost question. The audit slices are captured per run, so that scoring can be added later.

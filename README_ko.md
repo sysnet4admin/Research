@@ -10,8 +10,9 @@ Kubernetes, 클라우드 네이티브, AI에 대한 벤치마크 및 PoC 연구 
 
 **[KubernetesLab](https://kuberneteslab.dev/ko/)** 은 Kubernetes, 클라우드 네이티브, AI를 주제로 한 연구, 컨설팅, 교육 플랫폼입니다. 이 저장소의 각 프로젝트는 직접 실험한 연구 결과이며 블로그 포스트로 발행됩니다. 연구는 세 가지 영역을 다룹니다:
 
-- **AI / AIOps**: 실제 Kubernetes 운영 및 장애 대응 과제에서 AI 코딩 에이전트 성능 비교
-- **Kubernetes**: Gateway API 구현체 비교, 클러스터 최적화, 관측 가능성
+- **AI / AIOps**: 실제 Kubernetes 운영 및 장애 대응 과제에서 AI 코딩 에이전트, 오픈 웨이트 모델, 에이전트 하네스 비교
+- **에이전트 프로토콜**: MCP 와 A2A, 그리고 그 앞의 게이트웨이가 실제로 무엇을 강제하고 관측하며 얼마를 쓰는지 스펙이 아니라 실측으로 확인
+- **Kubernetes**: Gateway API 구현체 비교, CNI 상시 자원 비용, 클러스터 최적화, 관측 가능성
 - **FinOps**: EKS/AKS 비용 절감 사례 연구 (각 49%, 48% 절감)
 
 ---
@@ -58,6 +59,14 @@ MCP 2026-07-28 스테이트리스 개정이 쿠버네티스 위의 서버에 무
 
 ---
 
+### [mcp-server-benchmark](./mcp-server-benchmark)
+
+K8s용 MCP 서버 6종을 한 자에 올려 비교합니다. 프로브 모델, 장애 시나리오 10개, 하네스, 클러스터, 채점기를 전부 고정하고 MCP 서버만 교체해 240런을 돌렸습니다. MCP 서버를 꽂는 것이 공짜 품질이 아니라는 것(6종 중 4종이 셸 기준선 0.9167보다 낮습니다), 범용 서버는 예외 없이 셸보다 토큰을 더 쓴다는 것(도구 정의가 컨텍스트에 실립니다)이 대표 결과입니다. 상위 두 종은 접전이라 점수가 아니라 비용으로 고르는 편이 낫습니다.
+
+→ [README (EN)](./mcp-server-benchmark/README.md) | [README (KO)](./mcp-server-benchmark/README_ko.md)
+
+---
+
 ### [agentgateway-study](./agentgateway-study)
 
 agentgateway(v1.5.0, Kubernetes 1.37. 첫 회차는 v1.4.1)가 MCP 앞단에서 문서에 적힌 대로 강제하고 관측하는지를 실측합니다. 도구 인자 조건을 쓴 인가 정책이 검증을 통과한 채 모든 호출을 막는다는 것(업스트림 #3092로 제보), 정책은 접두사가 붙기 전의 원래 이름을 평가한다는 것, traceparent가 헤더와 `_meta` 양쪽으로 전파된다는 것, 게이트웨이 비용이 도구 호출당 p50 1ms 아래이고 어떤 백엔드 처리 시간에서도 꼬리 지연을 낮추지는 않는다는 것, 화이트리스트로 `tools/list`를 거르는 비용은 게이트웨이에서 0이지만 지연을 줄여 주지도 않는다는 것이 대표 결과입니다. A2A 표면(카드 주소 변경, A2A 인가 없음)은 같은 연구의 한 절입니다.
@@ -74,6 +83,14 @@ agentgateway(v1.5.0)가 A2A 에이전트 앞단에서 실제로 강제하고 관
 
 ---
 
+### [a2a-study](./a2a-study)
+
+A2A가 스펙에 무엇이라 적혀 있는지가 아니라 어떤 상황에서 실제로 쓸모가 있는지를 묻습니다. 1단계에서 셋을 쟀습니다. 스펙이 선언한 것 대 공식 SDK의 기본 동작, 같은 작업을 넘길 때 MCP 및 순수 HTTP와의 비교, 그리고 프로토콜 자체의 비용입니다. 2단계는 두 세대 사이의 상호운용과 게이트웨이 통과를 다룹니다. 위의 agentgateway A2A 표면과는 별개 연구입니다. 그쪽은 게이트웨이가 무엇을 강제하는지를 재고 이쪽은 프로토콜 자체를 잽니다.
+
+→ [README (EN)](./a2a-study/README.md) | [README (KO)](./a2a-study/README_ko.md)
+
+---
+
 ## 작성자
 
-**조훈 (Hoon Jo)** / CNCF Ambassador / Kubestronaut / [@sysnet4admin](https://github.com/sysnet4admin) / [kuberneteslab.dev](https://kuberneteslab.dev/ko/)
+**조훈 (Hoon Jo)** / CNCF Ambassador / AAIF Ambassador / Kubestronaut / [@sysnet4admin](https://github.com/sysnet4admin) / [kuberneteslab.dev](https://kuberneteslab.dev/ko/)

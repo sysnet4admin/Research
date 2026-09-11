@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """안전 어포던스 실측 (재시도판).
-실패 원인 2건 해소: ① 셸의 NODE_OPTIONS가 깨진 preload를 걸어 node가 죽음 → env에서 제거
+실패 원인 3건 해소: ① 셸의 NODE_OPTIONS가 깨진 preload를 걸어 node가 죽음 → env에서 제거
                     ② 응답이 길어 줄 단위 파싱이 잘림 → 스트림 전체를 모아 파싱
+                    ③ stdin을 닫으면 서버가 즉시 종료(containers의 "server is closing: EOF")
+                       → Popen으로 파이프를 열어 둔 채 응답을 읽는다 (2026-09-09)
 각 서버를 기본/read-only로 띄워 tools/list 개수와 도구 이름을 센다. LLM 미사용."""
-import json, os, subprocess, shlex, time
+import json, os, subprocess, shlex, threading, time
 from pathlib import Path
 
 OUT = Path(os.environ.get("MCP_BENCH_OUT", Path(__file__).resolve().parents[1]/"studies"/"server-comparison"))
@@ -19,9 +21,10 @@ SERVERS = [
     ("azure-k8s", "access-level",
      f"{HOME}/.local/bin/mcp-kubernetes --access-level readwrite",
      f"{HOME}/.local/bin/mcp-kubernetes --access-level readonly"),
+    # mcp<2 고정 필수: uvx가 mcp 2.x를 끌어오면 v1 API(mcp.server.fastmcp) 부재로 기동 실패
     ("rohitg00", "호출 시점만 차단",
-     "uvx --from kubectl-mcp-server kubectl-mcp-serve serve --transport stdio",
-     "uvx --from kubectl-mcp-server kubectl-mcp-serve serve --transport stdio --read-only"),
+     "uvx --from kubectl-mcp-server --with mcp<2 kubectl-mcp-serve serve --transport stdio",
+     "uvx --from kubectl-mcp-server --with mcp<2 kubectl-mcp-serve serve --transport stdio --read-only"),
     ("ro-only", "구조적(쓰기 경로 없음)",
      "npx -y @patrickdappollonio/mcp-kubernetes-ro",
      "npx -y @patrickdappollonio/mcp-kubernetes-ro"),
@@ -36,33 +39,69 @@ REQ = ('{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion
        '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}\n')
 
 def probe(cmd, extra_env=None, timeout=180):
+    """서버를 띄우고 tools/list 응답의 도구 이름 목록을 돌려준다.
+
+    stdin을 닫지 않는다. 닫으면 일부 서버(containers)가 응답 전에 종료한다.
+    """
     env = {k: v for k, v in os.environ.items() if k != "NODE_OPTIONS"}
     env["KUBECONFIG"] = KCFG
     if extra_env:
         env.update(extra_env)
     try:
-        p = subprocess.run(shlex.split(cmd), input=REQ, env=env,
-                           capture_output=True, text=True, timeout=timeout)
-        out = p.stdout
-    except subprocess.TimeoutExpired as e:
-        out = (e.stdout or "") if isinstance(e.stdout, str) else ((e.stdout or b"").decode(errors="ignore"))
+        p = subprocess.Popen(shlex.split(cmd), stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                             stderr=subprocess.DEVNULL, text=True, env=env)
     except Exception as e:
         return None, f"실행 실패: {str(e)[:80]}"
-    # 스트림 전체에서 id=2 응답을 찾는다 (한 줄이 아닐 수 있음)
-    dec = json.JSONDecoder()
-    i = 0
-    while i < len(out):
-        j = out.find("{", i)
-        if j < 0: break
+    buf = ""
+
+    def reader():
+        nonlocal buf
         try:
-            obj, end = dec.raw_decode(out[j:])
+            for line in p.stdout:
+                buf += line
         except Exception:
-            i = j + 1; continue
-        i = j + end
-        if isinstance(obj, dict) and obj.get("id") == 2 and "result" in obj:
-            tools = obj["result"].get("tools", [])
-            return [t.get("name", "?") for t in tools], None
-    return None, "id=2 응답 없음"
+            pass
+
+    threading.Thread(target=reader, daemon=True).start()
+    try:
+        p.stdin.write(REQ)
+        p.stdin.flush()
+    except Exception as e:
+        p.kill()
+        return None, f"요청 전송 실패: {str(e)[:80]}"
+
+    dec, t0, names, err = json.JSONDecoder(), time.time(), None, "타임아웃"
+    while time.time() - t0 < timeout and names is None:
+        i = 0
+        while i < len(buf):
+            j = buf.find("{", i)
+            if j < 0:
+                break
+            try:
+                obj, end = dec.raw_decode(buf[j:])
+            except Exception:
+                i = j + 1
+                continue
+            i = j + end
+            if isinstance(obj, dict) and obj.get("id") == 2 and "result" in obj:
+                names, err = [t.get("name", "?") for t in obj["result"].get("tools", [])], None
+                break
+        if names is None:
+            if p.poll() is not None:      # 서버가 먼저 죽었다
+                err = f"서버 조기 종료(exit {p.returncode})"
+                break
+            time.sleep(0.5)
+    try:
+        p.stdin.close()
+    except Exception:
+        pass
+    p.terminate()
+    try:
+        p.wait(timeout=10)
+    except Exception:
+        p.kill()
+    return names, err
+
 
 def main():
     rows = []
