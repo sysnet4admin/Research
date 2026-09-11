@@ -7,7 +7,7 @@ runs/rv-abm-0902 원값에서 그림 2종 x 언어 2종을 figures/에 만든다
 
   python3 harness/chart.py runs/rv-abm-0902
 
-그림 1 cost-3arm: 조건별 3팔 p50 절대값 점 + 연결선 + 증분 라벨.
+그림 1 cost-3arm: 조건별 세 경로 p50 절대값 점 + 연결선 + 증분 라벨.
 그림 2 card-rewrite: 카드 재작성 매트릭스와 병기 카드 누설(결정론 프로브
 결과의 도식화. 데이터 인자 불필요).
 """
@@ -104,7 +104,7 @@ def cost_chart(med, diffs, lang, path):
         out.append(f"<line x1='{xs['direct']:.0f}' y1='{y}' x2='{xs['gwa2a']:.0f}' y2='{y}' stroke='#999' stroke-width='2'/>")
         overlap = abs(xs["gwa2a"] - xs["gwplain"]) < 8
         if overlap:
-            # 두 게이트웨이 팔이 같은 자리: gwplain을 고리로, gwa2a를 안에 채움
+            # 두 게이트웨이 경로가 같은 자리: gwplain을 고리로, gwa2a를 안에 채움
             out.append(f"<circle cx='{xs['direct']:.0f}' cy='{y}' r='7' fill='{C['direct']}'/>")
             out.append(f"<text x='{xs['direct']:.0f}' y='{y+26}' {FONT} font-size='11' fill='{C['direct']}' text-anchor='middle'>{vals['direct']:.1f}</text>")
             out.append(f"<circle cx='{xs['gwplain']:.0f}' cy='{y}' r='10' fill='white' stroke='{C['gwplain']}' stroke-width='3'/>")

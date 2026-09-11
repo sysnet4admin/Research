@@ -21,6 +21,6 @@ run_stage() {
   log "=== 단계 완료: $name ==="; push "단계 완료 $name"
 }
 run_stage "guardrail 교대(재)" "$STUDY" ./harness/rv_gr_matrix.sh runs/rv-grm-0831b
-run_stage "A2A 3팔 20회차"    "$A2A"   ./harness/rv_ab_matrix.sh runs/rv-abm-0831 1 20
+run_stage "A2A 세 경로 20회차"    "$A2A"   ./harness/rv_ab_matrix.sh runs/rv-abm-0831 1 20
 log "=== 체인2 전체 종료 ==="
 push "체인2 전체 종료"

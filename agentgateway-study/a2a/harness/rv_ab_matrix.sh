@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # [rv 사본] v1.5.0 + aaif-benchmark 재측정용. CTX 교체, 게이트웨이 설치/제거 없음(상주 환경).
-# 축 C: 비용 3팔 교대 캠페인. DESIGN.md 참조.
+# 축 C: 비용 세 경로 교대 캠페인. DESIGN.md 참조.
 #
-# 팔: direct(LB 직접) / gwplain(게이트웨이, appProtocol 없음) /
-#     gwa2a(게이트웨이, appProtocol 있음). 세 팔 모두 설치 상태 동일, 차이는
-#     대상 주소뿐. 회차 안 3팔 인접 교대 + 회차마다 순서 로테이션
-#     (grm-0826 교훈: 1ms 아래 비교는 순차 팔 금지).
-# 셀: {close,reuse} x {100,200rps} x 5회차 x 3팔 = 60셀, 30초, 쿨다운 180초.
+# 경로: direct(LB 직접) / gwplain(게이트웨이, appProtocol 없음) /
+#     gwa2a(게이트웨이, appProtocol 있음). 세 경로 모두 설치 상태 동일, 차이는
+#     대상 주소뿐. 회차 안 세 경로 인접 교대 + 회차마다 순서 로테이션
+#     (grm-0826 교훈: 1ms 아래 비교는 순차 경로 금지).
+# 셀: {close,reuse} x {100,200rps} x 5회차 x 세 경로 = 60셀, 30초, 쿨다운 180초.
 #     예상 약 3.6시간.
 # 종료 시 에이전트와 게이트웨이 전부 제거(격리 복원).
 # 사용: caffeinate -i nohup ./ab_matrix.sh runs/abm-0827 > /tmp/abm.log 2>&1 &
@@ -28,7 +28,7 @@ note() { echo "$*" >> "$OUT/FINDINGS.md"; }
 # 때는 이 함수 본문을 비우고 실행할 것.
 push_progress() {
   ( cd "$REPO" && git add a2a-study/runs >/dev/null 2>&1 \
-    && git commit -q -m "a2a 비용 3팔 교대: $1" >/dev/null 2>&1 \
+    && git commit -q -m "a2a 비용 세 경로 교대: $1" >/dev/null 2>&1 \
     && git pull --rebase --autostash -q origin main >/dev/null 2>&1 \
     && git push -q origin main >/dev/null 2>&1 ) || true
 }
@@ -39,9 +39,9 @@ push_progress() {
   exit 1
 }
 
-echo "# a2a 비용 3팔 교대 캠페인 (자동 생성)" > "$OUT/FINDINGS.md"
+echo "# a2a 비용 세 경로 교대 캠페인 (자동 생성)" > "$OUT/FINDINGS.md"
 note ""
-note "시작 $(date '+%Y-%m-%d %H:%M'). 3팔 인접 교대 + 회차 순서 로테이션,"
+note "시작 $(date '+%Y-%m-%d %H:%M'). 세 경로 인접 교대 + 회차 순서 로테이션,"
 note "{close,reuse} x {100,200rps} x 회차 ${N_FROM}~${N_TO}, 셀 30초, 쿨다운 ${COOLDOWN}초."
 note "- 전원 상태: $(pmset -g batt | head -1 | sed 's/Now drawing from //')"
 note ""
@@ -101,7 +101,7 @@ note "## 셀 기록 (교대 순서 그대로)"
 note ""
 for spec in close:100:8 close:200:16 reuse:100:8 reuse:200:16; do
   mode="${spec%%:*}"; rest="${spec#*:}"; rps="${rest%%:*}"; conc="${rest#*:}"
-  log "=== $mode ${rps}rps (회차 ${N_FROM}~${N_TO} x 3팔 로테이션) ==="
+  log "=== $mode ${rps}rps (회차 ${N_FROM}~${N_TO} x 세 경로 로테이션) ==="
   for n in $(seq "$N_FROM" "$N_TO"); do
     case $((n % 3)) in
       1) order="direct gwplain gwa2a" ;;
@@ -124,5 +124,5 @@ note "---"
 note "종료 $(date '+%Y-%m-%d %H:%M'). 격리 복원됨. 판독은 회차 안 인접 쌍의"
 note "p50 차이(gwplain-direct = 프록시 비용, gwa2a-gwplain = A2A 처리 비용)와"
 note "달성 rps(생성기 포화 확인)."
-push_progress "3팔 교대 전체 종료"
+push_progress "세 경로 교대 전체 종료"
 log "=== ab_matrix 완료 ==="

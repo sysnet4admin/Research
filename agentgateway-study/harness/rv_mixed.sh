@@ -3,8 +3,8 @@
 # 0ms)와 느린 백엔드(mcp-b-slow, 200ms)를 두고, 느린 쪽에 부하가 걸릴 때 빠른 쪽의
 # p50/p99가 달라지는지 잰다. 직접 경로에서도 같은 혼합을 걸어 호스트 경합을 분리한다.
 #   축 1. 4셀 교대 x {close, reuse} x 회차 RV_ROUNDS: gw-alone, gw-mixed, direct-alone,
-#         direct-mixed (짝수 회차는 역순). 측정값은 빠른 팔(100rps, conc 8)이고
-#         혼합 셀은 느린 팔에 100rps(conc 40) 부하를 같은 경로로 동시에 건다.
+#         direct-mixed (짝수 회차는 역순). 측정값은 빠른 쪽(100rps, conc 8)이고
+#         혼합 셀은 느린 쪽에 100rps(conc 40) 부하를 같은 경로로 동시에 건다.
 #   축 2. 지속 창: gw-alone 대 gw-mixed, RV_SUSTAIN초 x {close, reuse}.
 # 사용: ./rv_mixed.sh <PYTHON> <OUT_DIR>
 set -uo pipefail
@@ -56,7 +56,7 @@ echo "# 혼합 백엔드 보강: 느린 백엔드 부하가 빠른 백엔드 꼬
 note ""
 note "실행 $(date '+%Y-%m-%d %H:%M'). 컨텍스트 $CTX. fast=mcp-b(0ms) slow=mcp-b-slow(200ms)."
 note "fast direct=\`$FAST_DIRECT\` gw=\`$FAST_GW\` / slow direct=\`$SLOW_DIRECT\` gw=\`$SLOW_GW\`."
-note "측정 팔 = fast ${RPS}rps conc 8. mixed 셀은 slow에 ${RPS}rps conc 40 부하를 같은 경로로 동시에 건다(3초 먼저 시작, ${DURATION}+6초)."
+note "측정 경로 = fast ${RPS}rps conc 8. mixed 셀은 slow에 ${RPS}rps conc 40 부하를 같은 경로로 동시에 건다(3초 먼저 시작, ${DURATION}+6초)."
 note "축 1: 4셀 교대 x {close, reuse} x 회차 ${ROUNDS}, ${DURATION}초 셀. 축 2: ${SUSTAIN}초 지속 x {close, reuse}, gw-alone 대 gw-mixed."
 note "- 전원: $(pmset -g batt | head -1 | sed "s/Now drawing from //")"
 note ""

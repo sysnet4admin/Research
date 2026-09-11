@@ -3,7 +3,7 @@
 # 전량 폐기하고 이 체인이 정본을 만든다).
 # 구성: 18:00 대기 -> 사전 점검 -> [0] 환경 재초기화(베이스라인 복원 + 재배포)
 #  -> [1] MCP 축 -> [2] A2A 프로브 -> [3] 경로 쌍 -> [4] guardrail 교대
-#  -> [5] A2A 3팔 20회차. 단계 실패 시 중단. 예상 종료 9/1(월... 화) 오전.
+#  -> [5] A2A 세 경로 20회차. 단계 실패 시 중단. 예상 종료 9/1(월... 화) 오전.
 set -uo pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STUDY="$(cd "$DIR/.." && pwd)"
@@ -53,6 +53,6 @@ run_stage "MCP 축"          "$STUDY" ./harness/rv_run_axes.sh "$PY" runs/rv-axe
 run_stage "A2A 프로브"      "$A2A"   ./harness/rv_probes.sh runs/rv-probes-0831e
 run_stage "경로 쌍"         "$STUDY" ./harness/rv_run_ab.sh "$PY" runs/rv-ab-0831e
 run_stage "guardrail 교대"  "$STUDY" ./harness/rv_gr_matrix.sh runs/rv-grm-0831e
-run_stage "A2A 3팔 20회차"  "$A2A"   ./harness/rv_ab_matrix.sh runs/rv-abm-0831e 1 20
+run_stage "A2A 세 경로 20회차"  "$A2A"   ./harness/rv_ab_matrix.sh runs/rv-abm-0831e 1 20
 log "=== 체인3 전체 종료 ==="
 push "체인3 전체 종료"

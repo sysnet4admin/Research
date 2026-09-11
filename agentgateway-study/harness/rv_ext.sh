@@ -30,8 +30,8 @@ AGWV=$(kubectl --context $CTX -n $AGWNS get deploy agentgateway-proxy -o jsonpat
 echo "# extAuth / extProc 인자 통제와 비용 (자동 생성, agentgateway $AGWV)" > "$OUT/FINDINGS.md"
 note ""
 note "실행 $(date '+%Y-%m-%d %H:%M'). 규칙은 결과 7과 같다: tools/call get-sum은 a == 1일 때만 허용."
-note "검사 서버는 두 팔 모두 내내 상주하고 정책만 켰다 껐다 한다(자원 조건 통제)."
-note "부하 ${ROUNDS}회 x ${DUR}초, 셀 간 쿨다운 ${COOLDOWN}초. 팔: $ARMS"
+note "검사 서버는 두 경로 모두 내내 상주하고 정책만 켰다 껐다 한다(자원 조건 통제)."
+note "부하 ${ROUNDS}회 x ${DUR}초, 셀 간 쿨다운 ${COOLDOWN}초. 경로: $ARMS"
 note ""
 
 call() { # call <tag> <tool> <args-json>
@@ -136,7 +136,7 @@ trap cleanup EXIT
 
 run_arm() { # run_arm <extauth|extproc>
   local arm="$1"
-  note "## ${arm} 팔"
+  note "## ${arm} 경로"
   note ""
   if [ "$arm" = extauth ]; then
     log "extAuth 서버 배포"

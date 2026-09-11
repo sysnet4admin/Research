@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" font-family="Helvetica, Arial, sans-serif">
+<rect width="900" height="470" fill="white"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
+<text x="450.0" y="32" font-size="15" fill="#111" text-anchor="middle" font-weight="bold">상대는 불투명하고 보이는 것은 넷뿐이다</text>
+<text x="450.0" y="52" font-size="11" fill="#777" text-anchor="middle">A2A가 정한 것은 이 넷과 이들을 나르는 전송 규칙이다.</text>
+<rect x="30" y="210" width="130" height="58" rx="6" fill="#fafafa" stroke="#999" stroke-width="1.5"/>
+<text x="95" y="238" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">내 에이전트</text>
+<text x="95" y="286" font-size="8.5" fill="#888" text-anchor="middle">카드를 받고 메시지를</text>
+<text x="95" y="298" font-size="8.5" fill="#888" text-anchor="middle">보낸다</text>
+<rect x="196" y="80" width="452" height="274" rx="6" fill="#ffffff" stroke="#326CE5" stroke-width="1.6"/>
+<rect x="196" y="80" width="452" height="26" rx="6" fill="#326CE5"/>
+<rect x="196" y="96" width="452" height="10" fill="#326CE5"/>
+<text x="422.0" y="98" font-size="11.5" fill="#ffffff" text-anchor="middle" font-weight="bold">보이는 것</text>
+<rect x="210" y="120" width="180" height="76" rx="6" fill="#fafafa" stroke="#999" stroke-width="1.5"/>
+<text x="300.0" y="140" font-size="12.5" fill="#222" text-anchor="middle" font-weight="bold">① 카드</text>
+<text x="300.0" y="154" font-size="9" fill="#8a8a8a" text-anchor="middle" font-family="Menlo, monospace">Agent Card</text>
+<text x="300.0" y="170" font-size="9.5" fill="#666" text-anchor="middle">누구이고 무엇을 하는가</text>
+<text x="300.0" y="182" font-size="9.5" fill="#666" text-anchor="middle">어디로 어떻게 부르는가</text>
+<rect x="454" y="120" width="180" height="76" rx="6" fill="#fafafa" stroke="#999" stroke-width="1.5"/>
+<text x="544.0" y="140" font-size="12.5" fill="#222" text-anchor="middle" font-weight="bold">② 메시지</text>
+<text x="544.0" y="154" font-size="9" fill="#8a8a8a" text-anchor="middle" font-family="Menlo, monospace">Message</text>
+<text x="544.0" y="170" font-size="9.5" fill="#666" text-anchor="middle">보내는 내용</text>
+<text x="544.0" y="182" font-size="9.5" fill="#666" text-anchor="middle">텍스트, 파일, 구조화 데이터</text>
+<rect x="454" y="250" width="180" height="76" rx="6" fill="#fafafa" stroke="#999" stroke-width="1.5"/>
+<text x="544.0" y="270" font-size="12.5" fill="#222" text-anchor="middle" font-weight="bold">③ 태스크</text>
+<text x="544.0" y="284" font-size="9" fill="#8a8a8a" text-anchor="middle" font-family="Menlo, monospace">Task</text>
+<text x="544.0" y="300" font-size="9.5" fill="#666" text-anchor="middle">일의 단위</text>
+<text x="544.0" y="312" font-size="9.5" fill="#666" text-anchor="middle">id, 상태, 이력, 산출물</text>
+<rect x="210" y="250" width="180" height="76" rx="6" fill="#fafafa" stroke="#999" stroke-width="1.5"/>
+<text x="300.0" y="270" font-size="12.5" fill="#222" text-anchor="middle" font-weight="bold">④ 아티팩트</text>
+<text x="300.0" y="284" font-size="9" fill="#8a8a8a" text-anchor="middle" font-family="Menlo, monospace">Artifact</text>
+<text x="300.0" y="300" font-size="9.5" fill="#666" text-anchor="middle">태스크가 만든 결과</text>
+<line x1="394" y1="158.0" x2="448" y2="158.0" stroke="#555" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="364.2375" y="141.5" width="115.525" height="13.5" fill="white"/>
+<text x="422.0" y="151.0" font-size="8.5" fill="#777" text-anchor="middle">어디로 보낼지 알려 준다</text>
+<line x1="544.0" y1="200" x2="544.0" y2="244" stroke="#555" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="509.6125" y="216.5" width="68.775" height="13.5" fill="white"/>
+<text x="544.0" y="226.0" font-size="8.5" fill="#777" text-anchor="middle">보내면 생긴다</text>
+<line x1="448" y1="288.0" x2="394" y2="288.0" stroke="#555" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="387.6125" y="271.5" width="68.775" height="13.5" fill="white"/>
+<text x="422.0" y="281.0" font-size="8.5" fill="#777" text-anchor="middle">끝나면 남는다</text>
+<rect x="706" y="158" width="170" height="182" rx="6" fill="#f4f4f4" stroke="#bbb" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="791.0" y="180" font-size="12" fill="#555" text-anchor="middle" font-weight="bold">상대 에이전트</text>
+<text x="791.0" y="196" font-size="9" fill="#999" text-anchor="middle">일을 맡는다</text>
+<rect x="726" y="210" width="130" height="20" rx="4" fill="#e9e9e9" stroke="#dcdcdc" stroke-width="1"/>
+<text x="791.0" y="224" font-size="9.5" fill="#999" text-anchor="middle">도구</text>
+<rect x="726" y="236" width="130" height="20" rx="4" fill="#e9e9e9" stroke="#dcdcdc" stroke-width="1"/>
+<text x="791.0" y="250" font-size="9.5" fill="#999" text-anchor="middle">메모리</text>
+<rect x="726" y="262" width="130" height="20" rx="4" fill="#e9e9e9" stroke="#dcdcdc" stroke-width="1"/>
+<text x="791.0" y="276" font-size="9.5" fill="#999" text-anchor="middle">모델</text>
+<rect x="726" y="288" width="130" height="20" rx="4" fill="#e9e9e9" stroke="#dcdcdc" stroke-width="1"/>
+<text x="791.0" y="302" font-size="9.5" fill="#999" text-anchor="middle">내부 계획</text>
+<text x="791.0" y="332" font-size="9.5" fill="#999" text-anchor="middle">보이지 않는다</text>
+<line x1="160" y1="239" x2="190" y2="239" stroke="#555" stroke-width="1.8" marker-end="url(#a)"/>
+<line x1="654" y1="240" x2="700" y2="240" stroke="#555" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="450.0" y="424" font-size="10" fill="#555" text-anchor="middle">이 연구가 확인하는 것은 이 넷이 스펙대로 동작하는가이다. 카드의 선언이 실제로 강제되는가(선언 대 실제), 태스크가 있어서 HTTP나 MCP로 만들 때와 무엇이</text>
+<text x="450.0" y="439" font-size="10" fill="#555" text-anchor="middle">달라지는가(대안 대비).</text>
+</svg>

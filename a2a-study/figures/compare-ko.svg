@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 548" font-family="Helvetica, Arial, sans-serif">
+<rect width="900" height="548" fill="white"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
+<text x="450.0" y="32" font-size="15" fill="#111" text-anchor="middle" font-weight="bold">MCP와 A2A는 상대가 다르다</text>
+<text x="450.0" y="52" font-size="11" fill="#777" text-anchor="middle">겹치는 자리가 없어서 하는 일에 따라 골라 쓴다.</text>
+<rect x="56" y="78" width="788" height="248" rx="6" fill="#ffffff" stroke="#ccc" stroke-width="1.2"/>
+<rect x="174" y="78" width="335" height="32" fill="#eef1f6"/>
+<rect x="509" y="78" width="335" height="32" fill="#326CE5"/>
+<text x="341.5" y="99" font-size="13" fill="#3c4655" text-anchor="middle" font-weight="bold">MCP</text>
+<text x="676.5" y="99" font-size="13" fill="#ffffff" text-anchor="middle" font-weight="bold">A2A</text>
+<line x1="174" y1="78" x2="174" y2="326" stroke="#ddd" stroke-width="1"/>
+<line x1="509" y1="78" x2="509" y2="326" stroke="#ddd" stroke-width="1"/>
+<rect x="56" y="110" width="118" height="54" fill="#fafafa"/>
+<text x="115.0" y="141.0" font-size="11" fill="#555" text-anchor="middle" font-weight="bold">상대</text>
+<text x="341.5" y="141.0" font-size="10.5" fill="#333" text-anchor="middle">도구와 자원</text>
+<text x="676.5" y="141.0" font-size="10.5" fill="#333" text-anchor="middle">다른 에이전트</text>
+<line x1="56" y1="164" x2="844" y2="164" stroke="#eee" stroke-width="1"/>
+<rect x="56" y="164" width="118" height="54" fill="#fafafa"/>
+<text x="115.0" y="195.0" font-size="11" fill="#555" text-anchor="middle" font-weight="bold">모델</text>
+<text x="341.5" y="195.0" font-size="10.5" fill="#333" text-anchor="middle">부르면 결과가 온다</text>
+<text x="676.5" y="188.0" font-size="10.5" fill="#333" text-anchor="middle">일을 받아 시간을 들여 처리한다</text>
+<text x="676.5" y="202.0" font-size="10.5" fill="#333" text-anchor="middle">중간에 묻거나 거절할 수 있다</text>
+<line x1="56" y1="218" x2="844" y2="218" stroke="#eee" stroke-width="1"/>
+<rect x="56" y="218" width="118" height="54" fill="#fafafa"/>
+<text x="115.0" y="249.0" font-size="11" fill="#555" text-anchor="middle" font-weight="bold">있는 것</text>
+<text x="341.5" y="242.0" font-size="10.5" fill="#333" text-anchor="middle">도구 목록(tools/list)</text>
+<text x="341.5" y="256.0" font-size="10.5" fill="#333" text-anchor="middle">도구 호출(tools/call)</text>
+<text x="676.5" y="242.0" font-size="10.5" fill="#333" text-anchor="middle">카드, 태스크</text>
+<text x="676.5" y="256.0" font-size="10.5" fill="#333" text-anchor="middle">상태 변화(조회, 구독, 푸시), 취소</text>
+<line x1="56" y1="272" x2="844" y2="272" stroke="#eee" stroke-width="1"/>
+<rect x="56" y="272" width="118" height="54" fill="#fafafa"/>
+<text x="115.0" y="303.0" font-size="11" fill="#555" text-anchor="middle" font-weight="bold">없는 것</text>
+<text x="341.5" y="296.0" font-size="10.5" fill="#333" text-anchor="middle">진행 중인 일의 상태</text>
+<text x="341.5" y="310.0" font-size="10.5" fill="#333" text-anchor="middle">중간 입력 요청, 취소</text>
+<text x="676.5" y="303.0" font-size="10.5" fill="#333" text-anchor="middle">도구 목록이라는 개념</text>
+<text x="56" y="354" font-size="11" fill="#777" text-anchor="start" font-weight="bold">무엇을 하려느냐에 따라 고른다</text>
+<rect x="56" y="360" width="788" height="140" rx="6" fill="#fbfcfe" stroke="#dde3ee" stroke-width="1.5"/>
+<rect x="82" y="413.0" width="150" height="40" rx="6" fill="#fafafa" stroke="#999" stroke-width="1.5"/>
+<text x="157.0" y="437.0" font-size="11.5" fill="#333" text-anchor="middle" font-weight="bold">내 에이전트</text>
+<rect x="386" y="386" width="150" height="40" rx="6" fill="#f2f2f2" stroke="#999" stroke-width="1.5"/>
+<text x="461.0" y="410.0" font-size="11.5" fill="#333" text-anchor="middle" font-weight="bold">도구와 자원</text>
+<path d="M238,433.0 H276 V406.0 H378" fill="none" stroke="#7b8ca5" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="275.025" y="387.0" width="111.95" height="14" fill="white"/>
+<text x="331.0" y="397.0" font-size="9" fill="#777" text-anchor="middle">MCP: 도구를 직접 쓴다</text>
+<rect x="386" y="440" width="150" height="40" rx="6" fill="#fafafa" stroke="#326CE5" stroke-width="1.5"/>
+<text x="461.0" y="464.0" font-size="11.5" fill="#333" text-anchor="middle" font-weight="bold">상대 에이전트</text>
+<path d="M238,433.0 H276 V460.0 H378" fill="none" stroke="#326CE5" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="270.075" y="441.0" width="121.85000000000001" height="14" fill="white"/>
+<text x="331.0" y="451.0" font-size="9" fill="#777" text-anchor="middle">A2A: 남에게 일을 맡긴다</text>
+<rect x="616" y="440" width="150" height="40" rx="6" fill="#f7f7f7" stroke="#dcdcdc" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="691.0" y="464.0" font-size="11" fill="#999" text-anchor="middle">도구와 자원</text>
+<line x1="542" y1="460.0" x2="608" y2="460.0" stroke="#bbb" stroke-width="1.4" marker-end="url(#a)" stroke-dasharray="4 3"/>
+<rect x="532.2625" y="442.5" width="87.47500000000001" height="13.5" fill="white"/>
+<text x="576.0" y="452.0" font-size="8.5" fill="#999" text-anchor="middle">자기 도구는 MCP로</text>
+<text x="450.0" y="516" font-size="10" fill="#555" text-anchor="middle">둘은 순서가 아니라 선택이다. 도구를 직접 쓰면 MCP만 있으면 되고 남에게 일을 맡길 때 A2A를 쓴다. 맡은 쪽이 자기 도구를 부르는 것은 그쪽 사정이고 내가 거쳐 가는</text>
+<text x="450.0" y="531" font-size="10" fill="#555" text-anchor="middle">경로가 아니다.</text>
+</svg>

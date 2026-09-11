@@ -4,7 +4,7 @@
 # - message/send 응답 metadata에 수신 헤더와 수신 메시지 metadata를 되돌려
 #   준다. 게이트웨이가 무엇을 바꿔/넣어 보냈는지 호스트에서 판독하는 용도
 #   (축 B: traceparent 전파, metadata 주입).
-# - ThreadingHTTPServer + HTTP/1.1 (keep-alive). 축 C의 reuse 팔이 실제로
+# - ThreadingHTTPServer + HTTP/1.1 (keep-alive). 축 C의 reuse 경로가 실제로
 #   연결을 재사용하려면 서버가 1.1이어야 한다(스파이크판은 1.0이라 매 요청
 #   연결 종료였다).
 import json

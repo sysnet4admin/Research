@@ -145,13 +145,13 @@ a2a.response.error_code=-32601`을 액세스 로그에 남긴다(3/3). appProtoc
 조회에서 확인했고 오류 형태 프로브는 plain 경로에서 다시 재지 않았다).
 관측도 재작성과 같은 스위치의 옵트인이다.
 
-### 5. 비용: 3팔 교대
+### 5. 비용: 세 경로 교대
 
 대상 세 개, 설치 상태는 동일하고 부하 생성기의 대상 주소만 다르다.
 direct(LoadBalancer로 에이전트 직접), gw-plain(게이트웨이 경유, appProtocol
-없음), gw-a2a(게이트웨이 경유, appProtocol 있음). 서브밀리초 비교를 팔
+없음), gw-a2a(게이트웨이 경유, appProtocol 있음). 서브밀리초 비교를 경로
 순서대로 몰아 재면 시간 드리프트가 섞이므로(MCP 표면 연구의 교훈) 회차
-안에서 세 팔을 인접 교대하고 회차마다 순서를 로테이션했다. 회차 안 인접
+안에서 세 경로을 인접 교대하고 회차마다 순서를 로테이션했다. 회차 안 인접
 쌍의 p50 차이, 조건당 회차 20개(밤사이 캠페인 1회, 240셀, 오류 0)의 중앙값:
 
 ![층마다 무엇이 더해지는가: 경로별 p50 지연](figures/a2a-cost-3arm-ko.svg)
@@ -235,13 +235,13 @@ v1.4.1 회차는 [mcp-migration](../../mcp-migration/) 클러스터였다. A2A
   `disable_nagle_algorithm = True`가 필수인데, 없으면 delayed ACK가
   게이트웨이 경로에 상수 ~40ms를 얹어 측정을 삼킨다(이 문제로 초기 캠페인
   하나를 폐기했다).
-- `k8s/agent.yaml`: Deployment와 Service 3개(appProtocol 유무, direct 팔용
+- `k8s/agent.yaml`: Deployment와 Service 3개(appProtocol 유무, 직접 경로용
   LoadBalancer), HTTPRoute.
 - `harness/probes.sh`: 카드 매트릭스, 우회, 트레이스, 오류 형태의 결정론
   프로브.
 - `harness/loadgen_a2a.py`: A2A message/send 부하 생성기(열린/닫힌 루프,
   연결 모드 제어, 재연결 계수).
-- `harness/ab_matrix.sh`: 3팔 교대 비용 캠페인.
+- `harness/ab_matrix.sh`: 세 경로 교대 비용 캠페인.
 - `harness/read_abm.py`: 캠페인 디렉토리를 위 표로 판독.
 - `harness/rv_probes.sh`, `harness/rv_ab_matrix.sh`: v1.5.0 회차에 쓴
   사본(클러스터 컨텍스트 교체, 체인 단계 사이에 게이트웨이 상주).

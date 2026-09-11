@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # 혼합 백엔드 30분 close 창의 귀속 보강 (2026-09-05): 체인7에서 게이트웨이 경로의 close 혼합
-# 30분 창이 두 팔 모두 shed를 냈다(빠른 팔 22%, 느린 팔 15%, 게이트웨이 오류 0). 같은 조건을
+# 30분 창이 두 경로 모두 shed를 냈다(빠른 쪽 22%, 느린 쪽 15%, 게이트웨이 오류 0). 같은 조건을
 # 직접 경로(둘 다 LB 직접)에서 재고, 게이트웨이 경로를 한 번 더 재서 병목이 게이트웨이인지
-# 호스트/노드(연결 수립률)인지 가른다. rv_mixed.sh의 최소 델타 사본(축 2만, 팔 선택).
+# 호스트/노드(연결 수립률)인지 가른다. rv_mixed.sh의 최소 델타 사본(축 2만, 경로 선택).
 # 사용: RV_SUS_ARMS="direct gw" ./rv_mixed_sus.sh <PYTHON> <OUT_DIR>
 set -uo pipefail
 PY="$1"; OUT="$2"
@@ -54,8 +54,8 @@ cell() { # cell <name> <fast_url> <slow_url> <mode> <duration>
 
 echo "# 혼합 백엔드 지속 창 귀속 보강 (자동 생성)" > "$OUT/FINDINGS.md"
 note ""
-note "실행 $(date '+%Y-%m-%d %H:%M'). ${SUSTAIN}초 혼합 창(fast ${RPS}rps conc 8 + slow ${RPS}rps conc 40), 팔 {${ARMS}} x 모드 {${MODES}}, 셀 간 ${CD}초."
-note "direct 팔은 두 부하 모두 LB 직접, gw 팔은 두 부하 모두 게이트웨이 경유."
+note "실행 $(date '+%Y-%m-%d %H:%M'). ${SUSTAIN}초 혼합 창(fast ${RPS}rps conc 8 + slow ${RPS}rps conc 40), 경로 {${ARMS}} x 모드 {${MODES}}, 셀 간 ${CD}초."
+note "직접 경로은 두 부하 모두 LB 직접, 게이트웨이 경로은 두 부하 모두 게이트웨이 경유."
 note "- 전원: $(pmset -g batt | head -1 | sed "s/Now drawing from //")"
 note ""
 for mode in $MODES; do

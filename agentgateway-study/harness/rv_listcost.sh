@@ -2,7 +2,7 @@
 # 목록 필터링 비용 (2026-09-05): 도구 수(8/100/500) x 정책 유무 x 경로에서 tools/list의
 # p50/p99를 잰다. 서버 사본 k8s/b-server-tools/server.py(B_EXTRA_TOOLS)로 도구 수를 바꾸고
 # (ConfigMap 교체 + env 롤아웃), 부하는 harness/loadgen_list.py --tool list.
-#   팔 3: direct(정책 없음), gw-none(게이트웨이, 정책 없음), gw-policy(게이트웨이, echo만
+#   경로 3: direct(정책 없음), gw-none(게이트웨이, 정책 없음), gw-policy(게이트웨이, echo만
 #   허용 -> 목록이 1개로 필터링). 회차 안 교대, {close, reuse}, 회차 RV_ROUNDS, RV_RPS(기본 20)rps conc 8.
 # 종료 시 원본 ConfigMap과 env 없음으로 복원.
 # 사용: ./rv_listcost.sh <PYTHON> <OUT_DIR>
@@ -83,7 +83,7 @@ AGWV=$(kubectl --context $CTX -n agentgateway-system get deploy agentgateway-pro
 echo "# 목록 필터링 비용: 도구 수 x 정책 유무 x 경로 (자동 생성, agentgateway $AGWV)" > "$OUT/FINDINGS.md"
 note ""
 note "실행 $(date '+%Y-%m-%d %H:%M'). 컨텍스트 $CTX. direct=\`$DIRECT_URL\` gw=\`$GW_URL\`. tools/list ${RPS}rps conc 8, ${DURATION}초 셀."
-note "도구 수 = 8 + {${EXTRAS}}. 팔 = direct / gw-none / gw-policy(echo만 허용). 회차 ${ROUNDS}, 쿨다운 close ${CD_CLOSE}s / reuse ${CD_REUSE}s."
+note "도구 수 = 8 + {${EXTRAS}}. 경로 = direct / gw-none / gw-policy(echo만 허용). 회차 ${ROUNDS}, 쿨다운 close ${CD_CLOSE}s / reuse ${CD_REUSE}s."
 note "- 전원: $(pmset -g batt | head -1 | sed "s/Now drawing from //")"
 note ""
 for x in $EXTRAS; do

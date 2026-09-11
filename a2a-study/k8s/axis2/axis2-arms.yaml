@@ -1,0 +1,67 @@
+# 축 2 본측정: 세 팔이 같은 work.py를 쓰고 진행 확인 방식만 각자의 관용대로 만든다.
+# 오버헤드용 구성(k8s/three-arms/)의 사본에서 두 가지를 바꿨다.
+#   (1) WORK_SECONDS로 오래 걸리는 작업(시나리오 2)을 켠다.
+#   (2) A2A 팔에 httpx를 넣어 푸시 발송기를 배선한다.
+# 자원 조건을 같게 두려고 파드 하나에 컨테이너 셋을 그대로 유지한다.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: axis2-arms
+  namespace: mcp-pilot
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: axis2-arms}
+  template:
+    metadata:
+      labels: {app: axis2-arms}
+    spec:
+      containers:
+        - name: a2a
+          image: python:3.12-slim
+          command: ["sh", "-c"]
+          args: ["pip install -q 'a2a-sdk==1.1.2' fastapi uvicorn sse-starlette httpx && python /app/srv_a2a.py"]
+          env:
+            - {name: CARD_HOST, value: "axis2-arms.mcp-pilot.svc.cluster.local:9101"}
+            - {name: WORK_SECONDS, value: "15"}
+          ports: [{containerPort: 9101}]
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 512Mi}
+          volumeMounts: [{name: code, mountPath: /app}]
+        - name: mcp
+          image: docker.io/mcp-pilot/b-server:2.0.0   # mcp==2.0.0, uvicorn 포함
+          command: ["python", "/app/srv_mcp.py"]
+          env:
+            - {name: WORK_SECONDS, value: "15"}
+          ports: [{containerPort: 9102}]
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 512Mi}
+          volumeMounts: [{name: code, mountPath: /app}]
+        - name: http
+          image: python:3.12-slim
+          command: ["python", "/app/srv_http.py"]
+          env:
+            - {name: WORK_SECONDS, value: "15"}
+          ports: [{containerPort: 9103}]
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 512Mi}
+          volumeMounts: [{name: code, mountPath: /app}]
+      volumes:
+        - name: code
+          configMap: {name: axis2-code}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: axis2-arms
+  namespace: mcp-pilot
+spec:
+  type: LoadBalancer
+  selector: {app: axis2-arms}
+  ports:
+    - {name: a2a, port: 9101, targetPort: 9101}
+    - {name: mcp, port: 9102, targetPort: 9102}
+    - {name: http, port: 9103, targetPort: 9103}

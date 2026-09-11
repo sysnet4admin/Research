@@ -81,7 +81,7 @@ if [ ! -f "$CKPT-rehearsal" ]; then
   ( cd "$A2A"   && ./harness/rv_probes.sh runs/rehearsal-0902/probes )         || { log "리허설 실패: A2A 프로브"; exit 1; }
   ( cd "$STUDY" && ./harness/rv_run_ab.sh "$PY" runs/rehearsal-0902/ab )       || { log "리허설 실패: 경로 쌍"; exit 1; }
   ( cd "$STUDY" && ./harness/rv_gr_matrix.sh runs/rehearsal-0902/grm )         || { log "리허설 실패: guardrail"; exit 1; }
-  ( cd "$A2A"   && ./harness/rv_ab_matrix.sh runs/rehearsal-0902/abm 1 1 )     || { log "리허설 실패: A2A 3팔"; exit 1; }
+  ( cd "$A2A"   && ./harness/rv_ab_matrix.sh runs/rehearsal-0902/abm 1 1 )     || { log "리허설 실패: A2A 세 경로"; exit 1; }
   unset RV_DURATION RV_COOLDOWN RV_ROUNDS
   touch "$CKPT-rehearsal"
   log "=== 리허설 전 단계 완주. 본 창 대기 ==="
@@ -101,6 +101,6 @@ run_stage axes  "MCP 축"          "$STUDY" ./harness/rv_run_axes.sh "$PY" runs/
 run_stage probe "A2A 프로브"      "$A2A"   ./harness/rv_probes.sh runs/rv-probes-0902
 run_stage ab    "경로 쌍"         "$STUDY" ./harness/rv_run_ab.sh "$PY" runs/rv-ab-0902
 run_stage grm   "guardrail 교대"  "$STUDY" ./harness/rv_gr_matrix.sh runs/rv-grm-0902
-run_stage abm   "A2A 3팔 20회차"  "$A2A"   ./harness/rv_ab_matrix.sh runs/rv-abm-0902 1 20
+run_stage abm   "A2A 세 경로 20회차"  "$A2A"   ./harness/rv_ab_matrix.sh runs/rv-abm-0902 1 20
 log "=== 체인4 전체 종료 ==="
 push "체인4 전체 종료"

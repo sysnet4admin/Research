@@ -1,0 +1,91 @@
+# 축 1 본측정: 선언 대 실제. 서버 둘을 나란히 띄운다.
+#   a2a-axis1      compat 켬, 스킴 3종 선언(apiKey, bearer, oauth2), 작업 15초
+#   a2a-axis1-nc   compat 끔. 항목 1-2와 1-11의 대조군
+# 게이트웨이는 쓰지 않는다(1단계 범위). 푸시 수신기는 스파이크 4 것(webhook4)을 재사용한다.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: a2a-axis1
+  namespace: mcp-pilot
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: a2a-axis1}
+  template:
+    metadata:
+      labels: {app: a2a-axis1}
+    spec:
+      containers:
+        - name: agent
+          image: python:3.12-slim
+          command: ["sh", "-c", "pip install -q 'a2a-sdk==1.1.2' fastapi uvicorn sse-starlette httpx && python /app/server_axis1.py --host 0.0.0.0 --port 9999"]
+          env:
+            - {name: CARD_HOST, value: "a2a-axis1.mcp-pilot.svc.cluster.local:9999"}
+            - {name: WORK_SECONDS, value: "15"}
+            - {name: PUSH_CAP, value: "1"}
+            - {name: EXT_CARD, value: "1"}
+            - {name: INPUT_MODE, value: "1"}
+            - {name: PUSH_SEND, value: "1"}
+            - {name: SEC_SCHEMES, value: "apiKey,bearer,oauth2"}
+            - {name: COMPAT, value: "1"}
+          ports: [{containerPort: 9999}]
+          readinessProbe:
+            httpGet: {path: /.well-known/agent-card.json, port: 9999}
+            initialDelaySeconds: 20
+            periodSeconds: 5
+          volumeMounts: [{name: code, mountPath: /app}]
+      volumes:
+        - name: code
+          configMap: {name: a2a-axis1-code}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: a2a-axis1-lb, namespace: mcp-pilot}
+spec:
+  type: LoadBalancer
+  selector: {app: a2a-axis1}
+  ports: [{name: http, port: 9999, targetPort: 9999}]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: a2a-axis1-nc
+  namespace: mcp-pilot
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: a2a-axis1-nc}
+  template:
+    metadata:
+      labels: {app: a2a-axis1-nc}
+    spec:
+      containers:
+        - name: agent
+          image: python:3.12-slim
+          command: ["sh", "-c", "pip install -q 'a2a-sdk==1.1.2' fastapi uvicorn sse-starlette httpx && python /app/server_axis1.py --host 0.0.0.0 --port 9999"]
+          env:
+            - {name: CARD_HOST, value: "a2a-axis1-nc.mcp-pilot.svc.cluster.local:9999"}
+            - {name: WORK_SECONDS, value: "3"}
+            - {name: PUSH_CAP, value: "1"}
+            - {name: EXT_CARD, value: "1"}
+            - {name: INPUT_MODE, value: "1"}
+            - {name: PUSH_SEND, value: "1"}
+            - {name: SEC_SCHEMES, value: "apiKey,bearer,oauth2"}
+            - {name: COMPAT, value: "0"}
+          ports: [{containerPort: 9999}]
+          readinessProbe:
+            httpGet: {path: /.well-known/agent-card.json, port: 9999}
+            initialDelaySeconds: 20
+            periodSeconds: 5
+          volumeMounts: [{name: code, mountPath: /app}]
+      volumes:
+        - name: code
+          configMap: {name: a2a-axis1-code}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: a2a-axis1-nc-lb, namespace: mcp-pilot}
+spec:
+  type: LoadBalancer
+  selector: {app: a2a-axis1-nc}
+  ports: [{name: http, port: 9999, targetPort: 9999}]

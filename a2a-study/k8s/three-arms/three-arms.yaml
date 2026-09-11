@@ -1,0 +1,59 @@
+# 축 2 "같은 작업" 3팔. 파드 하나에 컨테이너 셋을 두어 노드와 자원 조건을 같게 만든다.
+# 세 컨테이너가 같은 ConfigMap의 work.py를 import 하므로 계산은 글자까지 같다.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: three-arms
+  namespace: mcp-pilot
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: three-arms}
+  template:
+    metadata:
+      labels: {app: three-arms}
+    spec:
+      containers:
+        - name: a2a
+          image: python:3.12-slim
+          command: ["sh", "-c"]
+          args: ["pip install -q 'a2a-sdk==1.1.2' fastapi uvicorn sse-starlette && python /app/srv_a2a.py"]
+          env:
+            - {name: CARD_HOST, value: "three-arms.mcp-pilot.svc.cluster.local:9101"}
+          ports: [{containerPort: 9101}]
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 512Mi}
+          volumeMounts: [{name: code, mountPath: /app}]
+        - name: mcp
+          image: docker.io/mcp-pilot/b-server:2.0.0   # mcp==2.0.0, uvicorn 포함
+          command: ["python", "/app/srv_mcp.py"]
+          ports: [{containerPort: 9102}]
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 512Mi}
+          volumeMounts: [{name: code, mountPath: /app}]
+        - name: http
+          image: python:3.12-slim
+          command: ["python", "/app/srv_http.py"]
+          ports: [{containerPort: 9103}]
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 512Mi}
+          volumeMounts: [{name: code, mountPath: /app}]
+      volumes:
+        - name: code
+          configMap: {name: three-arms-code}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: three-arms
+  namespace: mcp-pilot
+spec:
+  type: LoadBalancer
+  selector: {app: three-arms}
+  ports:
+    - {name: a2a, port: 9101, targetPort: 9101}
+    - {name: mcp, port: 9102, targetPort: 9102}
+    - {name: http, port: 9103, targetPort: 9103}

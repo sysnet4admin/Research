@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" font-family="Helvetica, Arial, sans-serif">
+<rect width="900" height="400" fill="white"/>
+<text x="450.0" y="32" font-size="15" fill="#111" text-anchor="middle" font-weight="bold">What you get and what you pay</text>
+<text x="450.0" y="52" font-size="11" fill="#777" text-anchor="middle">The same job built three ways. Each panel has its own conditions; lower is better in all three.</text>
+<rect x="22" y="84" width="268" height="236" rx="6" fill="#ffffff" stroke="#e2e6ec" stroke-width="1.2"/>
+<text x="156.0" y="110" font-size="11.5" fill="#333" text-anchor="middle" font-weight="bold">items to rebuild per counterpart</text>
+<text x="156.0" y="127" font-size="9" fill="#999" text-anchor="middle">only A2A has the spec fix them</text>
+<text x="74" y="166" font-size="10.5" fill="#555" text-anchor="end">HTTP</text>
+<rect x="82" y="154" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<rect x="82" y="154" width="138.0" height="16" rx="3" fill="#b6bec7"/>
+<text x="228" y="166" font-size="10.5" fill="#333" text-anchor="start">5</text>
+<text x="74" y="214" font-size="10.5" fill="#555" text-anchor="end">MCP</text>
+<rect x="82" y="202" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<rect x="82" y="202" width="138.0" height="16" rx="3" fill="#7b8ca5"/>
+<text x="228" y="214" font-size="10.5" fill="#333" text-anchor="start">5</text>
+<text x="74" y="262" font-size="10.5" fill="#555" text-anchor="end">A2A</text>
+<rect x="82" y="250" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<text x="228" y="262" font-size="10.5" fill="#333" text-anchor="start">0</text>
+<rect x="310" y="84" width="268" height="236" rx="6" fill="#ffffff" stroke="#e2e6ec" stroke-width="1.2"/>
+<text x="444.0" y="110" font-size="11.5" fill="#333" text-anchor="middle" font-weight="bold">bytes per response</text>
+<text x="444.0" y="127" font-size="9" fill="#999" text-anchor="middle">one call, no load</text>
+<text x="362" y="166" font-size="10.5" fill="#555" text-anchor="end">HTTP</text>
+<rect x="370" y="154" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<rect x="370" y="154" width="19.001721170395868" height="16" rx="3" fill="#b6bec7"/>
+<text x="516" y="166" font-size="10.5" fill="#333" text-anchor="start">80 B</text>
+<text x="362" y="214" font-size="10.5" fill="#555" text-anchor="end">MCP</text>
+<rect x="370" y="202" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<rect x="370" y="202" width="67.93115318416523" height="16" rx="3" fill="#7b8ca5"/>
+<text x="516" y="214" font-size="10.5" fill="#333" text-anchor="start">286 B</text>
+<text x="362" y="262" font-size="10.5" fill="#555" text-anchor="end">A2A</text>
+<rect x="370" y="250" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<rect x="370" y="250" width="138.0" height="16" rx="3" fill="#326CE5"/>
+<text x="516" y="262" font-size="10.5" fill="#333" text-anchor="start">581 B</text>
+<rect x="598" y="84" width="268" height="236" rx="6" fill="#ffffff" stroke="#e2e6ec" stroke-width="1.2"/>
+<text x="732.0" y="110" font-size="11.5" fill="#333" text-anchor="middle" font-weight="bold">latency per call, p50</text>
+<text x="732.0" y="127" font-size="9" fill="#999" text-anchor="middle">100 rps, connection reuse</text>
+<text x="650" y="166" font-size="10.5" fill="#555" text-anchor="end">HTTP</text>
+<rect x="658" y="154" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<rect x="658" y="154" width="94.09090909090908" height="16" rx="3" fill="#b6bec7"/>
+<text x="804" y="166" font-size="10.5" fill="#333" text-anchor="start">3.0 ms</text>
+<text x="650" y="214" font-size="10.5" fill="#555" text-anchor="end">MCP</text>
+<rect x="658" y="202" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<rect x="658" y="202" width="128.59090909090907" height="16" rx="3" fill="#7b8ca5"/>
+<text x="804" y="214" font-size="10.5" fill="#333" text-anchor="start">4.1 ms</text>
+<text x="650" y="262" font-size="10.5" fill="#555" text-anchor="end">A2A</text>
+<rect x="658" y="250" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<rect x="658" y="250" width="138.0" height="16" rx="3" fill="#326CE5"/>
+<text x="804" y="262" font-size="10.5" fill="#333" text-anchor="start">4.4 ms</text>
+<text x="450.0" y="358" font-size="10" fill="#555" text-anchor="middle">The left panel is what you get; the two on the right are what you pay. The blue bar is the shortest on the left and the longest on the right. The bytes are</text>
+<text x="450.0" y="373" font-size="10" fill="#555" text-anchor="middle">high because the task object rides along every time. For short one-shot calls there is nothing to gain on the left, so only the cost remains.</text>
+</svg>

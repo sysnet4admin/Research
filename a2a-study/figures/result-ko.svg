@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" font-family="Helvetica, Arial, sans-serif">
+<rect width="900" height="400" fill="white"/>
+<text x="450.0" y="32" font-size="15" fill="#111" text-anchor="middle" font-weight="bold">얻는 것과 드는 것</text>
+<text x="450.0" y="52" font-size="11" fill="#777" text-anchor="middle">같은 작업을 세 가지로 만들어 비교했다. 칸마다 조건이 다르고 셋 다 낮을수록 좋다.</text>
+<rect x="22" y="84" width="268" height="236" rx="6" fill="#ffffff" stroke="#e2e6ec" stroke-width="1.2"/>
+<text x="156.0" y="110" font-size="11.5" fill="#333" text-anchor="middle" font-weight="bold">상대가 바뀌면 다시 만들 항목</text>
+<text x="156.0" y="127" font-size="9" fill="#999" text-anchor="middle">A2A만 스펙이 정해 준다</text>
+<text x="74" y="166" font-size="10.5" fill="#555" text-anchor="end">HTTP</text>
+<rect x="82" y="154" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<rect x="82" y="154" width="138.0" height="16" rx="3" fill="#b6bec7"/>
+<text x="228" y="166" font-size="10.5" fill="#333" text-anchor="start">5개</text>
+<text x="74" y="214" font-size="10.5" fill="#555" text-anchor="end">MCP</text>
+<rect x="82" y="202" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<rect x="82" y="202" width="138.0" height="16" rx="3" fill="#7b8ca5"/>
+<text x="228" y="214" font-size="10.5" fill="#333" text-anchor="start">5개</text>
+<text x="74" y="262" font-size="10.5" fill="#555" text-anchor="end">A2A</text>
+<rect x="82" y="250" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<text x="228" y="262" font-size="10.5" fill="#333" text-anchor="start">0개</text>
+<rect x="310" y="84" width="268" height="236" rx="6" fill="#ffffff" stroke="#e2e6ec" stroke-width="1.2"/>
+<text x="444.0" y="110" font-size="11.5" fill="#333" text-anchor="middle" font-weight="bold">응답 1건당 바이트</text>
+<text x="444.0" y="127" font-size="9" fill="#999" text-anchor="middle">부하 없이 단발 호출 1회</text>
+<text x="362" y="166" font-size="10.5" fill="#555" text-anchor="end">HTTP</text>
+<rect x="370" y="154" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<rect x="370" y="154" width="19.001721170395868" height="16" rx="3" fill="#b6bec7"/>
+<text x="516" y="166" font-size="10.5" fill="#333" text-anchor="start">80 B</text>
+<text x="362" y="214" font-size="10.5" fill="#555" text-anchor="end">MCP</text>
+<rect x="370" y="202" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<rect x="370" y="202" width="67.93115318416523" height="16" rx="3" fill="#7b8ca5"/>
+<text x="516" y="214" font-size="10.5" fill="#333" text-anchor="start">286 B</text>
+<text x="362" y="262" font-size="10.5" fill="#555" text-anchor="end">A2A</text>
+<rect x="370" y="250" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<rect x="370" y="250" width="138.0" height="16" rx="3" fill="#326CE5"/>
+<text x="516" y="262" font-size="10.5" fill="#333" text-anchor="start">581 B</text>
+<rect x="598" y="84" width="268" height="236" rx="6" fill="#ffffff" stroke="#e2e6ec" stroke-width="1.2"/>
+<text x="732.0" y="110" font-size="11.5" fill="#333" text-anchor="middle" font-weight="bold">호출당 지연 p50</text>
+<text x="732.0" y="127" font-size="9" fill="#999" text-anchor="middle">100rps, 연결 재사용</text>
+<text x="650" y="166" font-size="10.5" fill="#555" text-anchor="end">HTTP</text>
+<rect x="658" y="154" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<rect x="658" y="154" width="94.09090909090908" height="16" rx="3" fill="#b6bec7"/>
+<text x="804" y="166" font-size="10.5" fill="#333" text-anchor="start">3.0 ms</text>
+<text x="650" y="214" font-size="10.5" fill="#555" text-anchor="end">MCP</text>
+<rect x="658" y="202" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<rect x="658" y="202" width="128.59090909090907" height="16" rx="3" fill="#7b8ca5"/>
+<text x="804" y="214" font-size="10.5" fill="#333" text-anchor="start">4.1 ms</text>
+<text x="650" y="262" font-size="10.5" fill="#555" text-anchor="end">A2A</text>
+<rect x="658" y="250" width="138" height="16" rx="3" fill="#f4f6f8"/>
+<rect x="658" y="250" width="138.0" height="16" rx="3" fill="#326CE5"/>
+<text x="804" y="262" font-size="10.5" fill="#333" text-anchor="start">4.4 ms</text>
+<text x="450.0" y="358" font-size="10" fill="#555" text-anchor="middle">왼쪽이 얻는 것이고 오른쪽 둘이 드는 것이다. 파란 막대가 왼쪽에서는 가장 짧고 오른쪽에서는 가장 길다. 바이트가 큰 것은 태스크 객체를 매번 싣기 때문이다. 짧은</text>
+<text x="450.0" y="373" font-size="10" fill="#555" text-anchor="middle">단발 호출이라면 왼쪽에서 얻을 것이 없어 비용만 남는다.</text>
+</svg>

@@ -73,7 +73,7 @@ AGWV=$(kubectl --context $CTX -n agentgateway-system get deploy agentgateway-pro
 echo "# tail 보강: 백엔드 지연 스윕 + 지속 창 (자동 생성, agentgateway $AGWV)" > "$OUT/FINDINGS.md"
 note ""
 note "실행 $(date '+%Y-%m-%d %H:%M'). 컨텍스트 $CTX. direct=\`$DIRECT_URL\` gw=\`$GW_URL\`."
-note "게이트웨이 상주(정책 0), 두 팔의 차이는 대상 주소뿐. ${RPS}rps 열린 루프."
+note "게이트웨이 상주(정책 0), 두 경로의 차이는 대상 주소뿐. ${RPS}rps 열린 루프."
 note "축 1: 지연 {${DELAYS}}ms x {close, reuse} x 회차 ${ROUNDS}, ${DURATION}초 셀, 쿨다운 close ${CD_CLOSE}s / reuse ${CD_REUSE}s."
 note "축 2: 지연 ${SUSTAIN_DELAY}ms 고정, ${SUSTAIN}초 연속 x {close, reuse} x {direct, gw}, 순서 뒤집어 ${SUSTAIN_REPS}회."
 note "- 전원: $(pmset -g batt | head -1 | sed "s/Now drawing from //")"
