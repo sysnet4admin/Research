@@ -154,7 +154,7 @@ TEXT = {
         "r_title": "What you get and what you pay",
         "r_sub": "The same job built three ways. Each panel has its own conditions; lower is better in all three.",
         "r_p1": "items to rebuild per counterpart",
-        "r_p1u": "", "r_p1n": "only A2A has the spec fix them",
+        "r_p1u": "", "r_p1n": "only in A2A does the spec fix them",
         "r_p2": "bytes per response",
         "r_p2u": "B", "r_p2n": "one call, no load",
         "r_p3": "latency per call, p50",

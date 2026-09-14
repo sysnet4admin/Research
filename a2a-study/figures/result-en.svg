@@ -4,7 +4,7 @@
 <text x="450.0" y="52" font-size="11" fill="#777" text-anchor="middle">The same job built three ways. Each panel has its own conditions; lower is better in all three.</text>
 <rect x="22" y="84" width="268" height="236" rx="6" fill="#ffffff" stroke="#e2e6ec" stroke-width="1.2"/>
 <text x="156.0" y="110" font-size="11.5" fill="#333" text-anchor="middle" font-weight="bold">items to rebuild per counterpart</text>
-<text x="156.0" y="127" font-size="9" fill="#999" text-anchor="middle">only A2A has the spec fix them</text>
+<text x="156.0" y="127" font-size="9" fill="#999" text-anchor="middle">only in A2A does the spec fix them</text>
 <text x="74" y="166" font-size="10.5" fill="#555" text-anchor="end">HTTP</text>
 <rect x="82" y="154" width="138" height="16" rx="3" fill="#f4f6f8"/>
 <rect x="82" y="154" width="138.0" height="16" rx="3" fill="#b6bec7"/>
