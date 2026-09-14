@@ -1,0 +1,49 @@
+# gRPC 바인딩 측정: A2A 서버 하나에 JSON-RPC와 gRPC를 같이 띄운다.
+# k8s/axis2/axis2-arms.yaml의 최소 델타 사본이고 다른 것은 셋이다.
+#   (1) A2A 컨테이너 하나만 둔다(MCP와 HTTP 대조군은 이 측정에 필요 없다).
+#   (2) grpcio를 설치하고 포트 9111을 연다.
+#   (3) srv_a2a_grpc.py를 띄운다.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-arm
+  namespace: mcp-pilot
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: grpc-arm}
+  template:
+    metadata:
+      labels: {app: grpc-arm}
+    spec:
+      containers:
+        - name: a2a
+          image: python:3.12-slim
+          command: ["sh", "-c"]
+          args: ["pip install -q 'a2a-sdk==1.1.2' fastapi uvicorn sse-starlette httpx grpcio && python /app/srv_a2a_grpc.py"]
+          env:
+            - {name: CARD_HOST, value: "grpc-arm.mcp-pilot.svc.cluster.local:9101"}
+            - {name: GRPC_HOST, value: "grpc-arm.mcp-pilot.svc.cluster.local"}
+            - {name: WORK_SECONDS, value: "15"}
+          ports:
+            - {containerPort: 9101}
+            - {containerPort: 9111}
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 512Mi}
+          volumeMounts: [{name: code, mountPath: /app}]
+      volumes:
+        - name: code
+          configMap: {name: grpc-arm-code}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-arm
+  namespace: mcp-pilot
+spec:
+  type: LoadBalancer
+  selector: {app: grpc-arm}
+  ports:
+    - {name: a2a, port: 9101, targetPort: 9101}
+    - {name: grpc, port: 9111, targetPort: 9111}

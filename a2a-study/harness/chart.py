@@ -4,8 +4,13 @@
 사용: python3 harness/chart.py <kind> <lang> > figures/<kind>-<lang>.svg
   kind: surface   Q1의 "보이는 것은 넷뿐" 도식
         compare   Q4의 "MCP와 A2A는 상대가 다르다" 비교표
-        result    결과 절의 "얻는 것과 드는 것" 한눈 비교
+        result    결과 절의 "얻는 것과 잃는 것" 한눈 비교
+        version   헤더 하나가 두 세대를 나누는 것 (블로그 전용)
+        waiting   15초 동안의 왕복 비교 (블로그 전용)
   lang: ko | en
+
+version 과 waiting 은 README 에 쓰지 않는다. 블로그가 README 보다 친절해야 해서
+표와 문장으로만 있던 두 대목을 그림으로 더 그린 것이다.
 
 agentgateway-study/harness/chart.py와 같은 구조다(텍스트 카탈로그 + 함수 하나당
 그림 하나 + 표준 출력). 수치 그림이 아니라 개념 도식이므로 runs를 읽지 않는다.
@@ -53,7 +58,7 @@ TEXT = {
         "c_e3": "자기 도구는 MCP로",
         "c_cap": "둘은 순서가 아니라 선택이다. 도구를 직접 쓰면 MCP만 있으면 되고 남에게 일을 맡길 때 A2A를 쓴다."
                  " 맡은 쪽이 자기 도구를 부르는 것은 그쪽 사정이고 내가 거쳐 가는 경로가 아니다.",
-        "r_title": "얻는 것과 드는 것",
+        "r_title": "얻는 것과 잃는 것",
         "r_sub": "같은 작업을 세 가지로 만들어 비교했다. 칸마다 조건이 다르고 셋 다 낮을수록 좋다.",
         "r_p1": "상대가 바뀌면 다시 만들 항목",
         "r_p1u": "개", "r_p1n": "A2A만 스펙이 정해 준다",
@@ -61,8 +66,48 @@ TEXT = {
         "r_p2u": "B", "r_p2n": "부하 없이 단발 호출 1회",
         "r_p3": "호출당 지연 p50",
         "r_p3u": "ms", "r_p3n": "100rps, 연결 재사용",
-        "r_cap": "왼쪽이 얻는 것이고 오른쪽 둘이 드는 것이다. 파란 막대가 왼쪽에서는 가장 짧고 오른쪽에서는 가장 길다."
+        "r_cap": "왼쪽이 얻는 것이고 오른쪽 둘이 잃는 것이다. 파란 막대가 왼쪽에서는 가장 짧고 오른쪽에서는 가장 길다."
                  " 바이트가 큰 것은 태스크 객체를 매번 싣기 때문이다. 짧은 단발 호출이라면 왼쪽에서 얻을 것이 없어 비용만 남는다.",
+        "v_title": "같은 주소가 헤더 하나로 두 세대로 나누어진다",
+        "v_sub": "헤더를 빠뜨리면 오류가 아니라 v0.3으로 처리된다.",
+        "v_client": "클라이언트 요청",
+        "v_server": "서버 한 대",
+        "v_handled": "처리되는 세대",
+        "v_c1": "헤더 없음",
+        "v_c1n": "A2A-Version 헤더를 안 보냄",
+        "v_c2": "A2A-Version: 0.3",
+        "v_c2n": "이전 버전을 명시",
+        "v_c3": "A2A-Version: 1.0",
+        "v_c3n": "새 버전을 명시",
+        "v_g1": "v0.3으로 처리",
+        "v_g1n": "메서드 이름도 상태 이름도 v0.3",
+        "v_g2": "v1.0으로 처리",
+        "v_g2n": "새 이름과 새 형식",
+        "v_warn": "오류 없이 조용히",
+        "v_band": "REST는 경로까지 나누어지는데 이름과 실제가 반대로 보인다",
+        "v_p1": "/a2a/rest/", "v_p1v": "v1.0",
+        "v_p2": "/a2a/rest/v1/", "v_p2v": "v0.3",
+        "v_cap": "JSON-RPC는 주소 하나에서 헤더로만 나누어진다. 스펙 3.6.1절이 헤더를 반드시 보내라고 하면서"
+                 " 같은 문장에서 헤더가 없으면 v0.3으로 본다고 적어 두었다. 그래서 헤더를 빠뜨린 v1.0 클라이언트는"
+                 " 정상 응답을 받으면서 v0.3으로 처리된다.",
+        "w_title": "15초 걸리는 일을 맡겨 놓고 무엇을 하는가",
+        "w_sub": "걸린 시간은 세 구현 모두 15.1~15.2초로 같았다. 다른 것은 그동안의 왕복이다.",
+        "w_start": "맡김",
+        "w_done": "결과",
+        "w_r1": "HTTP와 MCP의 폴링",
+        "w_r1n": "앱에 직접 만든 상태 조회. 1회 92B",
+        "w_r2": "A2A의 폴링",
+        "w_r2n": "태스크 객체가 전부 실려 온다. 1회 571B",
+        "w_r3": "A2A의 스트리밍과 푸시",
+        "w_r3n": "확인하러 가지 않는다. 서버가 보낸다",
+        "w_poll": "확인",
+        "w_ev": "이벤트",
+        "w_push": "푸시 1회",
+        "w_zero": "상태 확인 왕복 0",
+        "w_cap": "폴링만 놓고 보면 A2A가 가장 비싸다. 그런데 A2A는 폴링을 하지 않아도 된다."
+                 " 스트리밍과 푸시가 스펙 안에 있어서 확인하러 가는 왕복이 0이 된다."
+                 " 다른 두 구현에서 같은 것을 하려면 SSE 엔드포인트와 웹훅 발송 기능을 직접 만들어야 한다."
+                 " 확인 횟수는 얼마나 자주 묻느냐에 달렸고 그림에서는 5회를 예로 들었다.",
     },
     "en": {
         "title": "The counterpart is opaque; only four things are visible",
@@ -117,6 +162,45 @@ TEXT = {
         "r_cap": "The left panel is what you get; the two on the right are what you pay. The blue bar is the shortest on the left"
                  " and the longest on the right. The bytes are high because the task object rides along every time. For short one-shot calls"
                  " there is nothing to gain on the left, so only the cost remains.",
+        "v_title": "One header splits the same address into two generations",
+        "v_sub": "Omit it and you get v0.3, not an error.",
+        "v_client": "client request",
+        "v_server": "one server",
+        "v_handled": "generation used",
+        "v_c1": "no header",
+        "v_c1n": "A2A-Version not sent",
+        "v_c2": "A2A-Version: 0.3",
+        "v_c2n": "asks for the old one",
+        "v_c3": "A2A-Version: 1.0",
+        "v_c3n": "asks for the new one",
+        "v_g1": "handled as v0.3",
+        "v_g1n": "old method names, old state names",
+        "v_g2": "handled as v1.0",
+        "v_g2n": "new names, new shape",
+        "v_warn": "no error, no sign",
+        "v_band": "REST splits by path too, and the names read backwards",
+        "v_p1": "/a2a/rest/", "v_p1v": "v1.0",
+        "v_p2": "/a2a/rest/v1/", "v_p2v": "v0.3",
+        "v_cap": "JSON-RPC splits on the header alone, at one address. Spec 3.6.1 says clients MUST send the header"
+                 " and, in the same sentence, that an absent header means v0.3. So a v1.0 client that forgets it"
+                 " gets normal responses while being served the older generation.",
+        "w_title": "What you can do while a 15-second job runs",
+        "w_sub": "All three took 15.1-15.2 s. What differs is the round trips in between.",
+        "w_start": "handed off",
+        "w_done": "result",
+        "w_r1": "polling on HTTP and MCP",
+        "w_r1n": "a status call built by hand. 92 B each",
+        "w_r2": "polling on A2A",
+        "w_r2n": "the whole task object rides along. 571 B each",
+        "w_r3": "A2A streaming and push",
+        "w_r3n": "you do not go and check. the server sends",
+        "w_poll": "check",
+        "w_ev": "event",
+        "w_push": "one push",
+        "w_zero": "zero status round trips",
+        "w_cap": "On polling alone A2A is the most expensive. But A2A does not have to poll:"
+                 " streaming and push are in the spec, which takes the status round trips to zero."
+                 " Doing the same on the other two means building an SSE endpoint and a webhook sender yourself.",
     },
 }
 
@@ -268,7 +352,7 @@ def compare(T):
             for li, ln in enumerate(lines):
                 s.append(txt(col, top + li * 14, ln, 10.5, "#333"))
 
-    # 아래 띠: 갈림길. 일렬로 그리면 "A2A를 거쳐야 MCP에 닿는다"로 읽힌다.
+    # 아래 띠: 두 갈래. 일렬로 그리면 "A2A를 거쳐야 MCP에 닿는다"로 읽힌다.
     by = ty + hh + rh * 4 + 34
     bh_band = 140
     s.append(txt(tx, by - 6, T["c_band"], 11, "#777", anchor="start", bold=True))
@@ -318,7 +402,7 @@ def compare(T):
 
 
 def result(T):
-    """결과 절의 한눈 비교. 얻는 것 하나와 드는 것 둘을 같은 형태의 막대로 놓아
+    """결과 절의 한눈 비교. 얻는 것 하나와 잃는 것 둘을 같은 형태의 막대로 놓아
     트레이드오프가 한 화면에 보이게 한다. 색은 프로토콜마다 고정한다."""
     w, h = 900, 400
     s = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" '
@@ -374,6 +458,130 @@ def wrapcap(text, limit=150):
     return "\n".join(lines)
 
 
+def version(T):
+    """헤더 하나가 두 세대를 나누는 것. 블로그 전용(README에는 없다)."""
+    w, h = 900, 470
+    s = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" '
+         f'font-family="Helvetica, Arial, sans-serif">',
+         f'<rect width="{w}" height="{h}" fill="white"/>',
+         '<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" '
+         'markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>']
+    s.append(txt(w / 2, 32, T["v_title"], 15, "#111", bold=True))
+    s.append(txt(w / 2, 52, T["v_sub"], 11, "#777"))
+
+    cw, ch = 196, 52
+    cx = 44
+    ys = [92, 168, 244]
+    s.append(txt(cx, 80, T["v_client"], 10.5, "#888", anchor="start", bold=True))
+    keys = [("v_c1", "v_c1n"), ("v_c2", "v_c2n"), ("v_c3", "v_c3n")]
+    for i, (kt, kn) in enumerate(keys):
+        y = ys[i]
+        hot = i == 0
+        s.append(box(cx, y, cw, ch, fill="#fff7f2" if hot else "#fafafa",
+                     stroke="#d9822b" if hot else "#999"))
+        s.append(txt(cx + cw / 2, y + 22, T[kt], 11.5, "#222", bold=True, mono=(i > 0)))
+        s.append(txt(cx + cw / 2, y + 38, T[kn], 9, "#888"))
+
+    # 서버
+    sx, sy, sw_, sh_ = 356, 92, 150, 204
+    s.append(box(sx, sy, sw_, sh_, fill="#ffffff", stroke="#326CE5", sw=1.6))
+    s.append(f'<rect x="{sx}" y="{sy}" width="{sw_}" height="26" rx="6" fill="#326CE5"/>')
+    s.append(f'<rect x="{sx}" y="{sy + 16}" width="{sw_}" height="10" fill="#326CE5"/>')
+    s.append(txt(sx + sw_ / 2, sy + 18, T["v_server"], 11.5, "#ffffff", bold=True))
+    s.append(txt(sx + sw_ / 2, sy + 116, "/a2a/jsonrpc", 10, "#555", mono=True))
+    s.append(txt(sx + sw_ / 2, sy + 134, "v0.3 + v1.0", 9.5, "#999"))
+
+    # 처리 결과
+    gx, gw, gh = 640, 216, 62
+    gys = [104, 214]
+    s.append(txt(gx, 80, T["v_handled"], 10.5, "#888", anchor="start", bold=True))
+    for i, (kt, kn) in enumerate([("v_g1", "v_g1n"), ("v_g2", "v_g2n")]):
+        y = gys[i]
+        s.append(box(gx, y, gw, gh, fill="#fafafa",
+                     stroke="#326CE5" if i else "#b5b5b5"))
+        s.append(txt(gx + gw / 2, y + 24, T[kt], 12, "#222", bold=True))
+        s.extend(multiline(gx + gw / 2, y + 42, wrapcap(T[kn], 30), 9, "#777", 11))
+
+    # 화살표
+    for i in range(3):
+        y = ys[i] + ch / 2
+        s.append(f'<line x1="{cx + cw + 6}" y1="{y}" x2="{sx - 8}" y2="{y}" '
+                 f'stroke="{"#d9822b" if i == 0 else "#7b8ca5"}" stroke-width="1.8" '
+                 f'marker-end="url(#a)"/>')
+    s.append(f'<line x1="{sx + sw_ + 6}" y1="{gys[0] + gh / 2}" x2="{gx - 8}" '
+             f'y2="{gys[0] + gh / 2}" stroke="#7b8ca5" stroke-width="1.8" marker-end="url(#a)"/>')
+    s.append(f'<line x1="{sx + sw_ + 6}" y1="{gys[1] + gh / 2}" x2="{gx - 8}" '
+             f'y2="{gys[1] + gh / 2}" stroke="#326CE5" stroke-width="1.8" marker-end="url(#a)"/>')
+    s.extend(line_label((sx + sw_ + gx) / 2, gys[0] + gh / 2 - 9, T["v_warn"], 9, "#d9822b"))
+
+    # 아래 띠: 경로 이름 역전
+    by = 330
+    s.append(txt(cx, by - 8, T["v_band"], 11, "#777", anchor="start", bold=True))
+    s.append(box(cx, by, w - cx * 2, 66, fill="#fbfcfe", stroke="#dde3ee"))
+    for i, (kp, kv) in enumerate([("v_p1", "v_p1v"), ("v_p2", "v_p2v")]):
+        px = cx + 40 + i * 400
+        s.append(txt(px, by + 30, T[kp], 12, "#333", anchor="start", mono=True))
+        s.append(f'<line x1="{px + 130}" y1="{by + 26}" x2="{px + 186}" y2="{by + 26}" '
+                 f'stroke="#7b8ca5" stroke-width="1.6" marker-end="url(#a)"/>')
+        s.append(txt(px + 216, by + 30, T[kv], 12.5, "#326CE5" if i == 0 else "#777",
+                     anchor="start", bold=True))
+    s.extend(multiline(w / 2, 428, wrapcap(T["v_cap"], 92), 9.5, "#777", 13))
+    s.append("</svg>")
+    return "\n".join(s)
+
+
+def waiting(T):
+    """15초 동안의 왕복 비교. 블로그 전용(README에는 없다)."""
+    w, h = 900, 430
+    s = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" '
+         f'font-family="Helvetica, Arial, sans-serif">',
+         f'<rect width="{w}" height="{h}" fill="white"/>',
+         '<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" '
+         'markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#326CE5"/></marker></defs>']
+    s.append(txt(w / 2, 32, T["w_title"], 15, "#111", bold=True))
+    s.append(txt(w / 2, 52, T["w_sub"], 11, "#777"))
+
+    x0, x1 = 250, 800
+    rows = [110, 208, 306]
+    # 시간축 눈금
+    s.append(txt(x0, 84, T["w_start"], 9.5, "#888"))
+    s.append(txt(x1, 84, T["w_done"], 9.5, "#888"))
+    for x in (x0, x1):
+        s.append(f'<line x1="{x}" y1="{90}" x2="{x}" y2="{356}" stroke="#e3e3e3" '
+                 f'stroke-width="1" stroke-dasharray="3 3"/>')
+
+    specs = [("w_r1", "w_r1n", "#7b8ca5", 5, T["w_poll"], "92B"),
+             ("w_r2", "w_r2n", "#d9822b", 5, T["w_poll"], "571B"),
+             ("w_r3", "w_r3n", "#326CE5", 0, "", "")]
+    for i, (kt, kn, color, n, plabel, blabel) in enumerate(specs):
+        y = rows[i]
+        s.append(txt(30, y - 4, T[kt], 12, "#222", anchor="start", bold=True))
+        s.append(txt(30, y + 13, T[kn], 9, "#888", anchor="start"))
+        s.append(f'<line x1="{x0}" y1="{y}" x2="{x1}" y2="{y}" stroke="#ccc" stroke-width="2"/>')
+        s.append(f'<circle cx="{x0}" cy="{y}" r="4.5" fill="#555"/>')
+        s.append(f'<circle cx="{x1}" cy="{y}" r="4.5" fill="{color}"/>')
+        if n:
+            step = (x1 - x0) / (n + 1)
+            for k in range(1, n + 1):
+                px = x0 + step * k
+                s.append(f'<line x1="{px}" y1="{y}" x2="{px}" y2="{y - 22}" '
+                         f'stroke="{color}" stroke-width="1.4"/>')
+                s.append(f'<circle cx="{px}" cy="{y - 24}" r="3.5" fill="{color}"/>')
+            s.append(txt((x0 + x1) / 2, y - 34, f"{plabel}마다 {blabel}", 9.5, color))
+        else:
+            # 서버가 보내는 쪽. 이벤트 4개와 푸시 1회.
+            for k, px in enumerate([x0 + 110, x0 + 240, x0 + 370, x1 - 20]):
+                s.append(f'<line x1="{px}" y1="{y + 30}" x2="{px}" y2="{y + 5}" '
+                         f'stroke="{color}" stroke-width="1.4" marker-end="url(#ab)"/>')
+                s.append(f'<circle cx="{px}" cy="{y + 32}" r="3.5" fill="{color}"/>')
+            s.append(txt((x0 + x1) / 2, y + 54, T["w_ev"] + " / " + T["w_push"], 9.5, color))
+            s.extend(line_label((x0 + x1) / 2, y - 14, T["w_zero"], 9.5, color))
+
+    s.extend(multiline(w / 2, 386, wrapcap(T["w_cap"], 92), 9.5, "#777", 13))
+    s.append("</svg>")
+    return "\n".join(s)
+
+
 if __name__ == "__main__":
     kind = sys.argv[1] if len(sys.argv) > 1 else "surface"
     lang = sys.argv[2] if len(sys.argv) > 2 else "ko"
@@ -384,5 +592,9 @@ if __name__ == "__main__":
         print(compare(T))
     elif kind == "result":
         print(result(T))
+    elif kind == "version":
+        print(version(T))
+    elif kind == "waiting":
+        print(waiting(T))
     else:
         raise SystemExit(f"unknown kind: {kind}")

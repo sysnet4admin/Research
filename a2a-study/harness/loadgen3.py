@@ -9,7 +9,9 @@ agentgateway-study/a2a/harness/loadgen_a2a.py의 최소 델타 사본이다. 스
 - http: JSON-RPC POST {"method":"do-work","params":{"text":...}}. 성공 = result.text.
 - mcp:  tools/call do-work(신 스펙 _meta 3종, Mcp-Method/Mcp-Name 헤더). 성공 =
         result.content[0].text. 응답이 SSE면 data 줄을 파싱한다.
-- a2a:  message/send(v0.3 형식). 성공 = result.kind가 task이고 status.state가
+- grpc: A2A의 gRPC 바인딩. --url은 host:port 형식이고 바이트는 직렬화 길이다.
+- a2a:  --gen 0.3이면 message/send(v0.3), --gen 1.0이면 A2A-Version 헤더와
+        SendMessage(v1.0). 성공 = result.kind가 task이고 status.state가
         completed, 또는 result.kind가 message.
 """
 
@@ -27,6 +29,16 @@ def pctl(sorted_vals, p):
         return None
     k = max(0, min(len(sorted_vals) - 1, int(round(p / 100 * (len(sorted_vals) - 1)))))
     return sorted_vals[k]
+
+
+class _NullCM:
+    """gRPC 경로에서 httpx 클라이언트 자리를 채우는 빈 컨텍스트 매니저."""
+
+    async def __aenter__(self):
+        return None
+
+    async def __aexit__(self, *a):
+        return False
 
 
 class Stats:
@@ -67,10 +79,11 @@ META = {
 
 
 class Worker:
-    def __init__(self, client, url, stats, rid_base, arm, text):
+    def __init__(self, client, url, stats, rid_base, arm, text, gen="0.3"):
         self.client, self.url, self.stats = client, url, stats
         self.rid = rid_base
         self.arm, self.text = arm, text
+        self.gen = gen
 
     def _request(self):
         if self.arm == "http":
@@ -83,6 +96,13 @@ class Worker:
                     {"jsonrpc": "2.0", "id": self.rid, "method": "tools/call",
                      "params": {"name": "do-work", "arguments": {"text": self.text},
                                 "_meta": META}})
+        if self.gen == "1.0":
+            return ({"A2A-Version": "1.0"},
+                    {"jsonrpc": "2.0", "id": self.rid, "method": "SendMessage",
+                     "params": {"message": {
+                         "role": "ROLE_USER",
+                         "messageId": f"m-{self.rid}",
+                         "parts": [{"text": self.text}]}}})
         return {}, {"jsonrpc": "2.0", "id": self.rid, "method": "message/send",
                     "params": {"message": {
                         "kind": "message", "role": "user",
@@ -109,6 +129,11 @@ class Worker:
         if self.arm == "mcp":
             c = r.get("content") or []
             return bool(c) and "text" in c[0] and not r.get("isError", False)
+        if self.gen == "1.0":
+            t = r.get("task")
+            if isinstance(t, dict):
+                return (t.get("status") or {}).get("state") == "TASK_STATE_COMPLETED"
+            return "message" in r
         if r.get("kind") == "task":
             return (r.get("status") or {}).get("state") == "completed"
         return r.get("kind") == "message"
@@ -146,6 +171,43 @@ class Worker:
             self.stats.errors["shape"] += 1
 
 
+class GrpcWorker:
+    """gRPC 바인딩용. Worker와 같은 Stats에 기록해 계측 방식을 맞춘다.
+
+    바이트는 응답 메시지의 직렬화 길이다. HTTP/2 프레이밍과 헤더 압축은 빠지므로
+    JSON-RPC 쪽의 HTTP 본문 바이트와 같은 잣대가 아니다. 결과를 읽을 때 이 차이를
+    함께 본다.
+    """
+
+    def __init__(self, channel, stats, rid_base, text):
+        from a2a.types import a2a_pb2, a2a_pb2_grpc
+
+        self._pb = a2a_pb2
+        self.stub = a2a_pb2_grpc.A2AServiceStub(channel)
+        self.stats = stats
+        self.rid = rid_base
+        self.text = text
+
+    async def call_once(self):
+        self.rid += 1
+        pb = self._pb
+        msg = pb.Message(role=pb.ROLE_USER, message_id=f"g-{self.rid}")
+        msg.parts.add().text = self.text
+        t0 = time.perf_counter()
+        try:
+            resp = await self.stub.SendMessage(pb.SendMessageRequest(message=msg), timeout=10)
+        except Exception as e:  # grpc.aio.AioRpcError 포함
+            self.stats.errors[f"grpc:{type(e).__name__}"] += 1
+            return
+        dt = time.perf_counter() - t0
+        if resp.HasField("task") and resp.task.status.state == pb.TASK_STATE_COMPLETED:
+            self.stats.ok += 1
+            self.stats.latencies.append(dt)
+            self.stats.resp_bytes += len(resp.SerializeToString())
+        else:
+            self.stats.errors["shape"] += 1
+
+
 async def run(args):
     global _ACTIVE_STATS
     stats = Stats()
@@ -156,9 +218,22 @@ async def run(args):
         max_keepalive_connections=0 if args.conn_mode == "close" else args.concurrency * 2,
     )
     headers = {"Connection": "close"} if args.conn_mode == "close" else {}
-    async with httpx.AsyncClient(timeout=10.0, limits=limits, headers=headers) as client:
-        workers = [Worker(client, args.url, stats, rid_base=i * 1_000_000, arm=args.arm, text=args.text)
-                   for i in range(args.concurrency)]
+    if args.arm == "grpc":
+        import grpc
+
+        channel = grpc.aio.insecure_channel(args.url)
+        client_cm = _NullCM()
+    else:
+        channel = None
+        client_cm = httpx.AsyncClient(timeout=10.0, limits=limits, headers=headers)
+    async with client_cm as client:
+        if args.arm == "grpc":
+            workers = [GrpcWorker(channel, stats, rid_base=i * 1_000_000, text=args.text)
+                       for i in range(args.concurrency)]
+        else:
+            workers = [Worker(client, args.url, stats, rid_base=i * 1_000_000, arm=args.arm, text=args.text,
+                              gen=args.gen)
+                       for i in range(args.concurrency)]
         deadline = time.monotonic() + args.duration
         t_start = time.time()
 
@@ -197,6 +272,8 @@ async def run(args):
 
             await asyncio.gather(*(loop(w) for w in workers))
         elapsed = time.time() - t_start
+    if channel is not None:
+        await channel.close()
 
     lat = sorted(stats.latencies)
     return {
@@ -222,7 +299,9 @@ async def run(args):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--url", required=True, help="구현의 엔드포인트")
-    p.add_argument("--arm", choices=["http", "mcp", "a2a"], required=True)
+    p.add_argument("--arm", choices=["http", "mcp", "a2a", "grpc"], required=True)
+    p.add_argument("--gen", default="0.3", choices=["0.3", "1.0"],
+                   help="a2a 세대. 1.0이면 A2A-Version 헤더와 SendMessage를 쓴다")
     p.add_argument("--text", default="hello-world")
     p.add_argument("--concurrency", type=int, default=8)
     p.add_argument("--duration", type=int, default=30, help="seconds")

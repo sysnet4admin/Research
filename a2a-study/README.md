@@ -251,7 +251,7 @@ the HTTP application handle (the status query this study built inside the app
 because there is no convention for it).
 
 More latency too. Under load, A2A spends 1.2 to 2.1 ms more at p50 (the time half the requests finish within)
-per call than the minimal HTTP doing the same work. The gap to MCP is only 0.2 to 0.3 ms, so
+per call than the minimal HTTP doing the same work. The gap to MCP is only 0 to 0.4 ms, so
 most of the cost comes from being a structured protocol rather than from A2A
 specifically.
 
@@ -332,7 +332,7 @@ Here are the twelve.
 | 1-8 | Getting and listing tasks | Fetch one, and list them | Fetching one works in both generations; listing exists only in v1.0. Paging works | O |
 | 1-9 | Streaming | Send over SSE, first event is the task | Four events, the first is the task, the last marks completion | O |
 | 1-10 | Push notifications | Register a config and the server sends | Needs a config store and a sender wired in. Before that, the configuration request itself is refused. Point it at a host that does not exist and the task still completes, with the failure only in the server log | △ |
-| 1-11 | Transport equivalence | The same work through any binding | Identical across JSON-RPC and REST once you send the `A2A-Version` header. Without it the request is treated as v0.3. gRPC was not measured | △ |
+| 1-11 | Transport equivalence | The same work through any binding | The same work goes through JSON-RPC, REST and gRPC. JSON-RPC and REST need the `A2A-Version` header for v1.0; without it the request is treated as v0.3. gRPC speaks the v1.0 schema from the start | △ |
 | 1-12 | Error surface | Use the standard error codes | It differs by binding: JSON-RPC returns 200 with an error code, REST returns 404 in another format | △ |
 
 O means it behaves as specified, △ that a condition applies, X that it departs
@@ -416,15 +416,18 @@ the request was the thing that was wrong.
 
 ### 3. Overhead
 
-The same load against the three implementations, 60 cells. Run `axis3-0909`.
+The same load against the three implementations, 60 cells. Run `axis3-0909`. From
+2026-09-11 to 09-12 this was extended to 460 cells covering both generations and
+gRPC: runs `axis3gen-0911A`, `-0911B` (two generations) and `axis3four-0912C`,
+`-0912D`, `-0912E` (with gRPC). No errors and no shed requests in any of them.
 
 A2A spends 1.2 to 2.1 ms more at p50 per call than the minimal HTTP doing the same
-work, and 0.2 to 0.3 ms more than MCP. All 60 cells ran with zero errors and zero
+work, and 0 to 0.4 ms more than MCP. All 60 cells and the 460 cells of the addendum ran with zero errors and zero
 shed requests. Per-condition numbers are in the run-by-run numbers below.
 
 What matters is the size of those two gaps. The small distance between A2A and MCP
 says most of the cost comes from being a structured protocol rather than from A2A
-in particular. Against the MCP arm measured here, A2A cost 0.2 to 0.3 ms more. Coming from plain
+in particular. Against the MCP arm measured here, A2A cost 0 to 0.4 ms more. Coming from plain
 HTTP, you take the whole 1.2 to 2.1 ms.
 
 ### Run-by-run numbers
@@ -483,20 +486,32 @@ The 50 rps and 100 rps rows are not compared with each other because the
 generator's concurrency differs (8 and 16). Read the differences between
 implementations within a row.
 
-| Condition | HTTP | MCP | A2A | A2A - HTTP |
-|---|---|---|---|---|
-| 50 rps, new connection per call | 4.5 | 5.6 | 5.9 | +1.4 |
-| 50 rps, connection reuse | 3.4 | 5.3 | 5.5 | +2.1 |
-| 100 rps, new connection per call | 3.4 | 4.3 | 4.6 | +1.2 |
-| 100 rps, connection reuse | 3.0 | 4.1 | 4.4 | +1.4 |
+| Condition | HTTP | MCP | A2A v0.3 | A2A v1.0 | v0.3 - HTTP |
+|---|---|---|---|---|---|
+| 50 rps, new connection per call | 4.4 | 5.5 | 5.8 | 6.0 | +1.4 |
+| 50 rps, connection reuse | 3.4 | 5.5 | 5.5 | 5.7 | +2.1 |
+| 100 rps, new connection per call | 3.6 | 4.4 | 4.8 | 4.8 | +1.2 |
+| 100 rps, connection reuse | 3.0 | 4.2 | 4.5 | 4.5 | +1.5 |
 
-Bytes per successful response at 50 rps are 80 for HTTP, 286 for MCP and 582 for
-A2A. At 100 rps each grows by one or two bytes, to 81, 287 and 584. The 581 in the
-short-job table above was measured with a single call and no load, so the
-conditions differ.
+Bytes per successful response at 100 rps with connection reuse are 81 for HTTP, 287
+for MCP, 584 for A2A v0.3 and 550 for v1.0. The 581 in the short-job table above was
+measured with a single call and no load, so the conditions differ.
 
-The p50 gap between A2A and MCP is 0.2 to 0.3 ms, so most of the cost is common to
+**The two generations differ by 0 to 0.2 ms.** Two of the four conditions give the
+same number. Changing the generation does not move latency; only the bytes move, and
+v1.0 is 34 bytes smaller. The state name got longer but the `kind` discriminators on
+parts and messages went away, so the total shrank.
+
+The p50 gap between A2A and MCP is 0 to 0.4 ms, so most of the cost is common to
 structured protocols.
+
+The gRPC binding was measured in a separate set of runs where the same A2A container
+serves both JSON-RPC and gRPC. Its resource conditions differ from the table above,
+so the two sets are not mixed. Within that set, at 100 rps with connection reuse,
+gRPC runs at p50 3.1 ms and 280 serialized bytes against 4.9 ms and 550 bytes for
+JSON-RPC v1.0. Two caveats: the generator reuses one gRPC channel throughout, so the
+connection-mode axis does not apply, and the byte figure is a protobuf serialization
+length rather than an HTTP body size. See the axis 3 addendum in `RESULTS.md`.
 
 ## Limits
 
@@ -513,11 +528,16 @@ structured protocols.
   no task in its core.
 - Overhead load was measured at two points (50 and 100 rps) and no saturation point
   was found.
-- **The A2A calls in against-the-alternatives and overhead were sent without the
-  `A2A-Version` header**, so they went over the wire in v0.3 form. v1.0 has longer
-  state names and a different discriminator field, so its byte counts differ; read
-  the response bytes and latency as v0.3-form figures. Declared-versus-actual
-  checked both forms.
+- The against-the-alternatives run sent A2A calls without the `A2A-Version` header,
+  so those figures are v0.3-form. The 2026-09-11 addendum re-measured the same items
+  in v1.0 form; see the axis 3 addendum in `RESULTS.md`. Overhead now covers both
+  generations.
+- The gRPC runs reuse a single channel throughout, so the connection-mode axis does
+  not apply to them. Read them from the connection-reuse rows only. Their byte
+  figures are protobuf serialization lengths, not HTTP body sizes.
+- The runs that include gRPC put both servers in the same A2A container, which makes
+  them 0.4 to 0.5 ms slower across the board than the runs without it. The two sets
+  are not mixed.
 
 ## Reproduction
 
@@ -529,14 +549,21 @@ The runners deploy the servers themselves and leave them in place when `KEEP=1`.
 ./harness/axis1_probes.sh        # declared versus actual, about 5 minutes. Results in runs/axis1-<date>/
 ./harness/axis2_scenarios.sh     # against the alternatives, about 4 minutes. Results in runs/axis2-<date>/
 ./harness/axis3_load.sh          # overhead, about 3.5 hours (unattended). Results in runs/axis3-<date>/
+./harness/axis2_v10_bytes.sh     # the A2A side of against-the-alternatives in v1.0 form, about 3 minutes
+./harness/axis3_load_gen.sh      # overhead across both generations, about 5 hours (unattended)
+./harness/axis3_load_4.sh        # overhead including gRPC, about 6 hours (unattended)
+./harness/grpc_probe.py --host <IP>   # single gRPC calls. needs grpcio
 ```
 
-The overhead run happened in an unattended window. Reproducing it needs only
-`axis3_load.sh`.
+The overhead runs happened in unattended windows. Reproducing a single round needs
+only `axis3_load.sh`; `axis3_load_gen.sh` and `axis3_load_4.sh` cover both generations
+and gRPC. Over the weekend `harness/chain_axis3_gen.sh` and
+`harness/chain_a2a_weekend.sh` ran them in order.
 
 Server sources are under `k8s/axis1/` (declared versus actual), `k8s/axis2/` (against
-the alternatives) and `k8s/three-arms/` (overhead). The three implementations are
-three containers in one pod.
+the alternatives), `k8s/three-arms/` (overhead), `k8s/four-arms/` (overhead with gRPC)
+and `k8s/grpc/` (single gRPC calls). The three implementations are three containers in
+one pod.
 
 Figures are generated by `harness/chart.py`.
 

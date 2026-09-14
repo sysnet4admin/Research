@@ -1,0 +1,67 @@
+# 오버헤드 측정 4구현: HTTP, MCP, A2A(JSON-RPC), A2A(gRPC).
+# k8s/three-arms/three-arms.yaml의 최소 델타 사본이고 다른 것은 셋이다.
+#   (1) A2A 컨테이너가 srv_a2a_grpc.py를 띄워 gRPC 포트 9111을 함께 연다.
+#   (2) grpcio를 설치한다.
+#   (3) 서비스에 grpc 포트를 더한다.
+# gRPC 서버가 같은 컨테이너에 함께 떠 있으므로 three-arms 회차와 자원 조건이 다르다.
+# 이 구성의 회차는 따로 기록한다.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: four-arms
+  namespace: mcp-pilot
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: four-arms}
+  template:
+    metadata:
+      labels: {app: four-arms}
+    spec:
+      containers:
+        - name: a2a
+          image: python:3.12-slim
+          command: ["sh", "-c"]
+          args: ["pip install -q 'a2a-sdk==1.1.2' fastapi uvicorn sse-starlette grpcio && python /app/srv_a2a_grpc.py"]
+          env:
+            - {name: CARD_HOST, value: "four-arms.mcp-pilot.svc.cluster.local:9101"}
+          ports:
+            - {containerPort: 9101}
+            - {containerPort: 9111}
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 512Mi}
+          volumeMounts: [{name: code, mountPath: /app}]
+        - name: mcp
+          image: docker.io/mcp-pilot/b-server:2.0.0   # mcp==2.0.0, uvicorn 포함
+          command: ["python", "/app/srv_mcp.py"]
+          ports: [{containerPort: 9102}]
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 512Mi}
+          volumeMounts: [{name: code, mountPath: /app}]
+        - name: http
+          image: python:3.12-slim
+          command: ["python", "/app/srv_http.py"]
+          ports: [{containerPort: 9103}]
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 512Mi}
+          volumeMounts: [{name: code, mountPath: /app}]
+      volumes:
+        - name: code
+          configMap: {name: four-arms-code}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: four-arms
+  namespace: mcp-pilot
+spec:
+  type: LoadBalancer
+  selector: {app: four-arms}
+  ports:
+    - {name: a2a, port: 9101, targetPort: 9101}
+    - {name: grpc, port: 9111, targetPort: 9111}
+    - {name: mcp, port: 9102, targetPort: 9102}
+    - {name: http, port: 9103, targetPort: 9103}
