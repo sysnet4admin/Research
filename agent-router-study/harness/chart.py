@@ -20,7 +20,7 @@ TEXT = {
   "v_title": "Agent Router를 앞에 두면 무엇이 좋아지고 어떤 비용이 드는가",
   "v_sub": "이 글이 v1.1.0에서 측정한 범위다. 로고는 Agent Router 저장소의 것(Apache 2.0).",
   "v_client": "에이전트\n(MCP 클라이언트)",
-  "v_proxy": "MCP 프록시는 Envoy 파드 안 사이드카로 돈다",
+  "v_proxy": "MCP 프록시는 Envoy 파드의 extproc 사이드카 안에서 돈다",
   "v_srv_a": "MCP 서버 A\n도구 8종", "v_srv_b": "MCP 서버 B\n도구 2종",
   "v_gain_h": "얻는 것 (서버를 고치지 않고)",
   "v_gains": ["도구 이름만이 아니라 호출 인자 값까지 보고 허용을 정한다",
@@ -32,14 +32,14 @@ TEXT = {
               "원인은 세션 ID 복호화다. 반복을 1,000으로 낮추면 0.5ms가 된다"],
   "v_caveat": "단서: 인자 조건을 문서 예시 그대로 적으면 tools/list가 비어 에이전트가 도구를 찾지 못한다. CEL을 !has()로 감싸면 목록이 남고 조건도 그대로 강제된다.",
   "a_title": "MCP 요청은 Envoy를 두 번 지난다",
-  "a_sub": "v1.1.0 기준이다. MCP 프록시는 Envoy 파드의 extproc 사이드카 안에서 도는 Go HTTP 서버이고 포트는 코드에 박혀 있다.",
+  "a_sub": "v1.1.0 기준이다. MCP 프록시는 extproc 사이드카 안의 Go HTTP 서버이고 두 구간 모두 코드에 박힌 로컬 TCP 포트다.",
   "a_client": "에이전트", "a_client_n": "MCP 클라이언트",
   "a_pod": "Envoy 프록시 파드",
   "a_envoy1": "Envoy", "a_envoy1_n": "수신 리스너",
   "a_proxy": "MCP 프록시", "a_proxy_n": "사이드카 안의 Go 서버\nai-gateway-extproc\n세션, 병합, 인가",
   "a_envoy2": "Envoy", "a_envoy2_n": "MCP 리스너",
   "a_backend": "MCP 서버", "a_backend_n": "백엔드 여러 개",
-  "a_uds": "로컬 포트 9856", "a_local": "로컬 포트 10088",
+  "a_uds": "9856", "a_local": "10088",
   "a_cap": "설계 제안이 이유를 적는다."
            " Envoy 확장 메커니즘은 필터에서 스트리밍 응답을 만들지도, 임의 업스트림으로 스트리밍 호출을 하지도 못한다."
            " 클라이언트 SSE를 끊는 것과 여러 서버의 알림을 합치는 것을 필터로는 할 수 없었던 이유다."
@@ -110,7 +110,7 @@ TEXT = {
   "v_title": "What Agent Router adds in front of MCP servers, and what it costs",
   "v_sub": "The scope this post measured on v1.1.0. Logo from the Agent Router repository (Apache 2.0).",
   "v_client": "Agent\n(MCP client)",
-  "v_proxy": "The MCP proxy runs as a sidecar inside the Envoy pod",
+  "v_proxy": "The MCP proxy runs inside the extproc sidecar of the Envoy pod",
   "v_srv_a": "MCP server A\n8 tools", "v_srv_b": "MCP server B\n2 tools",
   "v_gain_h": "What you get, without touching the servers",
   "v_gains": ["Allow or deny on the values passed, not just the tool name",
@@ -122,19 +122,18 @@ TEXT = {
               "The cause is session ID decryption. At 1,000 iterations it is 0.5ms"],
   "v_caveat": "Caveat: write the argument condition the way the documentation shows and tools/list comes back empty, so an agent finds no tools. Wrap the CEL in !has() and the list survives with the condition still enforced.",
   "a_title": "An MCP request passes through Envoy twice",
-  "a_sub": "On v1.1.0. The MCP proxy is a Go HTTP server inside the extproc sidecar of the Envoy pod, and the ports are fixed in the code.",
+  "a_sub": "On v1.1.0. The MCP proxy is a Go HTTP server inside the extproc sidecar, and both hops are local TCP ports fixed in the code.",
   "a_client": "Agent", "a_client_n": "MCP client",
   "a_pod": "Envoy proxy pod",
   "a_envoy1": "Envoy", "a_envoy1_n": "inbound listener",
   "a_proxy": "MCP proxy", "a_proxy_n": "Go server in the sidecar\nai-gateway-extproc\nsessions, merge, authz",
   "a_envoy2": "Envoy", "a_envoy2_n": "MCP listener",
   "a_backend": "MCP server", "a_backend_n": "several backends",
-  "a_uds": "local port 9856", "a_local": "local port 10088",
+  "a_uds": "9856", "a_local": "10088",
   "a_cap": "The design proposal gives the reason. Envoy's extension mechanisms cannot reply with"
-           " streaming responses from a filter, nor make streaming callouts to arbitrary upstreams,"
-           " so terminating client SSE and merging notifications from several servers could not be done"
-           " in a filter. Hence a Go server, with Envoy still"
-           " carrying every byte in and out.",
+           " streaming responses from a filter, nor make streaming callouts to arbitrary upstreams."
+           " Neither terminating client SSE nor merging notifications from several servers could be done there."
+           " Hence a Go server, with Envoy still carrying every byte in and out.",
 
   "l_title": "Why an argument condition empties the tool list",
   "l_sub": "When filtering the list, the proxy asks about each tool as if it were being called.",
@@ -180,12 +179,13 @@ TEXT = {
   "s_cells": [
       [("100.0 achieved", "p50 99ms", "0 not sent", "#b5651d", "default"),
        ("99.2 achieved", "p50 133ms", "24 not sent", "#b5651d", "")],
-      [("99.3 achieved", "p50 118ms", "21 not sent", "#b5651d", "only one pod works"),
+      [("99.3 achieved", "p50 118ms", "21 not sent", "#b5651d", "only one pod receives"),
        ("100.0 achieved", "p50 25.7ms", "0 not sent", "#4a7c59", "")],
   ],
   "s_why": "With MetalLB announcing the address over L2, Local sends every request to pods on the announcing node.",
-  "s_cap": "Switch to Cluster and run two replicas and the target is met with latency back at its"
-           " unloaded level. The proposal's claim that any instance can serve any session holds.",
+  "s_cap": "Only the combination that changes both brings latency down. More replicas alone, or the"
+           " traffic policy alone, pushes it up instead."
+           " The proposal's claim that any instance can serve any session holds.",
 
   "r_title": "A denial comes back as plain HTTP 403",
   "r_sub": "An agent loop reads this response, not a person.",
@@ -195,7 +195,7 @@ TEXT = {
       ("What the client sees", "a transport-level error", "an error inside a normal response"),
       ("What the loop can do", "it surfaces as an exception", "read it and pick a next move"),
   ],
-  "r_cap": "The two gateways take different shapes in the same situation. Agent SDKs treat them"
+  "r_cap": "The two respond in different shapes here. Agent SDKs treat them"
            " differently, so check error handling before adopting either.",
  },
 }

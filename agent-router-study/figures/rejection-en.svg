@@ -46,6 +46,6 @@
 <text x="356.0" y="286.48" font-size="10" fill="#555" text-anchor="middle">it surfaces as an exception</text>
 <rect x="528" y="252" width="268" height="60" rx="6" fill="#eef3ee" stroke="#7a9" stroke-width="1.5"/>
 <text x="662.0" y="286.48" font-size="10" fill="#555" text-anchor="middle">read it and pick a next move</text>
-<text x="450.0" y="348.0" font-size="9.5" fill="#777" text-anchor="middle">The two gateways take different shapes in the same situation.</text>
+<text x="450.0" y="348.0" font-size="9.5" fill="#777" text-anchor="middle">The two respond in different shapes here.</text>
 <text x="450.0" y="361.5" font-size="9.5" fill="#777" text-anchor="middle">Agent SDKs treat them differently, so check error handling before adopting either.</text>
 </svg>

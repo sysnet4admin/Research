@@ -22,6 +22,28 @@ def approx(text, size, mono):
     return dwidth(text) * size * (0.52 if mono else 0.47)
 
 
+def check_labels(path, s, rects):
+    """선 위 라벨(흰 사각형 + 글자)이 옆 상자를 덮는지 본다. 글자 넘침 검사는
+    가장 가까운 상자와만 비교해서 이 겹침을 놓친다. 영문 라벨이 길어져 상자
+    글자를 가린 적이 있다."""
+    import re
+    bad = []
+    bad += check_labels(path, s, rects)
+    # 라벨은 흰색 채움에 테두리가 없는 사각형이다.
+    for m in re.finditer(r'<rect x="([0-9.-]+)" y="([0-9.-]+)" width="([0-9.]+)" height="([0-9.]+)" fill="white"/>', s):
+        lx, ly, lw, lh = (float(m.group(i)) for i in (1, 2, 3, 4))
+        if lw > 300:  # 바탕 사각형은 건너뛴다
+            continue
+        for bx, by, bw, bh in rects:
+            if bw > 300 or bh > 200:  # 큰 테두리 상자는 건너뛴다
+                continue
+            ox = min(lx + lw, bx + bw) - max(lx, bx)
+            oy = min(ly + lh, by + bh) - max(ly, by)
+            if ox > 2 and oy > 2:
+                bad.append(f"{path}: [라벨이 상자를 덮음] 라벨 x={lx:.0f}~{lx+lw:.0f} 이 상자 x={bx:.0f}~{bx+bw:.0f} 와 {ox:.0f}px 겹침")
+    return bad
+
+
 def check(path):
     s = open(path).read()
     rects = [(float(x), float(y), float(w), float(h)) for x, y, w, h in

@@ -91,9 +91,9 @@ Five things. Each takes the form "the documentation says X, is X so?"
 ### 1. What authorization actually blocks
 
 The documentation says `request.mcp.params` is in the CEL context and ships an example.
-agentgateway, under the same foundation, cannot see call arguments at that point, which
-this repository measured and reported upstream (`#3092`). So the first question is how
-this one handles it.
+agentgateway, under the same foundation, cannot see call arguments in its MCP
+authorization policy (`mcpAuthorization`), which this repository measured and reported
+upstream (`#3092`). So the first question is how this one handles it.
 
 A rule in the documented shape goes on, and calls that match and do not match the condition
 go in. What `tools/list` returns under the same policy is recorded alongside.
@@ -141,8 +141,10 @@ passed on the call.** For a tool called `get-sum`, instead of "this tool may be 
 can write "it may be used only when the first value is 1". Calling the same tool by the
 same name, `a=1` passes and `a=2` is blocked.
 
-That is where this parts from a gateway that can only block by tool name, and it is
-something agentgateway under the same foundation could not do at the same point.
+That is where this parts from a gateway that can only block by tool name. agentgateway
+under the same foundation cannot do it in its MCP authorization policy and needs a
+route-level policy instead, a path opened by PR #3301 (merged 2026-09-03) and therefore
+absent from the v1.5.0 this repository measured.
 
 Beyond that, it puts several backends behind one address, and the tool name a client sees
 carries the backend name so you can tell which server a tool belongs to.

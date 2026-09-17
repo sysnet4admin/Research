@@ -16,7 +16,7 @@
 <rect x="356" y="92" width="150" height="204" rx="6" fill="#ffffff" stroke="#326CE5" stroke-width="1.6"/>
 <rect x="356" y="92" width="150" height="26" rx="6" fill="#326CE5"/>
 <rect x="356" y="108" width="150" height="10" fill="#326CE5"/>
-<text x="431.0" y="110" font-size="11.5" fill="#ffffff" text-anchor="middle" font-weight="bold">서버 한 대</text>
+<text x="431.0" y="110" font-size="11.5" fill="#ffffff" text-anchor="middle" font-weight="bold">서버 1대</text>
 <text x="431.0" y="208" font-size="10" fill="#555" text-anchor="middle" font-family="Menlo, monospace">/a2a/jsonrpc</text>
 <text x="431.0" y="226" font-size="9.5" fill="#999" text-anchor="middle">v0.3 + v1.0</text>
 <text x="640" y="80" font-size="10.5" fill="#888" text-anchor="start" font-weight="bold">처리되는 세대</text>

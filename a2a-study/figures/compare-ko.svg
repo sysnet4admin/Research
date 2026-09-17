@@ -46,12 +46,12 @@
 <text x="461.0" y="464.0" font-size="11.5" fill="#333" text-anchor="middle" font-weight="bold">상대 에이전트</text>
 <path d="M238,433.0 H276 V460.0 H378" fill="none" stroke="#326CE5" stroke-width="1.8" marker-end="url(#a)"/>
 <rect x="270.075" y="441.0" width="121.85000000000001" height="14" fill="white"/>
-<text x="331.0" y="451.0" font-size="9" fill="#777" text-anchor="middle">A2A: 남에게 일을 맡긴다</text>
+<text x="331.0" y="451.0" font-size="9" fill="#777" text-anchor="middle">A2A: 남에게 일을 넘긴다</text>
 <rect x="616" y="440" width="150" height="40" rx="6" fill="#f7f7f7" stroke="#dcdcdc" stroke-width="1.5" stroke-dasharray="5 4"/>
 <text x="691.0" y="464.0" font-size="11" fill="#999" text-anchor="middle">도구와 자원</text>
 <line x1="542" y1="460.0" x2="608" y2="460.0" stroke="#bbb" stroke-width="1.4" marker-end="url(#a)" stroke-dasharray="4 3"/>
 <rect x="532.2625" y="442.5" width="87.47500000000001" height="13.5" fill="white"/>
 <text x="576.0" y="452.0" font-size="8.5" fill="#999" text-anchor="middle">자기 도구는 MCP로</text>
-<text x="450.0" y="516" font-size="10" fill="#555" text-anchor="middle">둘은 순서가 아니라 선택이다. 도구를 직접 쓰면 MCP만 있으면 되고 남에게 일을 맡길 때 A2A를 쓴다. 맡은 쪽이 자기 도구를 부르는 것은 그쪽 사정이고 내가 거쳐 가는</text>
+<text x="450.0" y="516" font-size="10" fill="#555" text-anchor="middle">둘은 순서가 아니라 선택이다. 도구를 직접 쓰면 MCP만 있으면 되고 남에게 일을 맡길 때 A2A를 쓴다. 받은 쪽이 자기 도구를 부르는 것은 그쪽 사정이고 내가 거쳐 가는</text>
 <text x="450.0" y="531" font-size="10" fill="#555" text-anchor="middle">경로가 아니다.</text>
 </svg>
