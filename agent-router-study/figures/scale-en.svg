@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 418" width="900" height="418" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#b5651d"/></marker></defs>
+<rect width="900" height="418" fill="white"/>
+<text x="450.0" y="32" font-size="17" fill="#111" text-anchor="middle" font-weight="bold">More replicas alone do not raise throughput</text>
+<text x="450.0" y="54" font-size="11.5" fill="#777" text-anchor="middle">Measured at a target of 100 requests per second. The default is one replica with Local.</text>
+<text x="320.0" y="96" font-size="11" fill="#666" text-anchor="middle" font-family="Menlo, monospace">externalTrafficPolicy: Local</text>
+<text x="660.0" y="96" font-size="11" fill="#666" text-anchor="middle" font-family="Menlo, monospace">externalTrafficPolicy: Cluster</text>
+<text x="144" y="154.0" font-size="12" fill="#444" text-anchor="end" font-weight="bold">1 replica</text>
+<rect x="160" y="106" width="320" height="96" rx="6" fill="#ffffff" stroke="#b5651d" stroke-width="2"/>
+<text x="320.0" y="134" font-size="13.5" fill="#b5651d" text-anchor="middle" font-weight="bold">100.0 achieved</text>
+<text x="320.0" y="154" font-size="11.5" fill="#555" text-anchor="middle">p50 99ms</text>
+<text x="320.0" y="172" font-size="10.5" fill="#777" text-anchor="middle">0 not sent</text>
+<text x="320.0" y="191" font-size="9.5" fill="#999" text-anchor="middle">default</text>
+<rect x="500" y="106" width="320" height="96" rx="6" fill="#ffffff" stroke="#b5651d" stroke-width="2"/>
+<text x="660.0" y="134" font-size="13.5" fill="#b5651d" text-anchor="middle" font-weight="bold">99.2 achieved</text>
+<text x="660.0" y="154" font-size="11.5" fill="#555" text-anchor="middle">p50 133ms</text>
+<text x="660.0" y="172" font-size="10.5" fill="#777" text-anchor="middle">24 not sent</text>
+<text x="144" y="268.0" font-size="12" fill="#444" text-anchor="end" font-weight="bold">2 replicas</text>
+<rect x="160" y="220" width="320" height="96" rx="6" fill="#ffffff" stroke="#b5651d" stroke-width="2"/>
+<text x="320.0" y="248" font-size="13.5" fill="#b5651d" text-anchor="middle" font-weight="bold">99.3 achieved</text>
+<text x="320.0" y="268" font-size="11.5" fill="#555" text-anchor="middle">p50 118ms</text>
+<text x="320.0" y="286" font-size="10.5" fill="#777" text-anchor="middle">21 not sent</text>
+<text x="320.0" y="305" font-size="9.5" fill="#999" text-anchor="middle">only one pod works</text>
+<rect x="500" y="220" width="320" height="96" rx="6" fill="#ffffff" stroke="#4a7c59" stroke-width="2"/>
+<text x="660.0" y="248" font-size="13.5" fill="#4a7c59" text-anchor="middle" font-weight="bold">100.0 achieved</text>
+<text x="660.0" y="268" font-size="11.5" fill="#555" text-anchor="middle">p50 25.7ms</text>
+<text x="660.0" y="286" font-size="10.5" fill="#777" text-anchor="middle">0 not sent</text>
+<text x="450.0" y="350" font-size="10" fill="#888" text-anchor="middle">With MetalLB announcing the address over L2, Local sends every request to pods on the announcing node.</text>
+<text x="450.0" y="378" font-size="9.5" fill="#777" text-anchor="middle">Switch to Cluster and run two replicas and the target is met with latency back at its unloaded level.</text>
+<text x="450.0" y="392" font-size="9.5" fill="#777" text-anchor="middle">The proposal's claim that any instance can serve any session holds.</text>
+</svg>

@@ -1,0 +1,11 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: Backend
+metadata: {name: mcpb, namespace: mcp-pilot}
+spec:
+  endpoints: [{fqdn: {hostname: mcp-b.mcp-pilot.svc.cluster.local, port: 80}}]
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: Backend
+metadata: {name: reflect, namespace: mcp-pilot}
+spec:
+  endpoints: [{fqdn: {hostname: reflect.mcp-pilot.svc.cluster.local, port: 80}}]

@@ -3,7 +3,7 @@
 # api-gateway has cpu limit=50m; load-gen floods it → throttled → slow/failed responses.
 
 set -euo pipefail
-CTX="AIOps-Agent-Benchmark"
+CTX="${KUBE_CONTEXT:-AIOps-Agent-Benchmark}"
 
 echo "[008-throttle] Creating prod namespace..."
 kubectl --context "$CTX" create namespace prod --dry-run=client -o yaml \

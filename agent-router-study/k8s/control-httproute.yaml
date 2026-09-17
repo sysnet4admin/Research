@@ -1,0 +1,13 @@
+# 대조군. 같은 Gateway(ar-gw)의 같은 Envoy를 지나되 MCP 프록시를 거치지 않는다.
+# 20ms가 Envoy 경로에서 오는지 MCP 프록시에서 오는지 가른다.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata: {name: raw-mcpb, namespace: mcp-pilot}
+spec:
+  parentRefs: [{name: ar-gw, kind: Gateway, group: gateway.networking.k8s.io}]
+  rules:
+    - matches: [{path: {type: PathPrefix, value: /raw}}]
+      filters:
+        - type: URLRewrite
+          urlRewrite: {path: {type: ReplacePrefixMatch, replacePrefixMatch: /mcp}}
+      backendRefs: [{name: mcp-b, port: 80}]

@@ -1,0 +1,44 @@
+{
+  "apiVersion": "aigateway.envoyproxy.io/v1beta1",
+  "kind": "MCPRoute",
+  "metadata": {
+    "name": "ar-mcp",
+    "namespace": "mcp-pilot"
+  },
+  "spec": {
+    "parentRefs": [
+      {
+        "name": "ar-gw",
+        "kind": "Gateway",
+        "group": "gateway.networking.k8s.io"
+      }
+    ],
+    "path": "/mcp",
+    "backendRefs": [
+      {
+        "name": "mcpb",
+        "kind": "Backend",
+        "group": "gateway.envoyproxy.io",
+        "path": "/mcp"
+      }
+    ],
+    "securityPolicy": {
+      "authorization": {
+        "rules": [
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "get-sum"
+                }
+              ]
+            },
+            "cel": "request.mcp.method != \"tools/call\" || request.mcp.params.arguments.a == 1"
+          }
+        ]
+      }
+    }
+  }
+}

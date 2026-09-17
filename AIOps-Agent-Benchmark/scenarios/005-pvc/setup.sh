@@ -3,7 +3,7 @@
 # Pod → PVC(Pending) → StorageClass "fast-ssd" not found.
 
 set -euo pipefail
-CTX="AIOps-Agent-Benchmark"
+CTX="${KUBE_CONTEXT:-AIOps-Agent-Benchmark}"
 
 echo "[005-pvc] Creating data namespace..."
 kubectl --context "$CTX" create namespace data --dry-run=client -o yaml \

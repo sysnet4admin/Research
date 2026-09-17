@@ -1,0 +1,26 @@
+{
+  "rate_target": 100.0,
+  "dur": 60,
+  "conc": 16,
+  "mode": "close",
+  "url": "http://192.168.2.106/mcp",
+  "tool": "mcpb__get-sum",
+  "ts": "2026-09-17T13:02:24",
+  "elapsed": 59.99,
+  "issued": 6000,
+  "shed": 0,
+  "n": 6000,
+  "ok": 6000,
+  "err": 0,
+  "codes": {
+    "200": 6000
+  },
+  "init_err": null,
+  "rate_achieved": 100.01,
+  "p50": 6.341,
+  "p95": 8.732,
+  "p99": 11.642,
+  "min": 2.171,
+  "mean": 6.482,
+  "label": "r100-close-1000"
+}

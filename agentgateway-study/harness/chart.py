@@ -49,7 +49,7 @@ TEXT = {
         "v_proxy": "프록시 v1.5.0 (Rust), Kubernetes 모드",
         "v_gain_h": "얻는 것 (서버 수정 없이)",
         "v_gains": ["도구 노출 통제: 화이트리스트 + 목록 필터링", "인자 검사: guardrail gRPC 서버 경유", "트레이스 전파: 헤더와 _meta 양쪽", "A2A: 카드 주소 재작성, JSON-RPC 로그"],
-        "v_cost_h": "내는 것",
+        "v_cost_h": "잃는 것",
         "v_costs": ["홉 p50 +0.2~0.8ms (연결 방식에 따라)", "p99는 낮아지지 않음. 재사용 + 에코급 백엔드에서만 +몇 ms", "guardrail 검사 호출당 1ms 아래"],
         "v_direct": "직접 호출 (통제 대조군)", "v_gw": "게이트웨이 경유",
         "v_caveat": "단서: 정책이 수용돼도 쓴 대로 강제되지 않을 수 있다. 인자 조건 정책은 정상 보고 뒤 백엔드 전체를 잠근다. 켠 뒤 실제 호출로 확인.",
@@ -290,7 +290,7 @@ def tail(study, T):
     return "\n".join(s)
 
 def value(T):
-    """도입 효과 그림: 경로 안의 게이트웨이(로고), 얻는 것과 내는 것. 로고 = figures/_agentgateway-logo.svg
+    """도입 효과 그림: 경로 안의 게이트웨이(로고), 얻는 것과 잃는 것. 로고 = figures/_agentgateway-logo.svg
     (agentgateway 저장소 ui/public/logo.svg, Apache 2.0)."""
     import re
     W, H = 920, 560
@@ -340,7 +340,7 @@ def value(T):
     # 직접 호출(대조군): 게이트웨이 위로 우회하는 점선
     s.append(f'<path d="M115,{CY - 32} C115,120 805,120 805,{CY - 62}" fill="none" stroke="#8a8f98" stroke-width="1.8" stroke-dasharray="6,4"/>')
     s.append(f'<text x="460" y="112" font-size="10" fill="#8a8f98" text-anchor="middle">{T["v_direct"]}</text>')
-    # 얻는 것 / 내는 것
+    # 얻는 것 / 잃는 것
     y = 350
     s.append(f'<text x="60" y="{y}" font-size="12" fill="#3c8d5a" font-weight="bold">{T["v_gain_h"]}</text>')
     for i, g in enumerate(T["v_gains"]):

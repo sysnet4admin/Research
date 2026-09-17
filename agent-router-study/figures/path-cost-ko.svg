@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 502" width="900" height="502" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#b5651d"/></marker></defs>
+<rect width="900" height="502" fill="white"/>
+<text x="450.0" y="32" font-size="17" fill="#111" text-anchor="middle" font-weight="bold">통과 비용의 99%가 MCP 프록시 구간에서 생긴다</text>
+<text x="450.0" y="54" font-size="11.5" fill="#777" text-anchor="middle">같은 Envoy를 지나되 MCP 프록시만 건너뛴 경로를 대조군으로 두었다.</text>
+<text x="46" y="88" font-size="10" fill="#999" text-anchor="start">경로</text>
+<text x="470" y="88" font-size="10" fill="#999" text-anchor="middle">동시 1 처리량</text>
+<text x="570" y="88" font-size="10" fill="#999" text-anchor="middle">지연 p50</text>
+<text x="46" y="116" font-size="11.5" fill="#333" text-anchor="start">백엔드 직접</text>
+<text x="470" y="116" font-size="11" fill="#555" text-anchor="middle">806 rps</text>
+<text x="570" y="116" font-size="11.5" fill="#4a7c59" text-anchor="middle" font-weight="bold">0.91ms</text>
+<rect x="630" y="105" width="9.613333333333333" height="14" rx="3" fill="#4a7c59" opacity="0.75"/>
+<text x="46" y="168" font-size="11.5" fill="#333" text-anchor="start">같은 Envoy, MCP 프록시 없음</text>
+<text x="470" y="168" font-size="11" fill="#555" text-anchor="middle">755 rps</text>
+<text x="570" y="168" font-size="11.5" fill="#4a7c59" text-anchor="middle" font-weight="bold">1.06ms</text>
+<rect x="630" y="157" width="11.19794871794872" height="14" rx="3" fill="#4a7c59" opacity="0.75"/>
+<text x="46" y="220" font-size="11.5" fill="#333" text-anchor="start">MCP 프록시 경유 (기본값)</text>
+<text x="470" y="220" font-size="11" fill="#555" text-anchor="middle">50 rps</text>
+<text x="570" y="220" font-size="11.5" fill="#b5651d" text-anchor="middle" font-weight="bold">19.5ms</text>
+<rect x="630" y="209" width="206.0" height="14" rx="3" fill="#b5651d" opacity="0.75"/>
+<text x="46" y="272" font-size="11.5" fill="#333" text-anchor="start">같은 경로, 반복 횟수만 1,000</text>
+<text x="470" y="272" font-size="11" fill="#555" text-anchor="middle">596 rps</text>
+<text x="570" y="272" font-size="11.5" fill="#4a7c59" text-anchor="middle" font-weight="bold">1.55ms</text>
+<rect x="630" y="261" width="16.374358974358977" height="14" rx="3" fill="#4a7c59" opacity="0.75"/>
+<text x="46" y="326" font-size="11" fill="#999" text-anchor="start">기본값에서 구간을 나눠 보면</text>
+<rect x="46" y="336" width="380" height="40" rx="6" fill="#fdf3e7" stroke="#c96" stroke-width="1.5"/>
+<text x="236" y="354" font-size="10.5" fill="#555" text-anchor="middle">클라이언트 → MCP 프록시</text>
+<text x="236" y="369" font-size="13" fill="#b5651d" text-anchor="middle" font-weight="bold">22ms</text>
+<rect x="456" y="336" width="380" height="40" rx="6" fill="#eef3ee" stroke="#8a8" stroke-width="1.5"/>
+<text x="646" y="354" font-size="10.5" fill="#555" text-anchor="middle">MCP 프록시 → 백엔드</text>
+<text x="646" y="369" font-size="13" fill="#4a7c59" text-anchor="middle" font-weight="bold">1ms</text>
+<text x="450.0" y="396" font-size="10" fill="#999" text-anchor="middle">첫 바이트가 나가기까지 0ms</text>
+<text x="450.0" y="422.0" font-size="9.5" fill="#777" text-anchor="middle">정책이 없든 인자 값 조건 CEL이든 규칙이 20개든 같다.</text>
+<text x="450.0" y="435.5" font-size="9.5" fill="#777" text-anchor="middle">규칙을 검사하는 비용이 아니다.</text>
+<text x="450.0" y="449.0" font-size="9.5" fill="#777" text-anchor="middle">이 구간은 프록시가 요청마다 세션 ID를 푸는 계산이다.</text>
+<text x="450.0" y="462.5" font-size="9.5" fill="#777" text-anchor="middle">반복 횟수를 낮추면 프록시 몫이 20ms에서 0.5ms로 줄어든다.</text>
+<text x="450.0" y="476.0" font-size="9.5" fill="#777" text-anchor="middle">위 3줄은 캠페인 회차이고 마지막 줄은 반복 횟수를 확인한 별도 회차다.</text>
+</svg>

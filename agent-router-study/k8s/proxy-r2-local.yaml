@@ -1,0 +1,14 @@
+# 복제본 2개, externalTrafficPolicy Local.
+# 기본값은 복제본 1개에 Local이다. MetalLB L2에서 Local이면 알림 노드의 파드만
+# 요청을 받으므로 복제본을 늘려도 한쪽만 일한다(2026-09-14 실측).
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata: {name: ar-proxy-2, namespace: mcp-pilot}
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        externalTrafficPolicy: Local
+      envoyDeployment:
+        replicas: 2

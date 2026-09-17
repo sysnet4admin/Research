@@ -297,7 +297,7 @@ harness/          measurement automation (runner, load, collector, aggregation, 
 ```
 
 ```bash
-# 9-day unattended measurement (about 4.5h per condition per repetition)
+# measurement over 9 days (about 4.5h per condition per repetition)
 ./harness/launch_campaign.sh 9
 
 # aggregation and charts

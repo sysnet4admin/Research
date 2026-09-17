@@ -65,7 +65,7 @@ A2A 전용 정책은 없다(아래 실측). 도입을 검토하는 쪽이 가장
 
 한 문장으로 줄이면, A2A에 대해 게이트웨이는 지금 정책 계층이 아니라
 디스커버리와 관측 계층이다. 값은 홉 하나이고 경로에 들어와 있는지 자체가
-Service 필드 하나와 카드 내용으로 갈린다.
+Service 필드 하나와 카드 내용으로 나누어진다.
 
 ## 결과
 
@@ -234,7 +234,7 @@ v1.4.1 회차는 [mcp-migration](../../mcp-migration/) 클러스터였다. A2A
   env로 카드 형식 전환, 수신 헤더를 응답 metadata로 반사).
   `disable_nagle_algorithm = True`가 필수인데, 없으면 delayed ACK가
   게이트웨이 경로에 상수 ~40ms를 얹어 측정을 삼킨다(이 문제로 초기 캠페인
-  하나를 폐기했다).
+  1개를 폐기했다).
 - `k8s/agent.yaml`: Deployment와 Service 3개(appProtocol 유무, 직접 경로용
   LoadBalancer), HTTPRoute.
 - `harness/probes.sh`: 카드 매트릭스, 우회, 트레이스, 오류 형태의 결정론

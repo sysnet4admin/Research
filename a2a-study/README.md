@@ -548,14 +548,14 @@ The runners deploy the servers themselves and leave them in place when `KEEP=1`.
 ```bash
 ./harness/axis1_probes.sh        # declared versus actual, about 5 minutes. Results in runs/axis1-<date>/
 ./harness/axis2_scenarios.sh     # against the alternatives, about 4 minutes. Results in runs/axis2-<date>/
-./harness/axis3_load.sh          # overhead, about 3.5 hours (unattended). Results in runs/axis3-<date>/
+./harness/axis3_load.sh          # overhead, about 3.5 hours. Results in runs/axis3-<date>/
 ./harness/axis2_v10_bytes.sh     # the A2A side of against-the-alternatives in v1.0 form, about 3 minutes
-./harness/axis3_load_gen.sh      # overhead across both generations, about 5 hours (unattended)
-./harness/axis3_load_4.sh        # overhead including gRPC, about 6 hours (unattended)
+./harness/axis3_load_gen.sh      # overhead across both generations, about 5 hours
+./harness/axis3_load_4.sh        # overhead including gRPC, about 6 hours
 ./harness/grpc_probe.py --host <IP>   # single gRPC calls. needs grpcio
 ```
 
-The overhead runs happened in unattended windows. Reproducing a single round needs
+The overhead runs were made with no other work on the host. Reproducing a single round needs
 only `axis3_load.sh`; `axis3_load_gen.sh` and `axis3_load_4.sh` cover both generations
 and gRPC. Over the weekend `harness/chain_axis3_gen.sh` and
 `harness/chain_a2a_weekend.sh` ran them in order.

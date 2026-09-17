@@ -3,7 +3,7 @@
 # Probe checks /healthz but nginx only serves /  → 404 → not ready → no traffic.
 
 set -euo pipefail
-CTX="AIOps-Agent-Benchmark"
+CTX="${KUBE_CONTEXT:-AIOps-Agent-Benchmark}"
 
 echo "[004-readiness] Creating web namespace..."
 kubectl --context "$CTX" create namespace web --dry-run=client -o yaml \

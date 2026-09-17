@@ -3,7 +3,7 @@
 # log-writer writes ~200KB/s to local log file → exceeds 30Mi limit → evicted → repeats.
 
 set -euo pipefail
-CTX="AIOps-Agent-Benchmark"
+CTX="${KUBE_CONTEXT:-AIOps-Agent-Benchmark}"
 
 echo "[007-evict] Creating logging namespace..."
 kubectl --context "$CTX" create namespace logging --dry-run=client -o yaml \

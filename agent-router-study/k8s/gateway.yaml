@@ -1,0 +1,16 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: ar-gw
+  namespace: mcp-pilot
+spec:
+  gatewayClassName: eg
+  infrastructure:
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: ar-proxy-2
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80

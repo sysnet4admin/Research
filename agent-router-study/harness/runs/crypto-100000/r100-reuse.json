@@ -1,0 +1,26 @@
+{
+  "rate_target": 100.0,
+  "dur": 60,
+  "conc": 16,
+  "mode": "reuse",
+  "url": "http://192.168.2.106/mcp",
+  "tool": "mcpb__get-sum",
+  "ts": "2026-09-17T12:44:19",
+  "elapsed": 59.99,
+  "issued": 5832,
+  "shed": 168,
+  "n": 5832,
+  "ok": 5832,
+  "err": 0,
+  "codes": {
+    "200": 5832
+  },
+  "init_err": null,
+  "rate_achieved": 97.21,
+  "p50": 159.691,
+  "p95": 244.25,
+  "p99": 287.587,
+  "min": 22.237,
+  "mean": 161.296,
+  "label": "r100-reuse-100000"
+}

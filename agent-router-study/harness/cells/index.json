@@ -1,0 +1,23 @@
+{
+  "A0": "정책 없음 기준선",
+  "A1": "이름만 보는 규칙. CEL 없음",
+  "A2": "인자 조건 CEL. 스파이크 재현",
+  "A3": "defaultAction Allow + 인자 조건 Allow 규칙",
+  "A4": "defaultAction Allow + 인자 조건 Deny 규칙. 우회 후보 1",
+  "A5": "method 가드로 목록 통과. 우회 후보 2",
+  "A6": "has() 가드로 목록 통과. 우회 후보 3",
+  "A7": "target을 클라이언트가 보는 접두사 이름으로",
+  "A8": "defaultAction Allow, 규칙 없음",
+  "A9": "규칙 20개. 마지막이 인자 조건",
+  "A10": "method 가드 + 규칙 20개. 지연 대조",
+  "B0": "백엔드 2개, 정책 없음. 이름과 목록 기준선",
+  "B1": "백엔드 2개, mcpb의 get-sum만 has() 가드로 Allow",
+  "B2": "같은 규칙인데 backend를 reflect로. 백엔드가 정책을 나누는가",
+  "B3": "target backend에 와일드카드. 두 백엔드의 같은 이름 도구를 한 규칙으로",
+  "B4": "backendSelector로 mcpb만 남긴다",
+  "B5": "backendSelector 기본값만. 규칙 없음",
+  "X1": "진단. CEL이 목록 시점에 method를 tools/list로 보는가",
+  "X2": "진단. 목록 시점에 method를 tools/call로 보는가",
+  "X3": "진단. tool 이름만 보는 CEL은 목록을 통과하는가",
+  "direct": "게이트웨이를 거치지 않은 백엔드 직접 호출"
+}

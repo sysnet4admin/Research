@@ -312,6 +312,6 @@ build and load images, then deploy (the snapshot restore would wipe images
 loaded before it). The image build also needs a running Docker daemon; on
 machines where the daemon is started by hand (colima and the like) the build
 script now checks first, tries to start it, and stops with a clear error
-otherwise. I lost an unattended run to that assumption before adding the
+otherwise. I lost a full round to that assumption before adding the
 check. Aggregated tables are in this README; per-cell JSON stays out of git
 and is available on request.

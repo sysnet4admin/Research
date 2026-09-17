@@ -45,7 +45,7 @@ Kubernetes, 클라우드 네이티브, AI에 대한 벤치마크 및 PoC 연구 
 
 ### [cni-benchmark](./cni-benchmark)
 
-CNI 5종(Calico, Cilium, Flannel, Antrea, kube-router)의 상시 자원 비용을 14개 구성과 6개 부하 구간에서 9일 무인 측정합니다. CPU, 메모리, eBPF map 커널 메모리까지 수집했으며 조건을 가르는 축은 CPU가 아니라 메모리 사용량이라는 것과 kube-proxy를 nftables 모드로 바꾸는 것만으로 메모리 사용량이 70% 줄어든다는 것이 대표 결과입니다.
+CNI 5종(Calico, Cilium, Flannel, Antrea, kube-router)의 상시 자원 비용을 14개 구성과 6개 부하 구간에서 9일에 걸쳐 측정합니다. CPU, 메모리, eBPF map 커널 메모리까지 수집했으며 조건을 나누는 축은 CPU가 아니라 메모리 사용량이라는 것과 kube-proxy를 nftables 모드로 바꾸는 것만으로 메모리 사용량이 70% 줄어든다는 것이 대표 결과입니다.
 
 → [블로그 포스트](https://kuberneteslab.dev/ko/blog/cni-standing-cost/) | [README (EN)](./cni-benchmark/README.md) | [README (KO)](./cni-benchmark/README_ko.md)
 
@@ -85,7 +85,7 @@ agentgateway(v1.5.0)가 A2A 에이전트 앞단에서 실제로 강제하고 관
 
 ### [a2a-study](./a2a-study)
 
-A2A가 스펙에 무엇이라 적혀 있는지가 아니라 어떤 상황에서 실제로 쓸모가 있는지를 묻습니다. 1단계에서 셋을 쟀습니다. 스펙이 선언한 것 대 공식 SDK의 기본 동작, 같은 작업을 넘길 때 MCP 및 순수 HTTP와의 비교, 그리고 프로토콜 자체의 비용입니다. 2단계는 두 세대 사이의 상호운용과 게이트웨이 통과를 다룹니다. 위의 agentgateway A2A 표면과는 별개 연구입니다. 그쪽은 게이트웨이가 무엇을 강제하는지를 재고 이쪽은 프로토콜 자체를 잽니다.
+A2A가 스펙에 무엇이라 적혀 있는지가 아니라 어떤 상황에서 실제로 쓸모가 있는지를 묻습니다. 1단계에서 셋을 측정했습니다. 스펙이 선언한 것 대 공식 SDK의 기본 동작, 같은 작업을 넘길 때 MCP 및 순수 HTTP와의 비교, 그리고 프로토콜 자체의 비용입니다. 2단계는 두 세대 사이의 상호운용과 게이트웨이 통과를 다룹니다. 위의 agentgateway A2A 표면과는 별개 연구입니다. 그쪽은 게이트웨이가 무엇을 강제하는지를 재고 이쪽은 프로토콜 자체를 잽니다.
 
 → [README (EN)](./a2a-study/README.md) | [README (KO)](./a2a-study/README_ko.md)
 

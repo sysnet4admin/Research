@@ -229,8 +229,8 @@ Environment: 3-node VirtualBox Kubernetes v1.37.0 (MacBook Pro M4 Pro),
 agentgateway v1.5.0, backend at 1 replica, echo tool, 30-second runs,
 measured 2026-09-02 to 09-03 behind a preflight gate with no other workload
 on the host: the rule-count, close-mode A/B and guardrail cells in one
-unattended window (2026-09-02 18:00 to 2026-09-03 13:19), the reuse A/B in a
-second window on 2026-09-03 (18:00);
+window spanning 2026-09-02 to 09-03, the reuse A/B in a
+second window on 2026-09-03;
 connection mode and cooldowns are stated per table (60 s between rule-count
 repetitions, 180 s between A/B and guardrail cells).
 Absolute numbers are
@@ -563,7 +563,7 @@ no-op. Script `harness/rv_3301.sh`, record `runs/pr3301-0907/`.
   to end; findings 1 through 5 reproduced with no contradictions.
 - **Re-measurement (2026-09-02)**: the whole matrix was re-run on
   agentgateway v1.5.0 and Kubernetes v1.37.0 on a fresh cluster, in
-  unattended windows behind a preflight gate. The deterministic probes behind
+  measurement windows behind a preflight gate. The deterministic probes behind
   findings 1, 2, 3, 5 and 7 (including the actual-prefix follow-up,
   FailClosed and FailOpen) reproduced identically, and every latency table
   above comes from this round.
@@ -628,7 +628,7 @@ that order. The `harness/rv_*.sh` files are the copies used for the v1.5.0
 round (cluster context switched, gateway left installed between chained
 stages, `rv_p3sup.sh` and `rv_g3.sh` for the follow-up probes, `rv_tail.sh`
 with `k8s/b-server-delay/` for the delay sweep and sustained window), the
-`harness/chain_rv*.sh` files are the unattended orchestrators with the
+`harness/chain_rv*.sh` files are the run orchestrators with the
 preflight gate, and `harness/rv_read.py` prints the tables. The guardrail
 policy server lives in `k8s/guardrail/`. Raw run outputs (`runs/`) are not
 included in this repository; the tables above document every published

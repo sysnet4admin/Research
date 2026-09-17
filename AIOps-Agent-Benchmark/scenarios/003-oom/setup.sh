@@ -4,7 +4,7 @@
 # Logs are empty (killed during allocation, before any stdout).
 
 set -euo pipefail
-CTX="AIOps-Agent-Benchmark"
+CTX="${KUBE_CONTEXT:-AIOps-Agent-Benchmark}"
 
 echo "[003-oom] Creating monitoring namespace..."
 kubectl --context "$CTX" create namespace monitoring --dry-run=client -o yaml \

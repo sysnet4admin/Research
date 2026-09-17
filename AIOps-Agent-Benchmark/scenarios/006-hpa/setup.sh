@@ -3,7 +3,7 @@
 # HPA shows <unknown>/50% → never triggers → pods stay at 1 under load.
 
 set -euo pipefail
-CTX="AIOps-Agent-Benchmark"
+CTX="${KUBE_CONTEXT:-AIOps-Agent-Benchmark}"
 
 echo "[006-hpa] Creating api namespace..."
 kubectl --context "$CTX" create namespace api --dry-run=client -o yaml \

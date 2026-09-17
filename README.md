@@ -45,7 +45,7 @@ Measures whether moving a project context file from CLAUDE.md to AGENTS.md (via 
 
 ### [cni-benchmark](./cni-benchmark)
 
-Measures the standing resource cost of five CNIs (Calico, Cilium, Flannel, Antrea, kube-router) across 14 configurations and 6 load phases: CPU, memory, and eBPF map kernel memory, over a 9-day unattended campaign. Key findings: memory (not CPU) separates the conditions, and switching kube-proxy to nftables mode alone cuts its memory usage by 70%.
+Measures the standing resource cost of five CNIs (Calico, Cilium, Flannel, Antrea, kube-router) across 14 configurations and 6 load phases: CPU, memory, and eBPF map kernel memory, over a campaign spanning nine days. Key findings: memory (not CPU) separates the conditions, and switching kube-proxy to nftables mode alone cuts its memory usage by 70%.
 
 → [Blog post](https://kuberneteslab.dev/en/blog/cni-standing-cost/) | [README (EN)](./cni-benchmark/README.md) | [README (KO)](./cni-benchmark/README_ko.md)
 

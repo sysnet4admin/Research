@@ -1,0 +1,57 @@
+# S1 스파이크. 인가 규칙 하나로 네 프로브를 돌린다.
+# defaultAction은 일부러 비운다. 기본값이 Deny인지 확인하는 것이 프로브의 일부다.
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: eg
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: ar-gw
+  namespace: mcp-pilot
+spec:
+  gatewayClassName: eg
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: Backend
+metadata:
+  name: mcpb
+  namespace: mcp-pilot
+spec:
+  endpoints:
+    - fqdn:
+        hostname: mcp-b.mcp-pilot.svc.cluster.local
+        port: 80
+---
+apiVersion: aigateway.envoyproxy.io/v1beta1
+kind: MCPRoute
+metadata:
+  name: ar-mcp
+  namespace: mcp-pilot
+spec:
+  parentRefs:
+    - name: ar-gw
+      kind: Gateway
+      group: gateway.networking.k8s.io
+  path: "/mcp"
+  backendRefs:
+    - name: mcpb
+      kind: Backend
+      group: gateway.envoyproxy.io
+      path: "/mcp"
+  securityPolicy:
+    authorization:
+      rules:
+        - action: Allow
+          target:
+            tools:
+              - backend: mcpb
+                tool: get-sum
+          cel: 'request.mcp.params.arguments.a == 1'

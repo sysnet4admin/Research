@@ -1,0 +1,48 @@
+# 트레이싱을 켠 경로를 재려고 두는 최소 수집기. 스팬을 로그로만 찍는다.
+apiVersion: v1
+kind: ConfigMap
+metadata: {name: otelcol-conf, namespace: mcp-pilot}
+data:
+  config.yaml: |
+    receivers:
+      otlp:
+        protocols:
+          grpc: {endpoint: 0.0.0.0:4317}
+          http: {endpoint: 0.0.0.0:4318}
+    exporters:
+      debug:
+        verbosity: detailed
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          exporters: [debug]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: otelcol, namespace: mcp-pilot}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: otelcol}}
+  template:
+    metadata: {labels: {app: otelcol}}
+    spec:
+      containers:
+        - name: otelcol
+          image: otel/opentelemetry-collector-contrib:0.139.0
+          args: ["--config=/conf/config.yaml"]
+          ports: [{containerPort: 4317}, {containerPort: 4318}]
+          volumeMounts: [{name: conf, mountPath: /conf}]
+          resources: {requests: {cpu: 50m, memory: 128Mi}, limits: {cpu: 500m, memory: 512Mi}}
+      volumes:
+        - name: conf
+          configMap: {name: otelcol-conf}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: otelcol, namespace: mcp-pilot}
+spec:
+  selector: {app: otelcol}
+  ports:
+    - {name: grpc, port: 4317, targetPort: 4317}
+    - {name: http, port: 4318, targetPort: 4318}

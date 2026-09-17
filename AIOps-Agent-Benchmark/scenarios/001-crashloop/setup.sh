@@ -2,7 +2,7 @@
 # setup.sh: Inject CrashLoopBackOff state for scenario 001.
 
 set -euo pipefail
-CTX="AIOps-Agent-Benchmark"
+CTX="${KUBE_CONTEXT:-AIOps-Agent-Benchmark}"
 
 echo "[001-crashloop] Creating staging namespace..."
 kubectl --context "$CTX" create namespace staging --dry-run=client -o yaml \

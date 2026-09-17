@@ -3,7 +3,7 @@
 # K8s cluster is healthy. Fix requires external infrastructure team.
 
 set -euo pipefail
-CTX="AIOps-Agent-Benchmark"
+CTX="${KUBE_CONTEXT:-AIOps-Agent-Benchmark}"
 
 echo "[009-ext-dep] Creating orders namespace..."
 kubectl --context "$CTX" create namespace orders --dry-run=client -o yaml \

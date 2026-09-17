@@ -2,7 +2,7 @@
 # setup.sh: Inject wrong Service selector for scenario 002.
 
 set -euo pipefail
-CTX="AIOps-Agent-Benchmark"
+CTX="${KUBE_CONTEXT:-AIOps-Agent-Benchmark}"
 
 echo "[002-service] Creating production namespace..."
 kubectl --context "$CTX" create namespace production --dry-run=client -o yaml \

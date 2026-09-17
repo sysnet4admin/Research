@@ -1,0 +1,11 @@
+# 트레이싱을 켠 경로용 helm values. 기준 설치에 이것만 더한다.
+extProc:
+  extraEnvVars:
+    - name: OTEL_SERVICE_NAME
+      value: "ai-gateway-extproc"
+    - name: OTEL_TRACES_EXPORTER
+      value: "otlp"
+    - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      value: "http://otelcol.mcp-pilot.svc.cluster.local:4318"
+    - name: OTEL_EXPORTER_OTLP_PROTOCOL
+      value: "http/protobuf"

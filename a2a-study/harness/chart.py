@@ -2,7 +2,7 @@
 """a2a-study 발행용 SVG 생성. 두 언어판을 같은 코드에서 낸다.
 
 사용: python3 harness/chart.py <kind> <lang> > figures/<kind>-<lang>.svg
-  kind: surface   Q1의 "보이는 것은 넷뿐" 도식
+  kind: surface   Q1의 "보이는 것은 4가지뿐" 도식
         compare   Q4의 "MCP와 A2A는 상대가 다르다" 비교표
         result    결과 절의 "얻는 것과 잃는 것" 한눈 비교
         version   헤더 하나가 두 세대를 나누는 것 (블로그 전용)
@@ -20,7 +20,7 @@ import unicodedata
 
 TEXT = {
     "ko": {
-        "title": "상대는 불투명하고 보이는 것은 넷뿐이다",
+        "title": "상대는 불투명하고 보이는 것은 4가지뿐이다",
         "sub": "A2A가 정한 것은 이 넷과 이들을 나르는 전송 규칙이다.",
         "me": "내 에이전트",
         "panel": "보이는 것",

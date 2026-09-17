@@ -1,0 +1,253 @@
+{
+  "apiVersion": "aigateway.envoyproxy.io/v1beta1",
+  "kind": "MCPRoute",
+  "metadata": {
+    "name": "ar-mcp",
+    "namespace": "mcp-pilot"
+  },
+  "spec": {
+    "parentRefs": [
+      {
+        "name": "ar-gw",
+        "kind": "Gateway",
+        "group": "gateway.networking.k8s.io"
+      }
+    ],
+    "path": "/mcp",
+    "backendRefs": [
+      {
+        "name": "mcpb",
+        "kind": "Backend",
+        "group": "gateway.envoyproxy.io",
+        "path": "/mcp"
+      }
+    ],
+    "securityPolicy": {
+      "authorization": {
+        "rules": [
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-0"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-1"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-2"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-3"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-4"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-5"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-6"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-7"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-8"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-9"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-10"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-11"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-12"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-13"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-14"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-15"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-16"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-17"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "noop-18"
+                }
+              ]
+            }
+          },
+          {
+            "action": "Allow",
+            "target": {
+              "tools": [
+                {
+                  "backend": "mcpb",
+                  "tool": "get-sum"
+                }
+              ]
+            },
+            "cel": "request.mcp.params.arguments.a == 1"
+          }
+        ]
+      }
+    }
+  }
+}
