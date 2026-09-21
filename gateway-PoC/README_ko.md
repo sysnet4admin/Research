@@ -32,7 +32,7 @@ Ingress(ingress-nginx)에서 Kubernetes Gateway API로 옮기는 팀을 위한, 
 - **conformance 너머**: 벤더 확장 매트릭스(rate-limiting, body-size, regex, tls-passthrough, ip-filter, basic-auth), 비기능 및 운영 지표(load, failover-recovery, health-check, config-robustness), auth 단면(JWT, 외부 인증).
 - **마이그레이션 증거**: ingress-nginx 어노테이션별로 ingress2gateway 1.1.0을 직접 실행하고, before/after manifest와 변환 통지를 [`migration/i2gw/`](migration/i2gw/)에 보존했다.
 
-핵심: **7종 전부 Core conformant**다. 갈리는 곳은 Extended 기능폭(13개 중 6개에서 13개)과 conformance가 채점하지 않는 벤더 확장이다. 위 두 뷰가 실측 표를 담는다.
+핵심: **7종 전부 Core conformant**다. 나누어지는 곳은 Extended 기능폭(13개 중 6개에서 13개)과 conformance가 채점하지 않는 벤더 확장이다. 위 두 뷰가 실측 표를 담는다.
 
 ## 저장소 구조
 
