@@ -6,7 +6,17 @@ Does moving a project context file from `CLAUDE.md` to **AGENTS.md** make Claude
 
 That question is where this study started.
 
-[AGENTS.md](https://agents.md/) is the open context-file format governed by AAIF (Agentic AI Foundation, Linux Foundation), read by 30+ coding agents. Claude Code does not read it natively ([issue #34235](https://github.com/anthropics/claude-code/issues/34235)), so a migration needs one of two workarounds: an `@AGENTS.md` import line inside `CLAUDE.md`, or a `CLAUDE.md` symlink pointing at `AGENTS.md`. This study measures whether either workaround costs anything, on real Kubernetes incident-response tasks.
+[AGENTS.md](https://agents.md/) is the open context-file format governed by AAIF (Agentic AI Foundation, Linux Foundation), read by 30+ coding agents. At the time of measurement Claude Code did not read it natively ([issue #34235](https://github.com/anthropics/claude-code/issues/34235)), so a migration needed one of two workarounds: an `@AGENTS.md` import line inside `CLAUDE.md`, or a `CLAUDE.md` symlink pointing at `AGENTS.md`. This study measures whether either workaround costs anything, on real Kubernetes incident-response tasks.
+
+> **Updated 2026-09-21: Claude Code reads AGENTS.md directly.** Native support landed in
+> v2.1.277. The default is a fallback, so it reads `AGENTS.md` only when there is no
+> `CLAUDE.md` in the working directory or above it; to load both, set **Project
+> instructions** to `claude-md-and-agents-md` in `/config`. The measurements below were
+> taken before that release, so the three conditions and their numbers stand, and the
+> official documentation also says the earlier workarounds can stay: keeping the import
+> never makes Claude read `AGENTS.md` twice, and a symlink reads the content once either
+> way. The native path itself is not measured here
+> ([documentation](https://code.claude.com/docs/en/memory#agents-md)).
 
 > **This README is a reference sheet for results, environment, and reproduction.** Motivation and interpretation live in the [blog post](https://kuberneteslab.dev/en/blog/agents-md-migration/).
 >

@@ -6,7 +6,15 @@
 
 이 의문에서 연구가 시작되었습니다.
 
-[AGENTS.md](https://agents.md/)는 AAIF(Agentic AI Foundation, Linux Foundation)가 관리하는 개방형 컨텍스트 파일 형식으로 30개가 넘는 코딩 에이전트가 읽습니다. 그런데 Claude Code는 이 파일을 그대로는 읽지 않아서([issue #34235](https://github.com/anthropics/claude-code/issues/34235)), 마이그레이션하려면 둘 중 1가지가 필요합니다. `CLAUDE.md` 안에 `@AGENTS.md` import 한 줄을 두거나, `CLAUDE.md`를 `AGENTS.md`로 가는 심볼릭 링크(symlink)로 바꾸는 것입니다. 이 연구는 그 두 우회로에 실제 비용이 있는지를 쿠버네티스 장애 대응 작업 위에서 측정했습니다.
+[AGENTS.md](https://agents.md/)는 AAIF(Agentic AI Foundation, Linux Foundation)가 관리하는 개방형 컨텍스트 파일 형식으로 30개가 넘는 코딩 에이전트가 읽습니다. 측정 당시 Claude Code는 이 파일을 그대로 읽지 않아서([issue #34235](https://github.com/anthropics/claude-code/issues/34235)), 마이그레이션하려면 둘 중 1가지가 필요했습니다. `CLAUDE.md` 안에 `@AGENTS.md` import 한 줄을 두거나, `CLAUDE.md`를 `AGENTS.md`로 가는 심볼릭 링크(symlink)로 바꾸는 것입니다. 이 연구는 그 두 우회로에 실제 비용이 있는지를 쿠버네티스 장애 대응 작업 위에서 측정했습니다.
+
+> **2026-09-21 갱신: Claude Code가 AGENTS.md를 바로 읽습니다.** 2.1.277에 네이티브 지원이
+> 들어갔습니다. 기본값은 폴백이라 작업 디렉터리와 그 위에 `CLAUDE.md`가 없을 때만
+> `AGENTS.md`를 읽습니다. 둘 다 읽게 하려면 `/config`의 **Project instructions**를
+> `claude-md-and-agents-md`로 바꿉니다. 아래 측정은 그 이전 상태에서 진행했으므로 세 조건의
+> 수치는 그대로 유효합니다. 공식 문서도 기존 우회로를 그대로 두어도 된다고 안내합니다. import를
+> 유지해도 `AGENTS.md`를 두 번 읽지 않고 심볼릭 링크도 내용을 한 번만 읽습니다. 네이티브
+> 경로를 따로 측정하지는 않았습니다([공식 문서](https://code.claude.com/docs/en/memory#agents-md)).
 
 > **이 README는 결과, 환경, 재현 방법을 모아두는 레퍼런스 시트입니다.** 작성 동기와 결과 해석은 [블로그 글](https://kuberneteslab.dev/ko/blog/agents-md-migration/)에서 다룹니다.
 >
