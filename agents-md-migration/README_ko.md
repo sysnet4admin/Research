@@ -6,15 +6,16 @@
 
 이 의문에서 연구가 시작되었습니다.
 
-[AGENTS.md](https://agents.md/)는 AAIF(Agentic AI Foundation, Linux Foundation)가 관리하는 개방형 컨텍스트 파일 형식으로 30개가 넘는 코딩 에이전트가 읽습니다. 측정 당시 Claude Code는 이 파일을 그대로 읽지 않아서([issue #34235](https://github.com/anthropics/claude-code/issues/34235)), 마이그레이션하려면 둘 중 1가지가 필요했습니다. `CLAUDE.md` 안에 `@AGENTS.md` import 한 줄을 두거나, `CLAUDE.md`를 `AGENTS.md`로 가는 심볼릭 링크(symlink)로 바꾸는 것입니다. 이 연구는 그 두 우회로에 실제 비용이 있는지를 쿠버네티스 장애 대응 작업 위에서 측정했습니다.
+[AGENTS.md](https://agents.md/)는 AAIF(Agentic AI Foundation, Linux Foundation)가 관리하는 개방형 컨텍스트 파일 형식으로 30개가 넘는 코딩 에이전트가 읽습니다. 측정 당시 Claude Code는 이 파일을 그대로 읽지 않아서([issue #34235](https://github.com/anthropics/claude-code/issues/34235)), 마이그레이션하려면 둘 중 1가지가 필요했습니다. `CLAUDE.md` 안에 `@AGENTS.md` import 한 줄을 두거나, `CLAUDE.md`를 `AGENTS.md`로 가는 심볼릭 링크(symlink)로 바꾸는 것입니다. 이 연구는 그 두 우회 방법에 실제 비용이 있는지를 쿠버네티스 장애 대응 작업 위에서 측정했습니다.
 
-> **2026-09-21 갱신: Claude Code가 AGENTS.md를 바로 읽습니다.** 2.1.277에 네이티브 지원이
-> 들어갔습니다. 기본값은 폴백이라 작업 디렉터리와 그 위에 `CLAUDE.md`가 없을 때만
+> **2026-09-21 갱신: Claude Code가 AGENTS.md를 직접 읽습니다.** 2.1.277에 네이티브 지원이
+> 들어갔습니다. 기본값은 작업 디렉터리와 그 위에 `CLAUDE.md`가 없을 때만
 > `AGENTS.md`를 읽습니다. 둘 다 읽게 하려면 `/config`의 **Project instructions**를
 > `claude-md-and-agents-md`로 바꿉니다. 아래 측정은 그 이전 상태에서 진행했으므로 세 조건의
-> 수치는 그대로 유효합니다. 공식 문서도 기존 우회로를 그대로 두어도 된다고 안내합니다. import를
+> 수치는 그대로 유효합니다. 공식 문서도 기존 우회 방법을 그대로 두어도 된다고 안내합니다. import를
 > 유지해도 `AGENTS.md`를 두 번 읽지 않고 심볼릭 링크도 내용을 한 번만 읽습니다. 네이티브
 > 경로를 따로 측정하지는 않았습니다([공식 문서](https://code.claude.com/docs/en/memory#agents-md)).
+> 무엇을 남기고 무엇을 고쳐야 하는지는 후속 [블로그 글](https://kuberneteslab.dev/ko/blog/agents-md-native/)에 정리했습니다.
 
 > **이 README는 결과, 환경, 재현 방법을 모아두는 레퍼런스 시트입니다.** 작성 동기와 결과 해석은 [블로그 글](https://kuberneteslab.dev/ko/blog/agents-md-migration/)에서 다룹니다.
 >
@@ -25,7 +26,7 @@
 - **세 가지 전달 방식 모두 실제로 읽힙니다.** 카나리 검증으로 `@AGENTS.md` import와 심볼릭 링크 둘 다 Claude Code가 따라가는 것을 확인했습니다(컨텍스트 없는 대조군만 카나리에 응답하지 않았습니다).
 - **속도 저하가 없습니다.** 5개 모델 구성(Haiku 4.5, Sonnet 4.6, Sonnet 5, Opus 4.8, Fable 5) 전부에서 wall time 편차의 부호가 조건마다 뒤바뀌고 토큰 편차와도 어긋납니다. 이는 컨텍스트 로드 오버헤드가 아니라 LLM 실행 편차의 특징입니다.
 - **토큰 비용 페널티가 없습니다.** 조건 간 cache write 토큰 편차는 ±6% 안이고 메커니즘상 native와 동일해 대조군 역할을 하는 심볼릭 링크와 같이 함께 달라집니다. 4개 모델에서는 import가 native보다 3~4% 낮았고 Sonnet 5에서는 import와 심볼릭 링크가 똑같이 6% 높았습니다. 대조군과 함께 달라졌다는 것은 이 편차가 전달 비용이 아니라 실행 편차라는 뜻입니다.
-- **네이티브 AGENTS.md 리더에서도 재현됩니다.** OpenCode와 로컬 모델 2종(gemma4:12b, qwen3.8:27b, 80런)에서 폴백 경로(CLAUDE.md)와 네이티브 경로(AGENTS.md) 사이에 속도와 과제 해결 차이가 없었습니다. 아래 확장 절 참조.
+- **네이티브 AGENTS.md 리더에서도 재현됩니다.** OpenCode와 로컬 모델 2종(gemma4:12b, qwen3.8:27b, 80런)에서 CLAUDE.md만 둔 경로와 AGENTS.md만 둔 경로 사이에 속도와 과제 해결 차이가 없었습니다. 아래 확장 절 참조.
 
 ## 조건
 
@@ -33,7 +34,7 @@
 
 | 조건 | 에이전트 작업 디렉토리의 파일 | Claude Code가 읽는 경로 |
 |---|---|---|
-| **A** native | `CLAUDE.md`(본문) | `CLAUDE.md`를 바로 읽음 |
+| **A** native | `CLAUDE.md`(본문) | `CLAUDE.md`를 직접 읽음 |
 | **B** import | `CLAUDE.md`(`@AGENTS.md` 한 줄) + `AGENTS.md`(본문) | `@AGENTS.md` import를 따라감 |
 | **C** symlink | `AGENTS.md`(본문) + 그리로 가는 `CLAUDE.md` 심볼릭 링크 | `CLAUDE.md` 경로를 여는 순간 OS가 링크를 풀어 `AGENTS.md` 내용을 돌려줌 |
 
@@ -78,13 +79,13 @@ output 토큰과 tool call 수도 각각 ±15%, ±8% 안에서 부호가 섞여 
 ## 확장: AGENTS.md를 네이티브로 읽는 에이전트(OpenCode)
 
 본 측정 대상인 Claude Code는 AGENTS.md를 네이티브로 지원하지 않습니다.
-그러면 AGENTS.md를 기본으로 읽고 CLAUDE.md를 폴백으로 두는 에이전트에서도
+그러면 AGENTS.md를 기본으로 읽고 그 파일이 없을 때만 CLAUDE.md를 읽는 에이전트에서도
 같은 결론이 나오는지가 다음 질문이 됩니다. OpenCode가 그렇게 동작하므로,
 import 한 줄이 아니라 에이전트 자신의 파일 해석 계층에서 전달 방식을 바꿔
 비교할 수 있습니다.
 
 조건은 두 개이고 페이로드는 바이트 동일합니다. **CO**는 작업 디렉토리에
-CLAUDE.md만 두고(폴백 경로), **AO**는 AGENTS.md만 둡니다(네이티브 경로).
+CLAUDE.md만 두고 **AO**는 AGENTS.md만 둡니다(네이티브 경로).
 Ollama로 로컬 모델 2종(gemma4:12b, qwen3.8:27b), 같은 저편차 4시나리오,
 5회 반복, 회차 안에서 조건을 교대해 80런을 돌렸고 전부 rc=0입니다.
 
@@ -96,7 +97,7 @@ AO가 느린 경우가 한 모델은 20쌍 중 7개, 다른 모델은 12개로 �
 표본에서는 회차 편차 안의 차이입니다.
 
 파일 해석 순서에 대해서는 두 모델에서 같은 동작을 확인했습니다. AGENTS.md가
-없으면 CLAUDE.md 폴백이 실제로 로드되고 두 파일이 함께 있으면 AGENTS.md가
+없으면 CLAUDE.md가 대신 로드되고 두 파일이 함께 있으면 AGENTS.md가
 이깁니다.
 
 방법론 함정 1가지를 남깁니다. 로드 카나리가 "코드워드가 무엇인가"만 물으면

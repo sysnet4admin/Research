@@ -17,6 +17,7 @@ That question is where this study started.
 > never makes Claude read `AGENTS.md` twice, and a symlink reads the content once either
 > way. The native path itself is not measured here
 > ([documentation](https://code.claude.com/docs/en/memory#agents-md)).
+> What to keep and what to fix is covered in the follow-up [blog post](https://kuberneteslab.dev/en/blog/agents-md-native/).
 
 > **This README is a reference sheet for results, environment, and reproduction.** Motivation and interpretation live in the [blog post](https://kuberneteslab.dev/en/blog/agents-md-migration/).
 >
