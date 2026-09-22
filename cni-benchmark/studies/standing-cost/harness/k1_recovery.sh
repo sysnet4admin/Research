@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
-# K1 히스테리시스의 pprof CPU 프로파일 확보 (업스트림 제보 첨부용, 약 60~70분).
+# K1 히스테리시스가 자연 회복하는 데 얼마나 걸리는지 관찰한다 (약 2시간 30분).
 #
-# k1_debug.sh와 같은 재현 절차에 --enable-pprof를 더해, churn 전/중/후의
-# CPU 프로파일(pb.gz)과 goroutine 덤프를 수집한다. 측정용 아님(수치 발행 금지).
+# k1_pprof.sh의 최소 델타 사본이다. churn 까지는 같고, 그 뒤에 오브젝트를
+# 지우지 않은 채 최대 90분을 관찰한다. 제보에서 "언젠가는 내려가지 않느냐"는
+# 물음에 답할 근거를 만드는 것이 목적이다. 측정용 아님(수치 발행 금지).
 #
-# 사용: ./k1_pprof.sh <OUT_DIR>
+# 사용: ./k1_recovery.sh <OUT_DIR>
 set -uo pipefail
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -93,15 +94,33 @@ pprof_grab "during-churn" 30
 wait "$CHURN_PID"
 log "churn 종료"
 
-# ---- 4. churn 후: 히스테리시스 구간 프로파일 (핵심) ----
-sleep 120;  cpu_probe; pprof_grab "post-churn-2min" 30
-sleep 300;  cpu_probe; pprof_grab "post-churn-7min" 60
-sleep 180;  cpu_probe
-log "post-churn 관찰 종료"
+# ---- 4. churn 후: 오브젝트를 둔 채 최대 90분 관찰 ----
+CHURN_END=$SECONDS
 
-# ---- 5. 오브젝트 삭제 후 복귀 확인 프로파일 ----
+cpu_now() { # w1의 kube-router CPU를 10초 창으로 잰다 (코어 단위)
+  nat_ssh 60351 'p=$(pgrep -x kube-router|head -1); [ -z "$p" ] && { echo NA; exit; }
+a=$(awk "{print \$14+\$15}" /proc/$p/stat); sleep 10
+b=$(awk "{print \$14+\$15}" /proc/$p/stat)
+echo "scale=3; ($b-$a)/100/10" | bc' 2>/dev/null | tr -d '\r'
+}
+
+for M in 2 7 15 30 45 60 75 90; do
+  TARGET=$((CHURN_END + M*60))
+  while [ $SECONDS -lt $TARGET ]; do sleep 20; done
+  C=$(cpu_now)
+  log "post-churn ${M}분: ${C:-NA} 코어"
+  echo "$M ${C:-NA}" >> "$OUT/recovery-curve.txt"
+  cpu_probe
+  case "$M" in
+    2|7|30|90) pprof_grab "post-churn-${M}min" 30 ;;
+  esac
+done
+log "90분 관찰 종료"
+
+# ---- 5. 오브젝트 삭제 후 복귀 확인 ----
 k delete ns loadwork --wait=false >/dev/null 2>&1
 sleep 120; cpu_probe
+log "삭제 후: $(cpu_now) 코어"
 pprof_grab "after-delete" 30
 k -n kube-system logs -l k8s-app=kube-router --tail=100 > "$OUT/logs-tail.txt" 2>&1
 log "완료: $OUT"

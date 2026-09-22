@@ -18,7 +18,7 @@ CILIUM_VER="1.19.5"
 FLANNEL_VER="v0.28.7"
 FLANNEL_CNI_PLUGIN_VER="v1.9.1-flannel2"
 ANTREA_VER="v2.6.2"
-KUBEROUTER_VER="v2.10.0"
+KUBEROUTER_VER="${KUBEROUTER_VER:-v2.10.0}"   # 환경변수로 덮어쓸 수 있다(2026-09-22)
 
 k() { kubectl --context "$CTX" "$@"; }
 
