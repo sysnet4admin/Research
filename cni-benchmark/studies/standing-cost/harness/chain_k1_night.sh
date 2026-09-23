@@ -2,6 +2,9 @@
 # 야간 무인 창(2026-09-22 18:00~): kube-router K1 히스테리시스를 최신 릴리스와
 # 개발 브랜치에서 재현한다. 4회차 약 4시간이고 22시 무렵 끝난다.
 #
+# 완주하면 요약을 남기고 vagrant halt 로 VM 을 내린다(2026-09-22 저자 요청).
+# 다른 연구가 M4 를 쓸 수 있게 리소스를 돌려준다. 한 회차라도 미완이면 켜 둔다.
+#
 # 자연 회복 관찰(k1_recovery.sh)은 저자 결정으로 뺐다(2026-09-22). 남는 시간을
 # 다른 작업에 쓴다. 회복 시간을 주장할 일이 생기면 그때 한 회차 더 돌린다.
 #
@@ -12,6 +15,7 @@
 set -uo pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STUDY="$(cd "$DIR/.." && pwd)"
+CLUSTER="$STUDY/../../test-cluster"
 BINS=/tmp/k1bins
 START_HOUR=${START_HOUR:-18}
 say() { echo "[chain $(date '+%m-%d %H:%M:%S')] $*"; }
@@ -61,3 +65,43 @@ run_one master-fix    runs/k1-master-fix-0922 \
   env KUBEROUTER_VER=$V ./harness/k1_fixtest.sh runs/k1-master-fix-0922 "$BINS/k1-master-fix"
 
 say "야간 창 완료 (4회차)"
+
+# ---- 완주 검사 -> 요약 -> VM 종료 ----
+# 증거는 전부 호스트의 runs/ 에 있으므로 VM 을 내려도 잃지 않는다. 다만 한 회차라도
+# 미완이면 이어서 돌리거나 원인을 봐야 하므로 켜 둔다.
+DIRS="runs/k1-v2111-stock-0922 runs/k1-v2111-fix-0922 runs/k1-master-stock-0922 runs/k1-master-fix-0922"
+SUM="runs/k1-night-0922-SUMMARY.txt"
+ok=1
+: > "$SUM"
+{
+  echo "야간 4회차 요약 ($(date '+%Y-%m-%d %H:%M'))"
+  echo "수치 발행 금지. 업스트림 제보 증거용이다."
+  echo
+} >> "$SUM"
+
+export PATH="$PATH:/usr/local/go/bin:/opt/homebrew/bin"
+for d in $DIRS; do
+  if [ ! -f "$d/progress.log" ] || ! grep -q "완료:" "$d/progress.log"; then
+    say "미완: $d"; echo "[미완] $d" >> "$SUM"; ok=0; continue
+  fi
+  n=$(ls "$d"/profile-*.pb.gz 2>/dev/null | wc -l | tr -d " ")
+  if [ "${n:-0}" -lt 3 ]; then
+    say "프로파일 부족: $d ($n개)"; echo "[부족] $d 프로파일 ${n}개" >> "$SUM"; ok=0; continue
+  fi
+  echo "== $d" >> "$SUM"
+  for f in "$d"/profile-*.pb.gz; do
+    tot=$(go tool pprof -top "$f" 2>/dev/null | grep -oE "Total samples = .*" | sed "s/Total samples = //")
+    printf "   %-28s %8s B  %s\n" "$(basename "$f" .pb.gz | sed "s/profile-//")" "$(stat -f%z "$f")" "${tot:-(go 없음)}" >> "$SUM"
+  done
+  echo >> "$SUM"
+done
+
+if [ "$ok" = 1 ]; then
+  say "4회차 완주 확인. 요약: $SUM"
+  say "VM 종료"
+  ( cd "$CLUSTER" && vagrant halt ) >>/tmp/chain-k1-halt.log 2>&1 \
+    && say "VM 종료 완료. 리소스 반환됨" \
+    || say "ERROR: vagrant halt 실패. /tmp/chain-k1-halt.log 확인"
+else
+  say "미완 회차가 있어 VM 을 켜 둔다. 같은 명령을 다시 걸면 남은 것만 돈다"
+fi
