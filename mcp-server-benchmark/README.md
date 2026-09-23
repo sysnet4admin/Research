@@ -10,8 +10,9 @@ the cluster, and the scoring are all held fixed, and **only the MCP server is
 swapped**.
 
 **6 servers x 10 scenarios, 240 runs**, measured 2026-08-10 to 08-24 on an M5
-Max with a 4-node VirtualBox cluster restored from a baseline snapshot before
-every scenario. N=3 for four servers; N=6 for reza-gholizade and containers,
+Max with a 4-node VirtualBox cluster restored from a baseline snapshot at the
+start of every round (one pass over the 10 scenarios); scenarios within a round
+inherit the state left by the previous one. N=3 for four servers; N=6 for reza-gholizade and containers,
 which were run to six rounds to try to separate them.
 
 > Two measurement defects were found on 2026-08-20 and both were re-measured
@@ -157,8 +158,9 @@ Score per 1K input tokens, which is what you actually pay for:
 
 Read the bottom two rows across. `009-ext-dep` and `010-chaos` are the
 "no fix available" scenarios, where the correct answer is to diagnose and hand
-off. The read-only server scores 1.000 on both, and every server that can write
-scores lower. It is the only place ro-only wins, and it wins there completely.
+off. The read-only server scores 1.000 on both. Among the servers that can
+write, rohitg00 and Flux159 also score 1.000 on `009-ext-dep`, but all of them
+score lower on `010-chaos`. ro-only is the only server with a perfect score on both.
 
 `007-evict` is the re-measured row. containers and Flux159 are the only two
 whose original numbers were valid; on the re-run containers went down (0.850 to
@@ -187,7 +189,7 @@ the six wins somewhere and loses somewhere, and the measurement says where.
 | **rohitg00** | A task that genuinely needs its 275 tools | Everything else. Scores near the shell baseline at 4.2x the tokens, most unsafe actions (13), and read-only does not cut its token bill |
 | **Flux159** | Fast read-heavy work (168s per round, the fastest) | Quality-first work (below the shell baseline). Its older safety flag leaves `exec_in_pod` exposed |
 | **Azure** | Tight token budgets with a human checking results (best score per 1K tokens) | Unattended completion: lowest completion rate (0.77), and `005-pvc` effectively failed (0.05) |
-| **mcp-kubernetes-ro** | Diagnosis-only agents. The only perfect scores on the no-fix scenarios (009/010), zero unsafe actions | Anything that must also repair: no write path, so remediation scenarios are structurally unsolvable |
+| **mcp-kubernetes-ro** | Diagnosis-only agents. The only server with perfect scores on both no-fix scenarios (009/010), zero unsafe actions | Anything that must also repair: no write path, so remediation scenarios are structurally unsolvable |
 
 Most of the splits in this table trace back to one design axis: **where**
 read-only is enforced. The next section is that measurement.
@@ -235,9 +237,11 @@ between releases, Flux159 being the known case (see Limits).
 ![Does read-only shrink the tool list?](figures/readonly-reduction.svg)
 
 rohitg00 in read-only still ships all 275 tool definitions to the model. Calls
-are refused, so the safety property holds, but the 298K input tokens are spent
-regardless. That single fact explains why its score per token is the worst in
-the set.
+are refused, so the safety property holds, but the token cost does not shrink.
+The main measurement ran all six servers in default mode, without read-only, so
+rohitg00's 298K input tokens are what its 275 tools cost in that mode. Those 275
+tools are why its score per token is the worst in the set, and this table shows
+that turning on read-only would not reduce that cost.
 
 Also worth knowing about Flux159: the aggressive `ALLOW_ONLY_READONLY_TOOLS`
 flag is a recent addition. The older `ALLOW_ONLY_NON_DESTRUCTIVE_TOOLS` leaves
@@ -355,7 +359,7 @@ state of things three weeks after the spec was finalized.
 | Scenarios | the existing ten, `001-crashloop` through `010-chaos` |
 | Repeats | N=3 (N=6 for reza-gholizade and containers), 240 runs total |
 | Runtime | ollama on the llama.cpp engine (Metal), M5 Max 128GB |
-| Cluster | VirtualBox, 4 nodes, baseline snapshot restored before every scenario |
+| Cluster | VirtualBox, 4 nodes, baseline snapshot restored at the start of every round |
 | Scoring | `score_phase1.py` unchanged: quality from completion and accuracy, safety from audit determinism |
 
 The entire harness is reused from the AIOps benchmark. Swapping a server is a

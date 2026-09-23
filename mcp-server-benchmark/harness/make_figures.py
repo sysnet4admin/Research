@@ -38,7 +38,7 @@ T = {
    "trade_title": "Quality x Safety against input token cost",
    "trade_sub": "circle size = unsafe actions; green 0, red 10+",
    "cheaper": "cheaper and better",
-   "shell_q": "plain shell quality baseline: 0.9167 (v16, same runtime)",
+   "shell_q": "plain shell quality baseline: 0.9167 (v16)",
    "shell_t": "shell reference: 38K (only ro-only comes in under it)",
    "trade_x": "input tokens per run (median)",
    "worse": "below the baseline: more tokens than shell, less quality",
@@ -84,7 +84,7 @@ T = {
    "trade_title": "입력 토큰 비용 대비 품질 x 안전",
    "trade_sub": "원 크기 = 위험 행동 수 (초록 0건, 빨강 10건 이상)",
    "cheaper": "싸고 좋은 방향",
-   "shell_q": "셸 품질 기준선: 0.9167 (v16, 같은 런타임)",
+   "shell_q": "셸 품질 기준선: 0.9167 (v16)",
    "shell_t": "셸 참조선: 38K (ro-only만 이보다 적게 쓴다)",
    "trade_x": "런당 입력 토큰 (중앙값)",
    "worse": "기준선 아래: 토큰은 셸보다 더 쓰는데 품질은 낮다",
@@ -260,7 +260,8 @@ def fig_readonly(L10n):
         pair = L10n["ro_pair"].format(a=base, b=ro)
         note = pair + (f"   {L10n['ro_none']}" if same else f"   -{pct}%")
         b.append(txt(L+max(bw, rw)+10, y+16, note, 11, "#cf222e" if same else MUTE))
-    b.append(txt(24, H-18, L10n["ro_bottom"], 11.5, "#cf222e"))
+    if L10n["ro_bottom"]:
+        b.append(txt(24, H-18, L10n["ro_bottom"], 11.5, "#cf222e"))
     (FIG/f"readonly-reduction{L10n['suffix']}.svg").write_text(svg(W, H, "".join(b), L10n["ro_title"]))
 
 # ---------------------------------------------------------------- 4. 위험 행동 분포
@@ -348,7 +349,29 @@ def fig_mechanism(L10n):
             b.append(txt(AX, y+70, L10n["m_noteC"], 10.5, "#1a7f37"))
     (FIG/f"readonly-designs{L10n['suffix']}.svg").write_text(svg(W, H, "".join(b), L10n["m_title"]))
 
-for lang in ("en", "ko"):
+# 블로그 전용 한국어판 (2026-09-23). 블로그 본문이 합니다체라 그림 안 문장도 합니다체로 맞추고
+# 제목은 명사로 끝내며 그림 아래 해설 줄은 두지 않는다(author-style v0.3.80). 파일 접미사는
+# _blog_ko 이고 README 는 기존 _ko 판을 그대로 쓴다.
+T["ko_blog"] = dict(T["ko"], **{
+    "suffix": "_blog_ko",
+    "trade_sub": "원 크기: 위험 행동 수 (초록 0건, 빨강 10건 이상)",
+    "shell_t": "셸 참조선: 38K (ro-only만 이보다 적게 씁니다)",
+    "worse": "기준선 아래: 토큰은 셸보다 더 쓰는데 품질은 낮은 구역",
+    "heat_sub1": "오른쪽 두 열은 고칠 방법이 없는 시나리오입니다",
+    "heat_sub2": "읽기 전용 서버만 둘 다 만점이고 쓸 수 있는 서버는 전부 여기서 점수를 잃습니다",
+    "ro_title": "read-only를 켰을 때 도구 목록의 변화",
+    "ro_sub": "목록이 줄지 않으면 도구 정의가 그대로 입력 토큰을 차지합니다",
+    "ro_bottom": "",
+    "us_sub1": "위험 행동은 시나리오에 고루 퍼지지 않고 010-chaos 한 곳에 몰립니다.",
+    "us_sub2": "정답 경로가 분명하지 않은 유일한 시나리오입니다",
+    "m_title": "read-only가 쓰기를 막는 자리에 따른 세 가지 설계",
+    "m_sub": "차단 지점의 위치에 따라 안전과 함께 토큰 절약 여부가 나누어집니다",
+    "m_noteA": "쓰기 도구가 목록에 실리지 않아 에이전트가 보지 못하고 토큰도 줄어듭니다",
+    "m_noteB": "안전은 지켜지지만 도구 정의가 이미 컨텍스트에 실려 토큰이 들었습니다",
+    "m_noteC": "막을 것이 없습니다. 쓰기 경로 자체가 없습니다",
+})
+
+for lang in ("en", "ko", "ko_blog"):
     for f in (fig_tradeoff, fig_heatmap, fig_readonly, fig_unsafe, fig_mechanism):
         f(T[lang])
 print("생성 완료:", ", ".join(sorted(p.name for p in FIG.glob("*.svg"))))
