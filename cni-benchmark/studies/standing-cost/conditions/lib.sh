@@ -14,11 +14,16 @@ CLUSTER_DIR="$STUDY_DIR/../../test-cluster"
 
 # 버전 핀 (전 조건 공통)
 CALICO_VER="v3.32.1"
-CILIUM_VER="1.19.5"
+CILIUM_VER="${CILIUM_VER:-1.19.5}"          # 2026-09-23 회차 비교부터 환경변수로 덮어쓴다
 FLANNEL_VER="v0.28.7"
 FLANNEL_CNI_PLUGIN_VER="v1.9.1-flannel2"
-ANTREA_VER="v2.6.2"
+ANTREA_VER="${ANTREA_VER:-v2.6.2}"
 KUBEROUTER_VER="${KUBEROUTER_VER:-v2.10.0}"   # 환경변수로 덮어쓸 수 있다(2026-09-22)
+
+# kube-router shuffle 패치 바이너리 (#2165 제안안). 비어 있으면 스톡 이미지 그대로.
+# 설정하면 K1/K2가 설치 직후 노드에 바이너리를 넣고 hostPath 로 컨테이너의
+# /usr/local/bin/kube-router 위에 얹는다(k1_fixtest.sh 와 같은 방식).
+KUBEROUTER_FIXBIN="${KUBEROUTER_FIXBIN:-}"
 
 k() { kubectl --context "$CTX" "$@"; }
 
@@ -162,4 +167,37 @@ EOF
     k -n smoke describe pod smoke-client 2>&1 | tail -8 | sed 's/^/  /'
     return 1
   fi
+}
+
+# kube-router 패치 바이너리 적용 (KUBEROUTER_FIXBIN 이 있을 때만). DS 를 만든 뒤 부른다.
+# 패치 후 롤아웃이 끝나고 세 노드의 바이너리 해시가 패치본과 같은지까지 확인한다.
+apply_kuberouter_fix() {
+  [ -n "$KUBEROUTER_FIXBIN" ] || return 0
+  [ -x "$KUBEROUTER_FIXBIN" ] || { echo "ERROR: 패치 바이너리 없음 $KUBEROUTER_FIXBIN"; return 1; }
+  local want port vm key
+  want=$(shasum -a 256 "$KUBEROUTER_FIXBIN" | awk '{print $1}')
+  echo "==> kube-router 패치 바이너리 배포 (sha256 ${want:0:12})"
+  for port in 60350 60351 60352; do
+    vm="cp-k8s-1.36.2"
+    [ "$port" = "60351" ] && vm="w1-k8s-1.36.2"
+    [ "$port" = "60352" ] && vm="w2-k8s-1.36.2"
+    key="$CLUSTER_DIR/.vagrant/machines/$vm/virtualbox/private_key"
+    scp -q -i "$key" -P "$port" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+      "$KUBEROUTER_FIXBIN" "vagrant@127.0.0.1:/tmp/kube-router-fix" || { echo "ERROR: scp 실패 ($port)"; return 1; }
+    nat_ssh "$port" "sudo mkdir -p /opt/kuberouter-fix && sudo install -m 755 /tmp/kube-router-fix /opt/kuberouter-fix/kube-router" \
+      || { echo "ERROR: 설치 실패 ($port)"; return 1; }
+  done
+  k -n kube-system patch ds kube-router --patch '{
+    "spec": {"template": {"spec": {
+      "volumes": [{"name": "fixbin", "hostPath": {"path": "/opt/kuberouter-fix/kube-router", "type": "File"}}],
+      "containers": [{"name": "kube-router",
+        "volumeMounts": [{"name": "fixbin", "mountPath": "/usr/local/bin/kube-router", "readOnly": true}]}]
+    }}}}' || { echo "ERROR: DS 패치 실패"; return 1; }
+  k -n kube-system rollout status ds/kube-router --timeout=600s || return 1
+  local pod got
+  for pod in $(k -n kube-system get pods -l k8s-app=kube-router -o name); do
+    got=$(k -n kube-system exec "$pod" -c kube-router -- sha256sum /usr/local/bin/kube-router 2>/dev/null | awk '{print $1}')
+    [ "$got" = "$want" ] || { echo "ERROR: $pod 바이너리 해시 불일치 (${got:0:12})"; return 1; }
+  done
+  echo "==> 패치 바이너리 확인 (파드 전부 ${want:0:12})"
 }

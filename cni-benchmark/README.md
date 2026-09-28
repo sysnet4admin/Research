@@ -43,9 +43,15 @@ OS will not reclaim, the value `kubectl top` reports).
   service proxy all handled by one kube-router daemon) was the lightest of all
   conditions at idle. But after going through pod churn, its CPU stayed at
   about one core per node even though the number of Services and pods was
-  unchanged.
+  unchanged. The cause turned out to be how random numbers are generated when
+  shuffling endpoint order. I reported it upstream and the maintainer opened a
+  fix PR (not merged as of 2026-09). With the fix applied, CPU after churn
+  drops from 3,158mC to 59mC.
 - Turning on observability features such as Hubble or FlowExporter added very
   little: +5 to 22MiB of agent memory.
+- In 2026-09 I measured the three CNIs with new minor versions again. Cilium
+  1.20.2 matched 1.19, and Antrea 2.7.0 used 11% less idle memory. The ranking
+  and the scale did not change.
 
 ## Which one should you pick?
 
@@ -69,7 +75,7 @@ only in what this measurement covered.
 | Calico managed via operator | Calico operator (Ca1) | Same features as Ca3 with 533MiB more memory; that is the price of the management convenience |
 | Heading toward eBPF dataplane, observability, kube-proxy replacement | Cilium (Ci1~Ci4) | Budget about 530~800MiB per node (maps included); CPU stays flat even during pod replacement (churn 131mC in the KPR configuration) |
 | OVS required, or already in the Antrea ecosystem | Antrea (An1) | Mid-range on both memory (758MiB) and pod-replacement CPU (churn 285mC) |
-| BGP routing without an overlay, minimal footprint | kube-router CNI only + kube-proxy (Ku2) | Light at 369MiB idle. All-features mode (Ku1) is hard to recommend for clusters with frequent pod replacement, because of the churn behavior in finding 3 below |
+| BGP routing without an overlay, minimal footprint | kube-router CNI only + kube-proxy (Ku2) | Light at 369MiB idle. All-features mode (Ku1) is hard to recommend for clusters with frequent pod replacement, because of the churn behavior in finding 3 below. Worth revisiting once the fix is released |
 
 Whichever configuration you pick, if it uses kube-proxy, the nftables mode
 switch is worth evaluating alongside it. It was the largest saving in this
@@ -243,9 +249,22 @@ sync loop into continuous re-execution, and since one sync pass costs in
 proportion to Services times endpoints, CPU cannot come down while that scale
 persists. Ku2, which leaves the service proxy to kube-proxy, was normal under
 the same load (churn 406mC, then 25mC), so the cause most likely lies in
-kube-router's IPVS service proxy; I did not identify which internal operation
-is responsible. Pinning that down would need profiling enabled, and is a
-follow-up investigation if needed.
+kube-router's IPVS service proxy.
+
+**Follow-up (2026-09).** I reproduced it again with profiling enabled and found
+the cause. Each time the service proxy builds the endpoint list it shuffles the
+order (`shuffle`), calling `crypto/rand.Int` once per endpoint, and each call is
+a system call. During churn this path took more than half of kube-router's CPU.
+Shuffling does not need cryptographic randomness, so switching to
+`math/rand/v2` is enough, and a binary with only that change made the CPU after
+churn disappear. I confirmed the same behavior and the same fix on the latest
+release (2.11.1) and the development branch, then reported it upstream as
+[#2165](https://github.com/cloudnativelabs/kube-router/issues/2165). The
+maintainer opened [PR #2175](https://github.com/cloudnativelabs/kube-router/pull/2175)
+with the same change plus a fix to endpoint ordering for hashing schedulers; it
+is not merged as of 2026-09-28. Reproducing the PR with the same procedure, CPU
+also returned to zero within two minutes after churn. The full campaign measured
+with the fix applied is in the round comparison section below.
 
 ### 4. For Calico, the install method changes memory usage more than the dataplane does
 
@@ -277,6 +296,47 @@ path packets take, so I expected it not to show up on the standing-cost axis,
 and it did not. From a standing-cost perspective there is no reason to hold
 back on netkit.
 
+## Round comparison: re-measured on newer versions (2026-09)
+
+On 2026-09-23 to 27 I measured the three CNIs with new minor versions again, with
+the same procedure. Kubernetes (1.36.2), the nodes, the phases and the runner are
+the same as in July, with 3 repetitions per condition (July had 5 to 6). Calico
+(3.32.2) and Flannel (0.28.9) only had patch releases, so they were left out and
+keep their July values.
+
+| Condition | July | September | idle | churn | node |
+|---|---|---|---|---|---|
+| Cilium default (Ci1) | 1.19.5 | 1.20.2 | 110 / 1574 -> 112 / 1596 | 279 / 2003 -> 273 / 2056 | 119 / 1943 -> 121 / 1986 |
+| Cilium +KPR (Ci3) | 1.19.5 | 1.20.2 | 123 / 1705 -> 124 / 1732 | 131 / 1926 -> 131 / 1984 | 126 / 1894 -> 126 / 1936 |
+| Antrea default (An1) | 2.6.2 | 2.7.0 | 60 / 758 -> 60 / 676 | 285 / 1101 -> 287 / 1024 | 66 / 1108 -> 68 / 1035 |
+| kube-router all-features (Ku1) | 2.10.0 | 2.11.1 + fix | 2 / - -> 3 / - | 3355 / - -> 2268 / - | 3158 / - -> 59 / - |
+| kube-router CNI only (Ku2) | 2.10.0 | 2.11.1 + fix | 3 / - -> 4 / - | 406 / - -> 396 / - | 25 / - -> 23 / - |
+
+Values are "CPU mC / working set MiB", computed the same way as the results
+table above. The kube-router memory cells are left empty for the reason given
+below. The full table per condition is in
+[analysis/rev-0923-summary.md](studies/standing-cost/analysis/rev-0923-summary.md).
+
+- **Cilium 1.20.2 matches 1.19.** CPU is within the July repetition range in all
+  four conditions, working set is 1 to 2% higher, and RSS and eBPF maps (412MiB,
+  715MiB) are practically the same.
+- **Antrea 2.7.0 uses less memory.** Idle working set went from 758MiB to 676MiB
+  (-11%) and RSS from 297MiB to 205MiB (-31%). All three repetitions gave the
+  same value, so this is not repetition noise. CPU is unchanged.
+- **kube-router no longer stays high after churn.** The September Ku1 and Ku2
+  runs used a binary with the reported fix (the one-line `math/rand/v2` change),
+  not stock 2.11.1. The node phase after churn went from 3,158mC to 59mC. During
+  churn it still uses 2,268mC, which is the cost of re-syncing 200 Services into
+  IPVS, and the profile shows the same. Ku2 does not use this path, so it matches
+  July.
+
+The kube-router numbers in this section are not from an upstream release; I will
+measure again with the release that includes the fix. Also, because the fixed
+binary was mounted as a hostPath file, its page cache is charged outside the
+container, and working set reads about 48MiB per node lower. So kube-router
+memory is compared on RSS only, and both rounds show the same values: Ku1 66MiB,
+Ku2 99MiB.
+
 ## Limits
 
 - This is a small 3-node measurement on virtualization. Do not extrapolate the
@@ -287,6 +347,9 @@ back on netkit.
   day to day.
 - Encryption (WireGuard, IPsec) was off. Observability extras (Hubble relay,
   flow-aggregator) are out of scope.
+- The 2026-09 round comparison has 3 repetitions per condition, fewer than July
+  (5 to 6). Where the difference is within the July repetition range, read it
+  only as "unchanged".
 
 ## Reproducing
 
@@ -299,6 +362,11 @@ harness/          measurement automation (runner, load, collector, aggregation, 
 ```bash
 # measurement over 9 days (about 4.5h per condition per repetition)
 ./harness/launch_campaign.sh 9
+
+# 2026-09 round comparison (versions overridden by env; base snapshot has the new images preloaded)
+BASE_SNAP=base-no-cni-0923 CILIUM_VER=1.20.2 ANTREA_VER=v2.7.0 KUBEROUTER_VER=v2.11.1 \
+KUBEROUTER_FIXBIN=<fixed binary> CONDITIONS_OVERRIDE="X1 A1 K1 K2 A2 X2 X3 X4" MAX_REP=3 \
+  ./harness/run_campaign.sh runs/rev-0923 <deadline epoch>
 
 # aggregation and charts
 python3 harness/aggregate.py runs/<run dir> --json analysis/summary.json

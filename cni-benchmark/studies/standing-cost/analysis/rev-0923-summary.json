@@ -1,0 +1,2486 @@
+{
+ "A1": {
+  "reps": [
+   "rev-0923/rep1",
+   "rev-0923/rep2",
+   "rev-0923/rep3"
+  ],
+  "phases": {
+   "idle": {
+    "antrea-agent": {
+     "cpu_m": 52.6,
+     "ws_mib": 419.6,
+     "rss_mib": 138.2,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 30.18,
+     "ws_mib": 84.4,
+     "rss_mib": 43.8,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 60.97,
+     "ws_mib": 360.3,
+     "rss_mib": 285.4,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.87,
+     "ws_mib": 110.1,
+     "rss_mib": 50.0,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 1.11,
+     "ws_mib": 159.0,
+     "rss_mib": 33.9,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 12.06,
+     "ws_mib": 61.5,
+     "rss_mib": 21.4,
+     "reps": 3
+    },
+    "antrea-controller": {
+     "cpu_m": 6.63,
+     "ws_mib": 97.9,
+     "rss_mib": 33.1,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.92,
+     "ws_mib": 24.1,
+     "rss_mib": 22.8,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "density": {
+    "antrea-agent": {
+     "cpu_m": 52.46,
+     "ws_mib": 431.1,
+     "rss_mib": 145.5,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 29.07,
+     "ws_mib": 85.8,
+     "rss_mib": 44.8,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 59.75,
+     "ws_mib": 373.6,
+     "rss_mib": 298.3,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.41,
+     "ws_mib": 113.4,
+     "rss_mib": 53.4,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 1.06,
+     "ws_mib": 159.1,
+     "rss_mib": 34.0,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.63,
+     "ws_mib": 63.5,
+     "rss_mib": 23.1,
+     "reps": 3
+    },
+    "antrea-controller": {
+     "cpu_m": 6.32,
+     "ws_mib": 99.2,
+     "rss_mib": 34.1,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.72,
+     "ws_mib": 24.2,
+     "rss_mib": 23.0,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "policy": {
+    "antrea-agent": {
+     "cpu_m": 51.37,
+     "ws_mib": 447.2,
+     "rss_mib": 159.1,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 28.37,
+     "ws_mib": 86.9,
+     "rss_mib": 45.8,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 59.12,
+     "ws_mib": 375.0,
+     "rss_mib": 299.6,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 17.76,
+     "ws_mib": 112.7,
+     "rss_mib": 52.3,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 1.07,
+     "ws_mib": 159.3,
+     "rss_mib": 34.1,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.32,
+     "ws_mib": 64.1,
+     "rss_mib": 23.9,
+     "reps": 3
+    },
+    "antrea-controller": {
+     "cpu_m": 6.17,
+     "ws_mib": 99.8,
+     "rss_mib": 34.6,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.6,
+     "ws_mib": 24.5,
+     "rss_mib": 23.2,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "service": {
+    "antrea-agent": {
+     "cpu_m": 51.52,
+     "ws_mib": 531.4,
+     "rss_mib": 242.7,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 28.53,
+     "ws_mib": 89.9,
+     "rss_mib": 48.7,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 59.34,
+     "ws_mib": 395.4,
+     "rss_mib": 319.9,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 17.97,
+     "ws_mib": 131.6,
+     "rss_mib": 71.4,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 2.17,
+     "ws_mib": 249.0,
+     "rss_mib": 68.3,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.39,
+     "ws_mib": 64.2,
+     "rss_mib": 24.0,
+     "reps": 3
+    },
+    "antrea-controller": {
+     "cpu_m": 6.2,
+     "ws_mib": 99.9,
+     "rss_mib": 34.6,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.63,
+     "ws_mib": 30.0,
+     "rss_mib": 28.7,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "churn": {
+    "antrea-agent": {
+     "cpu_m": 110.76,
+     "ws_mib": 559.6,
+     "rss_mib": 269.0,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 36.19,
+     "ws_mib": 148.3,
+     "rss_mib": 100.1,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 114.12,
+     "ws_mib": 594.4,
+     "rss_mib": 518.2,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 48.72,
+     "ws_mib": 156.0,
+     "rss_mib": 95.1,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 168.4,
+     "ws_mib": 349.9,
+     "rss_mib": 141.7,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 7.62,
+     "ws_mib": 65.5,
+     "rss_mib": 25.0,
+     "reps": 3
+    },
+    "antrea-controller": {
+     "cpu_m": 8.24,
+     "ws_mib": 114.5,
+     "rss_mib": 49.3,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 12.09,
+     "ws_mib": 39.0,
+     "rss_mib": 37.6,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "node": {
+    "antrea-agent": {
+     "cpu_m": 53.92,
+     "ws_mib": 600.3,
+     "rss_mib": 305.6,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 28.53,
+     "ws_mib": 148.7,
+     "rss_mib": 95.1,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 60.03,
+     "ws_mib": 576.9,
+     "rss_mib": 500.5,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.77,
+     "ws_mib": 145.5,
+     "rss_mib": 85.0,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 7.34,
+     "ws_mib": 327.4,
+     "rss_mib": 106.5,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.26,
+     "ws_mib": 68.5,
+     "rss_mib": 27.9,
+     "reps": 3
+    },
+    "antrea-controller": {
+     "cpu_m": 6.3,
+     "ws_mib": 107.5,
+     "rss_mib": 41.3,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.72,
+     "ws_mib": 35.6,
+     "rss_mib": 34.0,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   }
+  }
+ },
+ "A2": {
+  "reps": [
+   "rev-0923/rep1",
+   "rev-0923/rep2",
+   "rev-0923/rep3"
+  ],
+  "phases": {
+   "idle": {
+    "antrea-agent": {
+     "cpu_m": 60.15,
+     "ws_mib": 424.4,
+     "rss_mib": 139.3,
+     "reps": 3
+    },
+    "antrea-controller": {
+     "cpu_m": 5.93,
+     "ws_mib": 97.4,
+     "rss_mib": 33.0,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.38,
+     "ws_mib": 74.5,
+     "rss_mib": 22.6,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 30.52,
+     "ws_mib": 84.5,
+     "rss_mib": 43.8,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 62.34,
+     "ws_mib": 358.6,
+     "rss_mib": 283.7,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 19.36,
+     "ws_mib": 109.7,
+     "rss_mib": 50.0,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 1.03,
+     "ws_mib": 159.1,
+     "rss_mib": 33.7,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.75,
+     "ws_mib": 61.5,
+     "rss_mib": 21.5,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "density": {
+    "antrea-agent": {
+     "cpu_m": 58.76,
+     "ws_mib": 437.1,
+     "rss_mib": 147.4,
+     "reps": 3
+    },
+    "antrea-controller": {
+     "cpu_m": 5.63,
+     "ws_mib": 98.7,
+     "rss_mib": 33.8,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.21,
+     "ws_mib": 74.7,
+     "rss_mib": 22.8,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 30.09,
+     "ws_mib": 85.4,
+     "rss_mib": 44.5,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 61.09,
+     "ws_mib": 372.9,
+     "rss_mib": 297.4,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.79,
+     "ws_mib": 113.1,
+     "rss_mib": 53.2,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 1.0,
+     "ws_mib": 159.2,
+     "rss_mib": 33.8,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 10.76,
+     "ws_mib": 63.0,
+     "rss_mib": 22.8,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "policy": {
+    "antrea-agent": {
+     "cpu_m": 58.95,
+     "ws_mib": 454.5,
+     "rss_mib": 161.9,
+     "reps": 3
+    },
+    "antrea-controller": {
+     "cpu_m": 5.51,
+     "ws_mib": 99.3,
+     "rss_mib": 34.2,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.05,
+     "ws_mib": 74.7,
+     "rss_mib": 22.8,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 29.71,
+     "ws_mib": 86.6,
+     "rss_mib": 45.7,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 59.72,
+     "ws_mib": 376.6,
+     "rss_mib": 301.4,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.72,
+     "ws_mib": 112.3,
+     "rss_mib": 52.3,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 0.99,
+     "ws_mib": 159.3,
+     "rss_mib": 33.8,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 10.91,
+     "ws_mib": 63.5,
+     "rss_mib": 23.3,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "service": {
+    "antrea-agent": {
+     "cpu_m": 58.04,
+     "ws_mib": 531.9,
+     "rss_mib": 237.2,
+     "reps": 3
+    },
+    "antrea-controller": {
+     "cpu_m": 5.37,
+     "ws_mib": 99.6,
+     "rss_mib": 34.5,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.35,
+     "ws_mib": 80.7,
+     "rss_mib": 28.5,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 29.41,
+     "ws_mib": 89.0,
+     "rss_mib": 47.9,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 59.5,
+     "ws_mib": 396.1,
+     "rss_mib": 320.8,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.95,
+     "ws_mib": 131.6,
+     "rss_mib": 71.5,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 2.03,
+     "ws_mib": 248.9,
+     "rss_mib": 68.3,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 10.61,
+     "ws_mib": 63.9,
+     "rss_mib": 23.6,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "churn": {
+    "antrea-agent": {
+     "cpu_m": 114.22,
+     "ws_mib": 568.9,
+     "rss_mib": 273.4,
+     "reps": 3
+    },
+    "antrea-controller": {
+     "cpu_m": 7.77,
+     "ws_mib": 114.3,
+     "rss_mib": 49.2,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 8.91,
+     "ws_mib": 89.7,
+     "rss_mib": 37.4,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 36.76,
+     "ws_mib": 148.9,
+     "rss_mib": 100.7,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 114.42,
+     "ws_mib": 593.3,
+     "rss_mib": 517.5,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 48.61,
+     "ws_mib": 155.2,
+     "rss_mib": 95.0,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 168.2,
+     "ws_mib": 347.1,
+     "rss_mib": 139.1,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 7.52,
+     "ws_mib": 65.2,
+     "rss_mib": 24.9,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "node": {
+    "antrea-agent": {
+     "cpu_m": 60.69,
+     "ws_mib": 602.4,
+     "rss_mib": 305.6,
+     "reps": 3
+    },
+    "antrea-controller": {
+     "cpu_m": 5.93,
+     "ws_mib": 106.6,
+     "rss_mib": 41.3,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.25,
+     "ws_mib": 85.8,
+     "rss_mib": 33.5,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 30.13,
+     "ws_mib": 148.3,
+     "rss_mib": 95.0,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 62.09,
+     "ws_mib": 582.4,
+     "rss_mib": 506.1,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 19.68,
+     "ws_mib": 146.6,
+     "rss_mib": 86.3,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 4.99,
+     "ws_mib": 323.5,
+     "rss_mib": 106.5,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 10.19,
+     "ws_mib": 67.4,
+     "rss_mib": 27.0,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   }
+  }
+ },
+ "K1": {
+  "reps": [
+   "rev-0923/rep1",
+   "rev-0923/rep2",
+   "rev-0923/rep3"
+  ],
+  "phases": {
+   "idle": {
+    "coredns": {
+     "cpu_m": 4.76,
+     "ws_mib": 74.5,
+     "rss_mib": 22.5,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 27.17,
+     "ws_mib": 77.4,
+     "rss_mib": 36.9,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 53.1,
+     "ws_mib": 291.5,
+     "rss_mib": 217.7,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.52,
+     "ws_mib": 105.7,
+     "rss_mib": 45.6,
+     "reps": 3
+    },
+    "kube-router": {
+     "cpu_m": 2.95,
+     "ws_mib": 69.9,
+     "rss_mib": 66.2,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 12.38,
+     "ws_mib": 61.3,
+     "rss_mib": 21.0,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "density": {
+    "coredns": {
+     "cpu_m": 4.47,
+     "ws_mib": 74.8,
+     "rss_mib": 22.7,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 26.43,
+     "ws_mib": 78.5,
+     "rss_mib": 37.8,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 52.44,
+     "ws_mib": 308.1,
+     "rss_mib": 233.9,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.43,
+     "ws_mib": 109.1,
+     "rss_mib": 48.8,
+     "reps": 3
+    },
+    "kube-router": {
+     "cpu_m": 4.58,
+     "ws_mib": 87.2,
+     "rss_mib": 82.9,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.97,
+     "ws_mib": 63.0,
+     "rss_mib": 22.4,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "policy": {
+    "coredns": {
+     "cpu_m": 4.4,
+     "ws_mib": 74.9,
+     "rss_mib": 22.8,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 25.58,
+     "ws_mib": 79.7,
+     "rss_mib": 38.8,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 51.35,
+     "ws_mib": 309.2,
+     "rss_mib": 235.1,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 17.74,
+     "ws_mib": 108.1,
+     "rss_mib": 47.7,
+     "reps": 3
+    },
+    "kube-router": {
+     "cpu_m": 14.58,
+     "ws_mib": 116.8,
+     "rss_mib": 105.2,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.37,
+     "ws_mib": 63.5,
+     "rss_mib": 23.0,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "service": {
+    "coredns": {
+     "cpu_m": 4.57,
+     "ws_mib": 80.8,
+     "rss_mib": 28.5,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 26.13,
+     "ws_mib": 81.9,
+     "rss_mib": 40.9,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 52.41,
+     "ws_mib": 329.5,
+     "rss_mib": 255.1,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.22,
+     "ws_mib": 127.7,
+     "rss_mib": 67.2,
+     "reps": 3
+    },
+    "kube-router": {
+     "cpu_m": 31.43,
+     "ws_mib": 169.6,
+     "rss_mib": 155.4,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.44,
+     "ws_mib": 63.8,
+     "rss_mib": 23.3,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "churn": {
+    "coredns": {
+     "cpu_m": 8.2,
+     "ws_mib": 90.0,
+     "rss_mib": 37.5,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 32.18,
+     "ws_mib": 143.5,
+     "rss_mib": 95.7,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 100.07,
+     "ws_mib": 513.6,
+     "rss_mib": 438.4,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 45.32,
+     "ws_mib": 151.7,
+     "rss_mib": 91.0,
+     "reps": 3
+    },
+    "kube-router": {
+     "cpu_m": 2268.44,
+     "ws_mib": 221.8,
+     "rss_mib": 207.0,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 7.14,
+     "ws_mib": 65.3,
+     "rss_mib": 24.6,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "node": {
+    "coredns": {
+     "cpu_m": 4.62,
+     "ws_mib": 86.2,
+     "rss_mib": 33.6,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 26.5,
+     "ws_mib": 143.0,
+     "rss_mib": 90.0,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 53.19,
+     "ws_mib": 503.3,
+     "rss_mib": 428.1,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 19.01,
+     "ws_mib": 142.6,
+     "rss_mib": 81.7,
+     "reps": 3
+    },
+    "kube-router": {
+     "cpu_m": 59.34,
+     "ws_mib": 200.6,
+     "rss_mib": 186.0,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.5,
+     "ws_mib": 67.8,
+     "rss_mib": 27.2,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   }
+  }
+ },
+ "K2": {
+  "reps": [
+   "rev-0923/rep1",
+   "rev-0923/rep2",
+   "rev-0923/rep3"
+  ],
+  "phases": {
+   "idle": {
+    "etcd": {
+     "cpu_m": 26.4,
+     "ws_mib": 77.8,
+     "rss_mib": 37.3,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 53.27,
+     "ws_mib": 289.6,
+     "rss_mib": 215.8,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 17.55,
+     "ws_mib": 105.9,
+     "rss_mib": 45.8,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 1.11,
+     "ws_mib": 157.4,
+     "rss_mib": 33.1,
+     "reps": 3
+    },
+    "kube-router": {
+     "cpu_m": 2.68,
+     "ws_mib": 69.4,
+     "rss_mib": 66.2,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 12.38,
+     "ws_mib": 61.3,
+     "rss_mib": 20.9,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.86,
+     "ws_mib": 23.8,
+     "rss_mib": 22.5,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "density": {
+    "etcd": {
+     "cpu_m": 25.71,
+     "ws_mib": 79.3,
+     "rss_mib": 38.6,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 52.8,
+     "ws_mib": 304.3,
+     "rss_mib": 229.7,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 17.25,
+     "ws_mib": 109.6,
+     "rss_mib": 49.3,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 1.02,
+     "ws_mib": 157.4,
+     "rss_mib": 33.2,
+     "reps": 3
+    },
+    "kube-router": {
+     "cpu_m": 4.35,
+     "ws_mib": 84.3,
+     "rss_mib": 80.5,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.89,
+     "ws_mib": 63.0,
+     "rss_mib": 22.4,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.61,
+     "ws_mib": 24.1,
+     "rss_mib": 22.7,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "policy": {
+    "etcd": {
+     "cpu_m": 25.44,
+     "ws_mib": 80.5,
+     "rss_mib": 39.8,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 51.63,
+     "ws_mib": 308.6,
+     "rss_mib": 234.0,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 16.59,
+     "ws_mib": 108.6,
+     "rss_mib": 48.4,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 1.08,
+     "ws_mib": 157.5,
+     "rss_mib": 33.3,
+     "reps": 3
+    },
+    "kube-router": {
+     "cpu_m": 14.3,
+     "ws_mib": 117.4,
+     "rss_mib": 106.4,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.76,
+     "ws_mib": 63.4,
+     "rss_mib": 22.8,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.52,
+     "ws_mib": 24.1,
+     "rss_mib": 22.8,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "service": {
+    "etcd": {
+     "cpu_m": 25.45,
+     "ws_mib": 82.8,
+     "rss_mib": 41.9,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 53.22,
+     "ws_mib": 326.9,
+     "rss_mib": 252.0,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 17.05,
+     "ws_mib": 127.7,
+     "rss_mib": 67.3,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 2.35,
+     "ws_mib": 247.8,
+     "rss_mib": 67.7,
+     "reps": 3
+    },
+    "kube-router": {
+     "cpu_m": 4.76,
+     "ws_mib": 145.9,
+     "rss_mib": 132.3,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.61,
+     "ws_mib": 64.1,
+     "rss_mib": 23.4,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.72,
+     "ws_mib": 29.8,
+     "rss_mib": 28.5,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "churn": {
+    "etcd": {
+     "cpu_m": 36.94,
+     "ws_mib": 143.0,
+     "rss_mib": 95.2,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 118.9,
+     "ws_mib": 511.5,
+     "rss_mib": 436.0,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 52.45,
+     "ws_mib": 151.3,
+     "rss_mib": 90.8,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 178.31,
+     "ws_mib": 351.2,
+     "rss_mib": 143.1,
+     "reps": 3
+    },
+    "kube-router": {
+     "cpu_m": 218.13,
+     "ws_mib": 179.7,
+     "rss_mib": 165.9,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 8.17,
+     "ws_mib": 65.2,
+     "rss_mib": 24.6,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 13.17,
+     "ws_mib": 38.6,
+     "rss_mib": 37.2,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   },
+   "node": {
+    "etcd": {
+     "cpu_m": 26.38,
+     "ws_mib": 141.8,
+     "rss_mib": 88.8,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 53.24,
+     "ws_mib": 502.8,
+     "rss_mib": 427.4,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.36,
+     "ws_mib": 142.1,
+     "rss_mib": 81.3,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 6.29,
+     "ws_mib": 326.3,
+     "rss_mib": 108.4,
+     "reps": 3
+    },
+    "kube-router": {
+     "cpu_m": 16.73,
+     "ws_mib": 156.1,
+     "rss_mib": 142.1,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.52,
+     "ws_mib": 67.8,
+     "rss_mib": 26.7,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.73,
+     "ws_mib": 81.9,
+     "rss_mib": 33.5,
+     "reps": 3
+    },
+    "_bpf_mib": 0.0
+   }
+  }
+ },
+ "X1": {
+  "reps": [
+   "rev-0923/rep1",
+   "rev-0923/rep2",
+   "rev-0923/rep3"
+  ],
+  "phases": {
+   "idle": {
+    "cilium": {
+     "cpu_m": 92.94,
+     "ws_mib": 1145.6,
+     "rss_mib": 234.4,
+     "reps": 3
+    },
+    "cilium-envoy": {
+     "cpu_m": 9.18,
+     "ws_mib": 170.1,
+     "rss_mib": 40.0,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.85,
+     "ws_mib": 24.0,
+     "rss_mib": 22.6,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 29.94,
+     "ws_mib": 82.0,
+     "rss_mib": 41.3,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 60.63,
+     "ws_mib": 371.0,
+     "rss_mib": 295.9,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.7,
+     "ws_mib": 109.6,
+     "rss_mib": 49.8,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 1.09,
+     "ws_mib": 158.9,
+     "rss_mib": 33.9,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.76,
+     "ws_mib": 62.4,
+     "rss_mib": 22.1,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 8.91,
+     "ws_mib": 121.2,
+     "rss_mib": 32.7,
+     "reps": 3
+    },
+    "_bpf_mib": 412.1
+   },
+   "density": {
+    "cilium": {
+     "cpu_m": 98.22,
+     "ws_mib": 1223.1,
+     "rss_mib": 299.0,
+     "reps": 3
+    },
+    "cilium-envoy": {
+     "cpu_m": 8.98,
+     "ws_mib": 170.2,
+     "rss_mib": 40.1,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.7,
+     "ws_mib": 24.2,
+     "rss_mib": 22.8,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 28.03,
+     "ws_mib": 84.6,
+     "rss_mib": 43.8,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 58.35,
+     "ws_mib": 383.4,
+     "rss_mib": 307.7,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 17.87,
+     "ws_mib": 112.7,
+     "rss_mib": 52.9,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 0.97,
+     "ws_mib": 159.0,
+     "rss_mib": 34.0,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.2,
+     "ws_mib": 64.0,
+     "rss_mib": 23.3,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 8.48,
+     "ws_mib": 121.3,
+     "rss_mib": 32.8,
+     "reps": 3
+    },
+    "_bpf_mib": 413.3
+   },
+   "policy": {
+    "cilium": {
+     "cpu_m": 101.14,
+     "ws_mib": 1250.1,
+     "rss_mib": 322.1,
+     "reps": 3
+    },
+    "cilium-envoy": {
+     "cpu_m": 8.53,
+     "ws_mib": 170.2,
+     "rss_mib": 40.1,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.54,
+     "ws_mib": 24.3,
+     "rss_mib": 22.9,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 27.67,
+     "ws_mib": 85.6,
+     "rss_mib": 44.7,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 57.22,
+     "ws_mib": 381.9,
+     "rss_mib": 306.2,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 17.28,
+     "ws_mib": 111.6,
+     "rss_mib": 51.8,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 1.01,
+     "ws_mib": 159.0,
+     "rss_mib": 34.1,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 10.82,
+     "ws_mib": 64.5,
+     "rss_mib": 23.9,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 8.2,
+     "ws_mib": 121.4,
+     "rss_mib": 32.9,
+     "reps": 3
+    },
+    "_bpf_mib": 413.7
+   },
+   "service": {
+    "cilium": {
+     "cpu_m": 98.27,
+     "ws_mib": 1292.4,
+     "rss_mib": 361.3,
+     "reps": 3
+    },
+    "cilium-envoy": {
+     "cpu_m": 8.43,
+     "ws_mib": 170.2,
+     "rss_mib": 40.1,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.51,
+     "ws_mib": 30.1,
+     "rss_mib": 28.7,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 27.57,
+     "ws_mib": 86.8,
+     "rss_mib": 45.7,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 58.01,
+     "ws_mib": 401.3,
+     "rss_mib": 325.9,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 17.57,
+     "ws_mib": 131.6,
+     "rss_mib": 71.0,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 2.14,
+     "ws_mib": 249.5,
+     "rss_mib": 68.7,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 10.52,
+     "ws_mib": 65.0,
+     "rss_mib": 24.4,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 8.22,
+     "ws_mib": 121.5,
+     "rss_mib": 32.9,
+     "reps": 3
+    },
+    "_bpf_mib": 416.0
+   },
+   "churn": {
+    "cilium": {
+     "cpu_m": 103.18,
+     "ws_mib": 1411.9,
+     "rss_mib": 477.9,
+     "reps": 3
+    },
+    "cilium-envoy": {
+     "cpu_m": 5.35,
+     "ws_mib": 170.2,
+     "rss_mib": 40.1,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 11.2,
+     "ws_mib": 39.0,
+     "rss_mib": 37.6,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 33.31,
+     "ws_mib": 144.5,
+     "rss_mib": 96.3,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 108.01,
+     "ws_mib": 602.1,
+     "rss_mib": 526.1,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 43.72,
+     "ws_mib": 156.2,
+     "rss_mib": 95.1,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 158.52,
+     "ws_mib": 347.7,
+     "rss_mib": 139.9,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 7.3,
+     "ws_mib": 65.8,
+     "rss_mib": 25.5,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 6.09,
+     "ws_mib": 126.2,
+     "rss_mib": 37.5,
+     "reps": 3
+    },
+    "_bpf_mib": 416.8
+   },
+   "node": {
+    "cilium": {
+     "cpu_m": 98.35,
+     "ws_mib": 1370.5,
+     "rss_mib": 435.9,
+     "reps": 3
+    },
+    "cilium-envoy": {
+     "cpu_m": 8.51,
+     "ws_mib": 170.2,
+     "rss_mib": 40.1,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.57,
+     "ws_mib": 82.9,
+     "rss_mib": 34.0,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 28.16,
+     "ws_mib": 144.9,
+     "rss_mib": 91.5,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 59.73,
+     "ws_mib": 587.0,
+     "rss_mib": 510.6,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.2,
+     "ws_mib": 145.2,
+     "rss_mib": 84.6,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 6.11,
+     "ws_mib": 320.5,
+     "rss_mib": 106.8,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 10.04,
+     "ws_mib": 68.8,
+     "rss_mib": 28.6,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 7.63,
+     "ws_mib": 124.4,
+     "rss_mib": 35.0,
+     "reps": 3
+    },
+    "_bpf_mib": 416.8
+   }
+  }
+ },
+ "X2": {
+  "reps": [
+   "rev-0923/rep1",
+   "rev-0923/rep2",
+   "rev-0923/rep3"
+  ],
+  "phases": {
+   "idle": {
+    "cilium": {
+     "cpu_m": 93.0,
+     "ws_mib": 1126.1,
+     "rss_mib": 215.2,
+     "reps": 3
+    },
+    "cilium-envoy": {
+     "cpu_m": 9.24,
+     "ws_mib": 170.1,
+     "rss_mib": 40.0,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 29.54,
+     "ws_mib": 82.4,
+     "rss_mib": 41.6,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 61.25,
+     "ws_mib": 369.0,
+     "rss_mib": 294.2,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 19.21,
+     "ws_mib": 110.2,
+     "rss_mib": 49.9,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 1.03,
+     "ws_mib": 158.7,
+     "rss_mib": 33.7,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.89,
+     "ws_mib": 62.6,
+     "rss_mib": 22.2,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 8.76,
+     "ws_mib": 120.2,
+     "rss_mib": 32.3,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.81,
+     "ws_mib": 24.1,
+     "rss_mib": 22.8,
+     "reps": 3
+    },
+    "_bpf_mib": 412.1
+   },
+   "density": {
+    "cilium": {
+     "cpu_m": 95.8,
+     "ws_mib": 1191.0,
+     "rss_mib": 267.5,
+     "reps": 3
+    },
+    "cilium-envoy": {
+     "cpu_m": 8.8,
+     "ws_mib": 170.1,
+     "rss_mib": 40.1,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 28.31,
+     "ws_mib": 83.9,
+     "rss_mib": 42.9,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 59.49,
+     "ws_mib": 380.7,
+     "rss_mib": 305.4,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.37,
+     "ws_mib": 113.5,
+     "rss_mib": 52.9,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 0.97,
+     "ws_mib": 158.8,
+     "rss_mib": 33.8,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 10.92,
+     "ws_mib": 63.9,
+     "rss_mib": 23.4,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 8.31,
+     "ws_mib": 120.5,
+     "rss_mib": 32.4,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.59,
+     "ws_mib": 24.3,
+     "rss_mib": 23.0,
+     "reps": 3
+    },
+    "_bpf_mib": 413.3
+   },
+   "policy": {
+    "cilium": {
+     "cpu_m": 98.53,
+     "ws_mib": 1213.8,
+     "rss_mib": 284.6,
+     "reps": 3
+    },
+    "cilium-envoy": {
+     "cpu_m": 8.69,
+     "ws_mib": 170.1,
+     "rss_mib": 40.1,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 27.64,
+     "ws_mib": 84.0,
+     "rss_mib": 42.9,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 57.23,
+     "ws_mib": 383.1,
+     "rss_mib": 307.7,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 17.92,
+     "ws_mib": 112.8,
+     "rss_mib": 52.0,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 1.02,
+     "ws_mib": 158.8,
+     "rss_mib": 34.0,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 10.74,
+     "ws_mib": 64.4,
+     "rss_mib": 24.1,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 8.06,
+     "ws_mib": 120.6,
+     "rss_mib": 32.5,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.5,
+     "ws_mib": 24.4,
+     "rss_mib": 23.1,
+     "reps": 3
+    },
+    "_bpf_mib": 413.7
+   },
+   "service": {
+    "cilium": {
+     "cpu_m": 96.14,
+     "ws_mib": 1257.9,
+     "rss_mib": 326.1,
+     "reps": 3
+    },
+    "cilium-envoy": {
+     "cpu_m": 8.33,
+     "ws_mib": 170.2,
+     "rss_mib": 40.1,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 27.84,
+     "ws_mib": 88.1,
+     "rss_mib": 46.8,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 58.07,
+     "ws_mib": 403.3,
+     "rss_mib": 327.7,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.17,
+     "ws_mib": 132.2,
+     "rss_mib": 71.4,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 2.16,
+     "ws_mib": 249.4,
+     "rss_mib": 68.7,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 10.34,
+     "ws_mib": 64.7,
+     "rss_mib": 24.3,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 8.03,
+     "ws_mib": 120.6,
+     "rss_mib": 32.5,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.54,
+     "ws_mib": 29.9,
+     "rss_mib": 28.6,
+     "reps": 3
+    },
+    "_bpf_mib": 416.0
+   },
+   "churn": {
+    "cilium": {
+     "cpu_m": 101.54,
+     "ws_mib": 1368.4,
+     "rss_mib": 434.2,
+     "reps": 3
+    },
+    "cilium-envoy": {
+     "cpu_m": 5.24,
+     "ws_mib": 170.2,
+     "rss_mib": 40.1,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 33.93,
+     "ws_mib": 144.3,
+     "rss_mib": 96.2,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 109.32,
+     "ws_mib": 601.3,
+     "rss_mib": 525.2,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 44.95,
+     "ws_mib": 156.3,
+     "rss_mib": 95.4,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 158.74,
+     "ws_mib": 347.8,
+     "rss_mib": 140.1,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 7.37,
+     "ws_mib": 65.6,
+     "rss_mib": 25.2,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 5.89,
+     "ws_mib": 125.2,
+     "rss_mib": 37.0,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 11.36,
+     "ws_mib": 39.0,
+     "rss_mib": 37.3,
+     "reps": 3
+    },
+    "_bpf_mib": 416.8
+   },
+   "node": {
+    "cilium": {
+     "cpu_m": 97.52,
+     "ws_mib": 1326.0,
+     "rss_mib": 391.4,
+     "reps": 3
+    },
+    "cilium-envoy": {
+     "cpu_m": 8.7,
+     "ws_mib": 170.2,
+     "rss_mib": 40.1,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 28.31,
+     "ws_mib": 145.6,
+     "rss_mib": 92.3,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 59.76,
+     "ws_mib": 594.5,
+     "rss_mib": 518.0,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 19.17,
+     "ws_mib": 147.4,
+     "rss_mib": 86.3,
+     "reps": 3
+    },
+    "kube-proxy": {
+     "cpu_m": 6.12,
+     "ws_mib": 317.7,
+     "rss_mib": 106.2,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 10.32,
+     "ws_mib": 68.2,
+     "rss_mib": 27.7,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 7.35,
+     "ws_mib": 123.2,
+     "rss_mib": 35.0,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.55,
+     "ws_mib": 82.8,
+     "rss_mib": 33.8,
+     "reps": 3
+    },
+    "_bpf_mib": 416.8
+   }
+  }
+ },
+ "X3": {
+  "reps": [
+   "rev-0923/rep1",
+   "rev-0923/rep2",
+   "rev-0923/rep3"
+  ],
+  "phases": {
+   "idle": {
+    "cilium-envoy": {
+     "cpu_m": 9.58,
+     "ws_mib": 170.0,
+     "rss_mib": 39.9,
+     "reps": 3
+    },
+    "cilium": {
+     "cpu_m": 106.74,
+     "ws_mib": 1440.7,
+     "rss_mib": 222.3,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 29.66,
+     "ws_mib": 81.5,
+     "rss_mib": 40.6,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 60.44,
+     "ws_mib": 367.3,
+     "rss_mib": 292.3,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 19.3,
+     "ws_mib": 109.8,
+     "rss_mib": 49.5,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 12.14,
+     "ws_mib": 62.2,
+     "rss_mib": 22.1,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 8.17,
+     "ws_mib": 121.3,
+     "rss_mib": 32.5,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.82,
+     "ws_mib": 24.0,
+     "rss_mib": 22.7,
+     "reps": 3
+    },
+    "_bpf_mib": 715.1
+   },
+   "density": {
+    "cilium-envoy": {
+     "cpu_m": 8.63,
+     "ws_mib": 170.1,
+     "rss_mib": 40.1,
+     "reps": 3
+    },
+    "cilium": {
+     "cpu_m": 108.42,
+     "ws_mib": 1503.9,
+     "rss_mib": 274.9,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 28.51,
+     "ws_mib": 84.4,
+     "rss_mib": 43.4,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 58.72,
+     "ws_mib": 378.7,
+     "rss_mib": 303.2,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.37,
+     "ws_mib": 113.3,
+     "rss_mib": 52.9,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.71,
+     "ws_mib": 63.5,
+     "rss_mib": 23.3,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 7.7,
+     "ws_mib": 121.5,
+     "rss_mib": 32.6,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.48,
+     "ws_mib": 24.3,
+     "rss_mib": 23.0,
+     "reps": 3
+    },
+    "_bpf_mib": 716.3
+   },
+   "policy": {
+    "cilium-envoy": {
+     "cpu_m": 8.41,
+     "ws_mib": 170.2,
+     "rss_mib": 40.1,
+     "reps": 3
+    },
+    "cilium": {
+     "cpu_m": 111.62,
+     "ws_mib": 1531.6,
+     "rss_mib": 297.8,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 28.09,
+     "ws_mib": 85.2,
+     "rss_mib": 43.8,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 57.83,
+     "ws_mib": 378.4,
+     "rss_mib": 303.0,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 17.96,
+     "ws_mib": 112.4,
+     "rss_mib": 51.9,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.53,
+     "ws_mib": 64.1,
+     "rss_mib": 23.9,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 7.69,
+     "ws_mib": 121.5,
+     "rss_mib": 32.7,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.4,
+     "ws_mib": 24.4,
+     "rss_mib": 23.1,
+     "reps": 3
+    },
+    "_bpf_mib": 716.6
+   },
+   "service": {
+    "cilium-envoy": {
+     "cpu_m": 8.71,
+     "ws_mib": 170.2,
+     "rss_mib": 40.1,
+     "reps": 3
+    },
+    "cilium": {
+     "cpu_m": 109.32,
+     "ws_mib": 1569.1,
+     "rss_mib": 332.2,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 28.32,
+     "ws_mib": 87.0,
+     "rss_mib": 45.7,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 58.06,
+     "ws_mib": 402.4,
+     "rss_mib": 327.0,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 17.9,
+     "ws_mib": 131.8,
+     "rss_mib": 71.5,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.33,
+     "ws_mib": 64.5,
+     "rss_mib": 24.2,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 7.49,
+     "ws_mib": 121.6,
+     "rss_mib": 32.8,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.59,
+     "ws_mib": 29.9,
+     "rss_mib": 28.6,
+     "reps": 3
+    },
+    "_bpf_mib": 719.0
+   },
+   "churn": {
+    "cilium-envoy": {
+     "cpu_m": 5.94,
+     "ws_mib": 170.2,
+     "rss_mib": 40.2,
+     "reps": 3
+    },
+    "cilium": {
+     "cpu_m": 119.09,
+     "ws_mib": 1687.3,
+     "rss_mib": 448.4,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 38.82,
+     "ws_mib": 144.9,
+     "rss_mib": 96.7,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 119.01,
+     "ws_mib": 595.1,
+     "rss_mib": 519.0,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 53.64,
+     "ws_mib": 156.1,
+     "rss_mib": 95.7,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 8.45,
+     "ws_mib": 65.8,
+     "rss_mib": 25.4,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 6.19,
+     "ws_mib": 126.3,
+     "rss_mib": 37.3,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 13.17,
+     "ws_mib": 38.8,
+     "rss_mib": 37.4,
+     "reps": 3
+    },
+    "_bpf_mib": 719.8
+   },
+   "node": {
+    "cilium-envoy": {
+     "cpu_m": 8.34,
+     "ws_mib": 170.2,
+     "rss_mib": 40.2,
+     "reps": 3
+    },
+    "cilium": {
+     "cpu_m": 109.87,
+     "ws_mib": 1640.9,
+     "rss_mib": 401.1,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 28.57,
+     "ws_mib": 144.7,
+     "rss_mib": 91.3,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 60.72,
+     "ws_mib": 587.2,
+     "rss_mib": 511.3,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 19.06,
+     "ws_mib": 148.3,
+     "rss_mib": 87.3,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.1,
+     "ws_mib": 68.6,
+     "rss_mib": 28.2,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 7.35,
+     "ws_mib": 124.4,
+     "rss_mib": 35.4,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.72,
+     "ws_mib": 35.6,
+     "rss_mib": 33.7,
+     "reps": 3
+    },
+    "_bpf_mib": 719.8
+   }
+  }
+ },
+ "X4": {
+  "reps": [
+   "rev-0923/rep1",
+   "rev-0923/rep2",
+   "rev-0923/rep3"
+  ],
+  "phases": {
+   "idle": {
+    "cilium-envoy": {
+     "cpu_m": 9.49,
+     "ws_mib": 170.1,
+     "rss_mib": 40.0,
+     "reps": 3
+    },
+    "cilium": {
+     "cpu_m": 98.86,
+     "ws_mib": 1442.0,
+     "rss_mib": 222.4,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 30.16,
+     "ws_mib": 81.8,
+     "rss_mib": 41.0,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 60.84,
+     "ws_mib": 367.1,
+     "rss_mib": 292.1,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.62,
+     "ws_mib": 110.1,
+     "rss_mib": 50.2,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 12.06,
+     "ws_mib": 62.4,
+     "rss_mib": 22.2,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 8.97,
+     "ws_mib": 121.4,
+     "rss_mib": 32.4,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 5.18,
+     "ws_mib": 24.0,
+     "rss_mib": 22.7,
+     "reps": 3
+    },
+    "_bpf_mib": 715.1
+   },
+   "density": {
+    "cilium-envoy": {
+     "cpu_m": 9.04,
+     "ws_mib": 170.1,
+     "rss_mib": 40.0,
+     "reps": 3
+    },
+    "cilium": {
+     "cpu_m": 101.46,
+     "ws_mib": 1506.8,
+     "rss_mib": 277.1,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 28.24,
+     "ws_mib": 84.0,
+     "rss_mib": 43.0,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 58.27,
+     "ws_mib": 376.3,
+     "rss_mib": 301.0,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 17.53,
+     "ws_mib": 113.4,
+     "rss_mib": 53.4,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.21,
+     "ws_mib": 63.8,
+     "rss_mib": 23.5,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 8.55,
+     "ws_mib": 121.6,
+     "rss_mib": 32.6,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.59,
+     "ws_mib": 24.2,
+     "rss_mib": 22.9,
+     "reps": 3
+    },
+    "_bpf_mib": 716.3
+   },
+   "policy": {
+    "cilium-envoy": {
+     "cpu_m": 8.27,
+     "ws_mib": 170.1,
+     "rss_mib": 40.0,
+     "reps": 3
+    },
+    "cilium": {
+     "cpu_m": 105.78,
+     "ws_mib": 1532.0,
+     "rss_mib": 297.9,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 27.49,
+     "ws_mib": 85.0,
+     "rss_mib": 43.7,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 56.72,
+     "ws_mib": 378.0,
+     "rss_mib": 302.7,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 16.98,
+     "ws_mib": 112.4,
+     "rss_mib": 52.3,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.02,
+     "ws_mib": 64.3,
+     "rss_mib": 24.0,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 8.19,
+     "ws_mib": 121.6,
+     "rss_mib": 32.6,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.28,
+     "ws_mib": 24.3,
+     "rss_mib": 23.0,
+     "reps": 3
+    },
+    "_bpf_mib": 716.6
+   },
+   "service": {
+    "cilium-envoy": {
+     "cpu_m": 8.6,
+     "ws_mib": 170.2,
+     "rss_mib": 40.1,
+     "reps": 3
+    },
+    "cilium": {
+     "cpu_m": 102.04,
+     "ws_mib": 1568.4,
+     "rss_mib": 331.0,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 27.78,
+     "ws_mib": 87.5,
+     "rss_mib": 46.3,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 58.19,
+     "ws_mib": 399.8,
+     "rss_mib": 324.4,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 17.39,
+     "ws_mib": 131.6,
+     "rss_mib": 71.3,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 11.26,
+     "ws_mib": 64.7,
+     "rss_mib": 24.5,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 8.27,
+     "ws_mib": 121.8,
+     "rss_mib": 32.7,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.7,
+     "ws_mib": 30.0,
+     "rss_mib": 28.6,
+     "reps": 3
+    },
+    "_bpf_mib": 719.0
+   },
+   "churn": {
+    "cilium-envoy": {
+     "cpu_m": 5.95,
+     "ws_mib": 170.3,
+     "rss_mib": 40.2,
+     "reps": 3
+    },
+    "cilium": {
+     "cpu_m": 116.87,
+     "ws_mib": 1686.8,
+     "rss_mib": 447.8,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 38.66,
+     "ws_mib": 145.2,
+     "rss_mib": 97.1,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 120.43,
+     "ws_mib": 600.1,
+     "rss_mib": 524.0,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 53.55,
+     "ws_mib": 157.0,
+     "rss_mib": 96.2,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 8.15,
+     "ws_mib": 66.2,
+     "rss_mib": 25.6,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 6.57,
+     "ws_mib": 126.7,
+     "rss_mib": 37.3,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 13.47,
+     "ws_mib": 38.9,
+     "rss_mib": 37.5,
+     "reps": 3
+    },
+    "_bpf_mib": 719.8
+   },
+   "node": {
+    "cilium-envoy": {
+     "cpu_m": 8.4,
+     "ws_mib": 170.3,
+     "rss_mib": 40.2,
+     "reps": 3
+    },
+    "cilium": {
+     "cpu_m": 103.1,
+     "ws_mib": 1639.5,
+     "rss_mib": 399.7,
+     "reps": 3
+    },
+    "etcd": {
+     "cpu_m": 28.6,
+     "ws_mib": 144.8,
+     "rss_mib": 91.4,
+     "reps": 3
+    },
+    "kube-apiserver": {
+     "cpu_m": 59.3,
+     "ws_mib": 582.6,
+     "rss_mib": 506.3,
+     "reps": 3
+    },
+    "kube-controller-manager": {
+     "cpu_m": 18.16,
+     "ws_mib": 146.5,
+     "rss_mib": 85.5,
+     "reps": 3
+    },
+    "kube-scheduler": {
+     "cpu_m": 10.88,
+     "ws_mib": 69.0,
+     "rss_mib": 28.4,
+     "reps": 3
+    },
+    "cilium-operator": {
+     "cpu_m": 8.01,
+     "ws_mib": 124.5,
+     "rss_mib": 35.2,
+     "reps": 3
+    },
+    "coredns": {
+     "cpu_m": 4.72,
+     "ws_mib": 82.1,
+     "rss_mib": 31.7,
+     "reps": 3
+    },
+    "_bpf_mib": 719.8
+   }
+  }
+ }
+}

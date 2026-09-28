@@ -10,6 +10,7 @@ k apply -f "$TMP"
 rm -f "$TMP"
 
 wait_ds_ready kube-system kube-router 600
+apply_kuberouter_fix
 wait_nodes_ready 600
 smoke_test
 echo "K2 ready"

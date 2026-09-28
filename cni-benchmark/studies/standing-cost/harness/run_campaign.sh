@@ -49,7 +49,7 @@ restore_base() {
   local try
   for try in 1 2 3; do
     log "  스냅샷 복원 (시도 $try)"
-    ( cd "$CLUSTER" && vagrant snapshot restore base-no-cni ) >>"$OUT/vagrant.log" 2>&1
+    ( cd "$CLUSTER" && vagrant snapshot restore "${BASE_SNAP:-base-no-cni}" ) >>"$OUT/vagrant.log" 2>&1
     sleep 30
     # API 응답 대기 (최대 5분)
     local start=$SECONDS
@@ -122,6 +122,7 @@ need_s() { echo $(( 600 + 1500 + STABILIZE + $1 + T_DENSITY + T_POLICY + T_SERVI
 
 log "==== 캠페인 시작. 마감: $(date -r "$DEADLINE" '+%m-%d %H:%M') ===="
 log "조건 ${#CONDITIONS[@]}개: ${CONDITIONS[*]}"
+log "버전 덮어쓰기: CILIUM=${CILIUM_VER:-기본} ANTREA=${ANTREA_VER:-기본} KUBEROUTER=${KUBEROUTER_VER:-기본} FIXBIN=${KUBEROUTER_FIXBIN:-없음} BASE=${BASE_SNAP:-base-no-cni}"
 
 for rep in 1 2 3 4; do
   # rep4는 시간이 남을 때만

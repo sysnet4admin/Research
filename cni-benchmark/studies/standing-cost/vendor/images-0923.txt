@@ -1,0 +1,9 @@
+docker.io/antrea/antrea-agent-ubuntu:v2.7.0
+docker.io/antrea/antrea-controller-ubuntu:v2.7.0
+docker.io/cloudnativelabs/kube-router:v2.11.1
+quay.io/cilium/cilium-envoy:v1.37.6-1789133542-cbec91f666af0bf742da986d43832932dbb26b82
+quay.io/cilium/cilium-envoy:v1.37.6-1789133542-cbec91f666af0bf742da986d43832932dbb26b82@sha256:af7382699576b9e65e9184efa52eeca0b58aea70ad6e511bf260c91d9f740463
+quay.io/cilium/cilium:v1.20.2
+quay.io/cilium/cilium:v1.20.2@sha256:2939231d0d3e3ebddcd80fffa168b7ddcc78fdf0dc864d1c8c126ff523c54f01
+quay.io/cilium/operator-generic:v1.20.2
+quay.io/cilium/operator-generic:v1.20.2@sha256:64d8798350e8569b8e7622563fed6e44dce2625f311e4651b774816516c744fc
