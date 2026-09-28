@@ -63,6 +63,15 @@ both at rest and under load.
 
 ![Standing-cost map: idle memory vs churn CPU](studies/standing-cost/assets/standing-cost-map.svg)
 
+Filled points are the July measurement, with the versions in the results table
+below. The one hollow point is kube-router all-features (Ku1) re-measured in
+2026-09 with the upstream fix applied. Its churn-phase CPU drops from 3,355mC to
+2,268mC but is still the highest of all conditions. Most of the fix's effect
+shows up after churn ends (3,158mC to 59mC), which this chart's axes do not fully
+show. The hollow point keeps the July x position, for the reason given in the
+round comparison section. See finding 3 for details and the round comparison
+section for the numbers.
+
 Organized by situation, the results read as follows. Standing cost is only one
 of several criteria for choosing a CNI; features, performance, and operational
 experience belong in the decision too. The recommendations below are grounded

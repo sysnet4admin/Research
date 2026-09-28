@@ -4,7 +4,12 @@
 analysis/summary.json에서 스택 총합을 계산해 그린다 (AIOps 점도표 선례를 따라
 재생성 가능한 스크립트로 유지). x축 메모리는 process working set + eBPF map.
 
-사용: python3 harness/chart.py analysis/summary.json > assets/standing-cost-map.svg
+사용: python3 harness/chart.py analysis/summary.json [en|ko] [analysis/rev-0923-summary.json]
+      > assets/standing-cost-map.svg
+
+세 번째 인자(회차 비교 집계)를 주면 Ku1에 업스트림 수정을 얹은 9월 값을 속 빈 원과
+화살표로 겹쳐 그린다(2026-09-28). 다른 점은 7월 값 그대로다. 9월 Ku1의 x는 7월 값을
+쓴다. 수정 바이너리를 hostPath 로 얹어 working set 은 비교할 수 없고 RSS 가 같기 때문이다.
 """
 
 import json
@@ -41,10 +46,12 @@ LABELS = {
 TEXT = {
   "ko": {"x": "idle 메모리 (클러스터 합, working set + eBPF map, MiB)",
          "y": "churn CPU (클러스터 합, mC, 1000mC=1코어, 로그 축)",
-         "note1": "왼쪽 아래일수록", "note2": "상시 비용이 낮다"},
+         "note1": "왼쪽 아래일수록", "note2": "상시 비용이 낮다",
+         "fix": "Ku1 + 업스트림 수정 (2026-09)", "leg_fix1": "속 빈 원: 2026-09", "leg_fix2": "수정 반영 재측정"},
   "en": {"x": "idle memory (cluster total, working set + eBPF maps, MiB)",
          "y": "churn CPU (cluster total, mC, 1000mC = 1 core, log scale)",
-         "note1": "lower-left =", "note2": "cheaper to run"},
+         "note1": "lower-left =", "note2": "cheaper to run",
+         "fix": "Ku1 + upstream fix (2026-09)", "leg_fix1": "hollow: 2026-09", "leg_fix2": "re-run with fix"},
 }
 
 # 라벨 배치 미세조정 (겹침 방지: dx, dy, anchor)
@@ -59,7 +66,7 @@ NUDGE = {
 }
 
 
-def main(path, lang="en"):
+def main(path, lang="en", after=None):
     LABEL = LABELS[lang]
     T = TEXT[lang]
     data = json.load(open(path))
@@ -119,6 +126,23 @@ def main(path, lang="en"):
         s.append(f'<text x="{X(mem)+dx:.1f}" y="{Y(cpu)+dy:.1f}" font-size="11" '
                  f'fill="#222" text-anchor="{anchor}">{LABEL.get(cond, cond)}</text>')
 
+    # 9월 Ku1 (업스트림 수정 반영) 겹쳐 그리기
+    if after:
+        k1 = dict((c, (m, u)) for c, m, u in pts).get("K1")
+        rev = json.load(open(after)).get("K1")
+        if k1 and rev and rev["phases"].get("churn"):
+            cpu2 = totals(rev["phases"]["churn"])["stack"][0]
+            x0, y0, y1 = X(k1[0]), Y(k1[1]), Y(cpu2)
+            color = FAMILY["K"][1]
+            s.append(f'<line x1="{x0:.1f}" y1="{y0+8:.1f}" x2="{x0:.1f}" y2="{y1-9:.1f}" '
+                     f'stroke="{color}" stroke-width="1.5" stroke-dasharray="4 3"/>')
+            s.append(f'<path d="M{x0-4:.1f},{y1-13:.1f} L{x0:.1f},{y1-8:.1f} L{x0+4:.1f},{y1-13:.1f}" '
+                     f'fill="none" stroke="{color}" stroke-width="1.5"/>')
+            s.append(f'<circle cx="{x0:.1f}" cy="{y1:.1f}" r="6" fill="white" '
+                     f'stroke="{color}" stroke-width="2"/>')
+            s.append(f'<text x="{x0+10:.1f}" y="{y1+4:.1f}" font-size="11" '
+                     f'fill="#222">{T["fix"]}</text>')
+
     # 범례
     ly = MT + 6
     s.append(f'<text x="{ML+PW+14}" y="{ly}" font-size="11" fill="#333" '
@@ -136,9 +160,17 @@ def main(path, lang="en"):
     s.append(f'<text x="{ML+PW+14}" y="{ly+134}" font-size="10" fill="#777">'
              f'{T["note2"]}</text>')
 
+    if after:
+        y = ly + 160
+        s.append(f'<circle cx="{ML+PW+20}" cy="{y-4}" r="5" fill="white" '
+                 f'stroke="{FAMILY["K"][1]}" stroke-width="2"/>')
+        s.append(f'<text x="{ML+PW+31}" y="{y}" font-size="10" fill="#777">{T["leg_fix1"]}</text>')
+        s.append(f'<text x="{ML+PW+14}" y="{y+14}" font-size="10" fill="#777">{T["leg_fix2"]}</text>')
+
     s.append('</svg>')
     print("\n".join(s))
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else "en")
+    main(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else "en",
+         sys.argv[3] if len(sys.argv) > 3 else None)
