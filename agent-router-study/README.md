@@ -338,7 +338,7 @@ Before adopting, check the following.
 
 ## Test record
 
-The figures of record are in [`RESULTS.md`](RESULTS.md); only verdicts are carried here.
+Each test below gives its verdict. The policy behind each cell is in [`harness/cells/`](harness/cells/).
 
 Measurement ran from 2026-09-14 to 09-16 over 75 cycles, with zero measurement
 errors and zero pod restarts. **All 21 cells gave the same verdict in all 75
