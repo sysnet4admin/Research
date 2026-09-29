@@ -4,7 +4,9 @@
 
 > Status: stage 1 measurement complete (2026-09-16). Results for authorization
 > enforcement, denial shape, multiple backends, observability and passthrough cost are below.
-> The comparison with agentgateway is left to stage 2.
+> Authorization behavior was compared with agentgateway on the same real tool and a rule
+> with the same meaning (2026-09-28, test record 7). A throughput comparison is left to
+> stage 2, because the two are deployed differently.
 
 ## What Agent Router is, and where it is used
 
@@ -416,6 +418,36 @@ falls short and starts leaving requests unsent.
 Over 37 hours the proxy pod's memory went from 60Mi to 62Mi. Both controllers held steady.
 Zero pod restarts.
 
+### 7. A real Kubernetes tool and a real MCP client (2026-09-28)
+
+The cells above use a toy rule (`get-sum`, `a == 1`) probed with a raw HTTP client. I repeated
+the two argument cells against a real Kubernetes MCP server, containers/kubernetes-mcp-server
+v0.0.63 (19 tools), whose ServiceAccount can only get, list and delete pods in two test
+namespaces, `dev` and `prod`. The rule: `pods_list_in_namespace` is allowed; `pods_delete`
+only when `namespace == "dev"`. Each round deletes a fresh dummy pod and kubectl confirms the
+outcome. 5 rounds per cell, same verdict every time.
+
+| Rule form | List (of 19) | Delete in dev | Delete in prod | Tool not in the rule |
+|---|---|---|---|---|
+| none | 19 | deleted | deleted | passes |
+| documented shape (`request.mcp.params.arguments.namespace == "dev"`) | 1 (`pods_delete` gone) | deleted | 403 `access denied` | 403 |
+| `!has(request.mcp.params.arguments) \|\| ...` | 2 | deleted | 403 `access denied` | 403 |
+
+The toy-rule result holds on a real delete tool: the documented shape enforces the argument
+condition but empties the tool from the list, and the guard keeps the tool listed without
+losing enforcement. The same guard written for agentgateway's `mcpAuthorization` let the prod
+deletion through (see the agentgateway-study README, same date).
+
+The denied prod deletion was also sent with the official MCP Python SDK (`mcp` 2.2.0). The SDK
+raised `MCPError: Server returned an error response` on the first response, did not retry, did
+not attempt re-authentication, and the session stayed usable (3 of 3). The `access denied`
+reason in the 403 body did not reach the caller.
+
+Both gateways were measured in one run, so the scripts and manifests live in
+[agentgateway-study](../agentgateway-study/) (`harness/cfp_0928.sh`, `harness/kmcp_probe.py`,
+`harness/sdk_reject_probe.py`, `k8s/kmcp/`). Per-run records are kept privately; the table
+above carries every verdict.
+
 ## Limits
 
 - The path with tracing enabled was not measured. Result 4 was taken with it off.
@@ -427,8 +459,10 @@ Zero pod restarts.
 - Authorization with OAuth was not measured.
 - One cluster, one host, arm64. Absolute figures are tied to the environment; what this
   measurement claims is the relative comparison between paths.
-- This is not a direct comparison with agentgateway. The deployment shapes differ, and
-  setting the conditions is stage 2's job.
+- Authorization behavior was compared with agentgateway under the same conditions: the same
+  real tool and a rule with the same meaning, written in each gateway's own policy format
+  (test record 7). Throughput and latency were not compared. The deployment shapes differ
+  (Envoy traversed twice versus a single process), and setting those conditions is stage 2's job.
 
 ## Reproducing
 

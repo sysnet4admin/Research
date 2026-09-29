@@ -1,0 +1,69 @@
+# 보강 측정(2026-09-28): 실제 쿠버네티스 MCP 서버를 두 게이트웨이의 공통 백엔드로 둔다.
+# containers/kubernetes-mcp-server v0.0.63(mcp-server-benchmark 측정 버전).
+# 권한은 dev, prod 두 네임스페이스의 파드 조회와 삭제뿐이다. ClusterRole 이 없으므로
+# 게이트웨이, 기존 백엔드, 다른 네임스페이스는 만질 수 없다.
+apiVersion: v1
+kind: Namespace
+metadata: { name: dev }
+---
+apiVersion: v1
+kind: Namespace
+metadata: { name: prod }
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata: { name: kmcp, namespace: mcp-pilot }
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata: { name: kmcp-pods, namespace: dev }
+rules:
+  - apiGroups: [""]
+    resources: [pods, pods/log]
+    verbs: [get, list, watch, delete]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata: { name: kmcp-pods, namespace: prod }
+rules:
+  - apiGroups: [""]
+    resources: [pods, pods/log]
+    verbs: [get, list, watch, delete]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata: { name: kmcp-pods, namespace: dev }
+roleRef: { apiGroup: rbac.authorization.k8s.io, kind: Role, name: kmcp-pods }
+subjects: [{ kind: ServiceAccount, name: kmcp, namespace: mcp-pilot }]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata: { name: kmcp-pods, namespace: prod }
+roleRef: { apiGroup: rbac.authorization.k8s.io, kind: Role, name: kmcp-pods }
+subjects: [{ kind: ServiceAccount, name: kmcp, namespace: mcp-pilot }]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: kmcp, namespace: mcp-pilot }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: kmcp } }
+  template:
+    metadata: { labels: { app: kmcp } }
+    spec:
+      serviceAccountName: kmcp
+      containers:
+        - name: kmcp
+          image: quay.io/containers/kubernetes_mcp_server:v0.0.63
+          args: ["--port", "8080", "--stateless", "--cluster-provider", "in-cluster"]
+          ports: [{ containerPort: 8080 }]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: kmcp, namespace: mcp-pilot, labels: { app: kmcp } }  # agentgateway 백엔드가 레이블로 고른다
+spec:
+  selector: { app: kmcp }
+  ports:
+    - port: 80
+      targetPort: 8080
+      appProtocol: agentgateway.dev/mcp

@@ -477,6 +477,50 @@ early")을 병합했고 아직 이것이 들어간 릴리스는 없다. 라우�
 v1.5.0에서 라우트 형태가 수용되고 아무 효과가 없는 것도 같은 종류의 조용한
 무효다. 스크립트 `harness/rv_3301.sh`, 기록 `runs/pr3301-0907/`.
 
+### 실제 쿠버네티스 MCP 서버와 실제 클라이언트로 (2026-09-28, 29 측정)
+
+위 셀들은 장난감 규칙(`get-sum`, `a == 1`)이고 curl 로 측정했다. 인자 셀을 실제 쿠버네티스 MCP
+서버와 공식 MCP 클라이언트로 다시 측정했다.
+
+**구성.** 백엔드는 containers/kubernetes-mcp-server v0.0.63(mcp-server-benchmark 에서 측정한
+버전)이고 도구는 19개다. 이 서버의 ServiceAccount 는 시험용 네임스페이스 `dev` 와 `prod` 의
+파드를 조회하고 지우는 것만 할 수 있어서 게이트웨이나 다른 백엔드는 건드릴 수 없다. 규칙은
+"`pods_list_in_namespace` 는 허용하고 `pods_delete` 는 `namespace == "dev"` 일 때만 허용"이다.
+회차마다 두 네임스페이스에 더미 파드를 새로 만들고 실제로 지워졌는지는 kubectl 로 따로
+확인했다. 셀마다 5회씩 돌렸고 5회 모두 같은 판정이 나왔다.
+
+| 정책 경로 | 규칙 형태 | 수용 | 목록(19개 중) | dev 삭제 | prod 삭제 | 규칙에 없는 도구 |
+|---|---|---|---|---|---|---|
+| `mcpAuthorization` | 인자 규칙 그대로 | 됨 | 1 (`pods_delete` 사라짐) | 400 `Unknown tool` | 400 `Unknown tool` | 400 `Unknown tool` |
+| `mcpAuthorization` | `!has(mcp.tool.arguments) \|\|` 가드 | 됨 | 2 | 삭제됨 | **삭제됨** | 400 `Unknown tool` |
+| 라우트 `traffic.authorization`, v1.5.0 | Deny, Allow 형태 | 됨 | 19 | 삭제됨 | **삭제됨** (효과 없음) | 통과 |
+| 라우트 `traffic.authorization`, v1.6.0-alpha.2 | Deny, Allow 형태 | 됨 | 19 | 삭제됨 | 403 `authorization failed` | 통과 |
+
+눈여겨볼 것은 가드 형태다. 수용되고 dev 에서는 규칙이 동작하는 것처럼 보이는데 prod 파드가
+지워진다. `mcpAuthorization` 은 v1.6.0-alpha.2 프리릴리스 태그에서도 같게 동작했다.
+
+**실제 클라이언트가 거부를 받으면 하는 일.** 공식 MCP Python SDK(`mcp` 2.2.0)로 거부되는
+호출을 보내고 SDK 가 실제로 보낸 HTTP 요청을 전부 기록했다. 세 거부 모양 모두 첫 응답에서
+오류를 올리고 끝났다. 재시도하지 않았고 재인증도 시도하지 않았으며(OAuth 나 well-known 요청
+0건, 응답에 `WWW-Authenticate` 없음) 같은 세션은 계속 쓸 수 있었다.
+
+| 거부 | 게이트웨이가 돌려준 것 | SDK 가 올린 오류 |
+|---|---|---|
+| `mcpAuthorization` | 400, JSON-RPC `Unknown tool: pods_delete` | `MCPError: Unknown tool: pods_delete` |
+| 라우트 authorization (v1.6.0-alpha.2) | 403, 평문 `authorization failed` | `MCPError: Server returned an error response` |
+
+403 의 평문 사유는 호출자에게 가지 않는다. SDK 가 JSON-RPC 오류가 아닌 4xx 본문을 버리고
+일반 문구로 바꾸기 때문이다. 그래서 두 모양 모두 에이전트에게 "권한이 없다"를 전하지 않는다.
+`mcpAuthorization` 쪽은 도구가 없다고 하고 라우트 쪽은 서버 오류처럼 보인다.
+
+**PR #3301 태그 빌드 재측정.** 앞 절의 dev 빌드 셀을 v1.6.0-alpha.2 프리릴리스 태그로 다시
+측정했다(CRD 차트와 컨트롤 플레인 차트 모두 alpha.2. dev 빌드 때는 프록시 이미지만 바꿨다). 결과는
+같았다. 두 라우트 형태 모두 `a=2` 는 403, `a=1` 과 `echo` 는 200, 목록은 8개로 5회 모두 같았다.
+
+스크립트는 `harness/cfp_0928.sh`, `harness/kmcp_probe.py`, `harness/sdk_reject_probe.py`이고
+매니페스트는 `k8s/kmcp/`에 있다. 회차별 기록은 공개하지 않으며 판정은 위 표에 모두 있다.
+측정 뒤 클러스터는 VM 스냅샷으로 v1.5.0에 되돌렸다.
+
 ## 무엇을 측정했나
 
 ![측정 구조: 무엇을 어디에 두었는가](figures/setup-ko.svg)

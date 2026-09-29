@@ -538,6 +538,52 @@ still accepted, and the admission warning PR #3127 is still open. On v1.5.0
 the route form is accepted and does nothing, which is the same kind of silent
 no-op. Script `harness/rv_3301.sh`, record `runs/pr3301-0907/`.
 
+### On a real Kubernetes MCP server and a real client (measured 2026-09-28 and 29)
+
+The cells above use a toy rule (`get-sum`, `a == 1`) and were probed with curl. I repeated
+the argument cells with a real Kubernetes MCP server and an official MCP client.
+
+**Setup.** Backend: containers/kubernetes-mcp-server v0.0.63 (the version measured in
+mcp-server-benchmark), 19 tools. Its ServiceAccount can only get, list and delete pods in two
+test namespaces, `dev` and `prod`, so it cannot touch the gateways or the other backends. The
+rule is "`pods_list_in_namespace` is allowed; `pods_delete` only when `namespace == "dev"`".
+Each round creates a fresh dummy pod in each namespace and checks with kubectl whether it was
+actually deleted. Every cell ran 5 rounds and gave the same verdict in all of them.
+
+| Policy path | Rule form | Accepted | List (of 19) | Delete in dev | Delete in prod | Tool not in the rule |
+|---|---|---|---|---|---|---|
+| `mcpAuthorization` | argument rule as written | yes | 1 (`pods_delete` gone) | 400 `Unknown tool` | 400 `Unknown tool` | 400 `Unknown tool` |
+| `mcpAuthorization` | with `!has(mcp.tool.arguments) \|\|` guard | yes | 2 | deleted | **deleted** | 400 `Unknown tool` |
+| route `traffic.authorization`, v1.5.0 | Deny or Allow form | yes | 19 | deleted | **deleted** (no effect) | passes |
+| route `traffic.authorization`, v1.6.0-alpha.2 | Deny or Allow form | yes | 19 | deleted | 403 `authorization failed` | passes |
+
+The guard form is the one to note. It is accepted, it makes the rule look like it works for
+dev, and it lets a prod pod be deleted. `mcpAuthorization` behaved the same way on the
+v1.6.0-alpha.2 prerelease tag.
+
+**What a real client does with the denial.** I sent the denied call with the official MCP
+Python SDK (`mcp` 2.2.0) and recorded every HTTP request it made. In all three denial shapes it
+raised on the first response, did not retry, did not attempt re-authentication (no OAuth or
+well-known requests, no `WWW-Authenticate` in the responses), and the session stayed usable.
+
+| Denial | What the gateway returned | What the SDK raised |
+|---|---|---|
+| `mcpAuthorization` | 400, JSON-RPC `Unknown tool: pods_delete` | `MCPError: Unknown tool: pods_delete` |
+| route authorization (v1.6.0-alpha.2) | 403, plain text `authorization failed` | `MCPError: Server returned an error response` |
+
+The plain-text reason of the 403 does not reach the caller: the SDK drops a non-JSON-RPC 4xx
+body and substitutes a generic message. So neither shape tells an agent "you are not allowed":
+one says the tool does not exist, the other looks like a server error.
+
+**PR #3301 on a tag build.** The dev-build cells of the previous section were re-measured on
+the v1.6.0-alpha.2 prerelease tag (CRD and control-plane charts both at alpha.2; the dev-build
+run had swapped only the proxy image). Results matched: with either route form, `a=2` got 403,
+`a=1` and `echo` got 200, and the list kept 8 tools, in 5 of 5 rounds.
+
+Scripts `harness/cfp_0928.sh`, `harness/kmcp_probe.py` and `harness/sdk_reject_probe.py`;
+manifests `k8s/kmcp/`. Per-run records are kept privately; the tables above carry every
+verdict. The cluster was restored to v1.5.0 from a VM snapshot afterwards.
+
 ## What was measured
 
 ![Measurement setup: what sits where](figures/setup-en.svg)

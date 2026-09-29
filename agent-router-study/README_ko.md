@@ -3,7 +3,8 @@
 **[Read in English: README.md](README.md)**
 
 > 상태: 1단계 측정 완료(2026-09-16). 인가 강제, 거부의 형태, 다중 백엔드, 관측,
-> 통과 비용 다섯의 결과가 아래에 있다. agentgateway와의 비교는 2단계로 남겼다.
+> 통과 비용 다섯의 결과가 아래에 있다. 인가 동작은 같은 실제 도구와 같은 의미의 규칙으로
+> agentgateway와 비교했다(2026-09-28, 시험 기록 7). 처리량 비교는 배치 구조가 달라 2단계로 남겼다.
 
 ## Agent Router는 무엇이고 어디서 어떻게 쓰이는가
 
@@ -389,6 +390,35 @@ CPU가 약 19.5ms이고 동시 1의 응답 21.0ms에 가깝다. 이 지연은 CP
 37시간 동안 프록시 파드 메모리가 60Mi에서 62Mi로 거의 그대로다. 컨트롤러 둘도 같다.
 파드 재시작 0건이다.
 
+### 7. 실제 쿠버네티스 도구와 실제 MCP 클라이언트 (2026-09-28)
+
+위 셀들은 장난감 규칙(`get-sum`, `a == 1`)을 HTTP 클라이언트로 직접 보낸 것이다. 인자 셀 두 개를
+실제 쿠버네티스 MCP 서버인 containers/kubernetes-mcp-server v0.0.63(도구 19개)으로 다시 측정했다.
+이 서버의 ServiceAccount 는 시험용 네임스페이스 `dev` 와 `prod` 의 파드를 조회하고 지우는 것만
+할 수 있다. 규칙은 "`pods_list_in_namespace` 는 허용하고 `pods_delete` 는 `namespace == "dev"` 일
+때만 허용"이다. 회차마다 더미 파드를 새로 지우고 결과는 kubectl 로 확인했다. 셀마다 5회씩
+돌렸고 매번 같은 판정이 나왔다.
+
+| 규칙 형태 | 목록(19개 중) | dev 삭제 | prod 삭제 | 규칙에 없는 도구 |
+|---|---|---|---|---|
+| 없음 | 19 | 삭제됨 | 삭제됨 | 통과 |
+| 문서 예시 형태(`request.mcp.params.arguments.namespace == "dev"`) | 1 (`pods_delete` 사라짐) | 삭제됨 | 403 `access denied` | 403 |
+| `!has(request.mcp.params.arguments) \|\| ...` | 2 | 삭제됨 | 403 `access denied` | 403 |
+
+장난감 규칙의 결과가 실제 삭제 도구에서도 그대로 나왔다. 문서 예시 형태는 인자 조건을 지키지만
+목록에서 도구를 지운다. 가드를 붙이면 강제력을 잃지 않고 도구가 목록에 남는다. 같은 가드를
+agentgateway 의 `mcpAuthorization` 에 적었을 때는 prod 삭제가 통과했다(같은 날의
+agentgateway-study README 참고).
+
+거부된 prod 삭제를 공식 MCP Python SDK(`mcp` 2.2.0)로도 보냈다. SDK 는 첫 응답에서
+`MCPError: Server returned an error response` 를 올리고 끝냈다. 재시도하지 않았고 재인증도
+시도하지 않았으며 세션은 계속 쓸 수 있었다(3회 모두). 403 본문의 `access denied` 사유는
+호출자에게 가지 않았다.
+
+두 게이트웨이를 한 번에 측정했기 때문에 스크립트와 매니페스트는
+[agentgateway-study](../agentgateway-study/)에 있다(`harness/cfp_0928.sh`, `harness/kmcp_probe.py`,
+`harness/sdk_reject_probe.py`, `k8s/kmcp/`). 회차별 기록은 공개하지 않으며 판정은 위 표에 모두 있다.
+
 ## 한계
 
 - 트레이싱을 켠 경로를 재지 않았다. 관측 결과는 끄고 측정한 것이다.
@@ -400,7 +430,9 @@ CPU가 약 19.5ms이고 동시 1의 응답 21.0ms에 가깝다. 이 지연은 CP
 - OAuth를 쓰는 인가를 재지 않았다.
 - 한 클러스터, 한 호스트, arm64다. 절대 수치는 환경에 매인다. 경로 사이의 상대 비교가
   이 측정이 주장하는 것이다.
-- agentgateway와의 직접 비교가 아니다. 배치 구조가 달라 조건을 정하는 것이 2단계의 일이다.
+- 인가 동작은 agentgateway와 같은 조건에서 비교했다. 같은 실제 도구에 같은 의미의 규칙을
+  각 게이트웨이의 정책 형식으로 적었다(시험 기록 7). 처리량과 지연은 비교하지 않았다. 배치 구조가
+  달라서(Envoy 2회 통과 대 단일 프로세스) 그 조건을 정하는 것은 2단계의 일이다.
 
 ## 재현
 
