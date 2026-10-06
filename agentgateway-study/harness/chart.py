@@ -64,7 +64,7 @@ TEXT = {
         "a_cap": "직접 경로와 게이트웨이 경로를 회차 안에서 교대로 재고, 정책과 guardrail은 켜고 끄며 같은 백엔드에 붙인다.",
         "t_take": "v1.4.1에서 봤던 \"게이트웨이가 꼬리를 평탄화한다\"는 재현되지 않았다. 매번 새 연결에서는 두 선이 겹치고 연결 재사용의 꼬리 손해(0ms에서 8.9 대 16.3ms)는 백엔드가 느려질수록 사라진다. p50 비용은 본문 표에서 전 구간 1ms 아래다.",
         "r_title": "요청이 거부될 때 클라이언트가 보는 세 가지 형태",
-        "r_sub": "거부한 층에 따라 응답 모양이 갈린다. 모양이 곧 진단 단서다.",
+        "r_sub": "거부한 층에 따라 응답 모양이 나누어진다. 모양이 곧 진단 단서다.",
         "p_client": "클라이언트", "p_gw": "게이트웨이", "p_authz": "인가 정책 (mcpAuthorization)",
         "p_gr": "guardrail 검사 서버", "p_srv": "MCP 서버", "p_grpc": "gRPC 왕복",
         "p_cap": "세 형태 모두 요청이 MCP 서버에 닿기 전에 멈춘다.",
@@ -73,7 +73,7 @@ TEXT = {
         "r2h": "mcpGuardrails 거부", "r2chg": "v1.6.0에서 바뀜", "r2b": "HTTP 200\nv1.5.0: -32001 + 사유\nv1.6.0: isError + 사유",
         "r2n": "사유가 그대로 나간다\n(\"a == 1일 때만 허용\")",
         "r3h": "FailClosed (서버 다운)", "r3b": "HTTP 200\n-32603 내부 오류 문구",
-        "r3n": "guardrail 죽으면 전부 차단.\n내부 상태가 노출된다",
+        "r3n": "guardrail 서버가 멈추면 전부 차단.\n내부 상태가 노출된다",
     },
     "en": {
         "c_title": "What each addition costs in latency (difference of median p50, n=5 each)",

@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 580" font-family="Helvetica, Arial, sans-serif">
 <rect width="760" height="580" fill="white"/>
 <text x="380.0" y="30" font-size="14" fill="#111" text-anchor="middle" font-weight="bold">요청이 거부될 때 클라이언트가 보는 세 가지 형태</text>
-<text x="380.0" y="48" font-size="11" fill="#777" text-anchor="middle">거부한 층에 따라 응답 모양이 갈린다. 모양이 곧 진단 단서다.</text>
+<text x="380.0" y="48" font-size="11" fill="#777" text-anchor="middle">거부한 층에 따라 응답 모양이 나누어진다. 모양이 곧 진단 단서다.</text>
 <rect x="40" y="120" width="110" height="44" rx="6" fill="#fafafa" stroke="#999" stroke-width="1.5"/>
 <text x="95.0" y="146.0" font-size="12" fill="#222" text-anchor="middle" font-weight="bold">클라이언트</text>
 <rect x="280" y="106" width="170" height="72" rx="6" fill="#fafafa" stroke="#999" stroke-width="1.5"/>
@@ -52,6 +52,6 @@
 <text x="624.0" y="372" font-size="12.5" fill="white" text-anchor="middle" font-weight="bold">3. FailClosed (서버 다운)</text>
 <text x="624.0" y="418" font-size="12.5" fill="#222" text-anchor="middle" font-family="Menlo, monospace">HTTP 200</text>
 <text x="624.0" y="438" font-size="12.5" fill="#222" text-anchor="middle" font-family="Menlo, monospace">-32603 내부 오류 문구</text>
-<text x="624.0" y="484" font-size="11" fill="#555" text-anchor="middle">guardrail 죽으면 전부 차단.</text>
+<text x="624.0" y="484" font-size="11" fill="#555" text-anchor="middle">guardrail 서버가 멈추면 전부 차단.</text>
 <text x="624.0" y="501" font-size="11" fill="#555" text-anchor="middle">내부 상태가 노출된다</text>
 </svg>
