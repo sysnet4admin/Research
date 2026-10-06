@@ -10,8 +10,9 @@ again. As a result, it is hard to find any organized data on how much CPU and
 memory CNI agents and controllers consume day to day. Throughput benchmarks are
 everywhere, but I could not find a public source that compares standing cost
 under identical conditions, and vendor docs do not state it either: Cilium
-ships its helm chart without resource requests, and a Calico maintainer
-declined a request to publish recommended values. Search results for these
+ships its helm chart without resource requests, and in projectcalico/calico#5418
+one Calico maintainer explained that a heuristic default would be wrong for
+somebody, while another pointed to per-cluster overrides. Search results for these
 numbers are often filled by sources with no traceable origin.
 
 This repository is the result of measuring that standing cost with one
@@ -21,20 +22,23 @@ map kernel memory (the kernel-side storage that eBPF programs use for state)
 across 6 phases, from a quiet idle to pod churn (pods being deleted and
 recreated repeatedly, as happens during frequent deployments or failure
 recovery). Each condition ran the full phase sequence 5 to 6 times, giving 73
-valid measurement runs over 9 days with no human intervention.
+valid measurement runs. The main campaign ran unattended for 9 days
+(2026-07-21 to 07-30), an extra round followed through 08-02, and An2 was
+re-measured on 08-03 after its install script was fixed.
 
 CPU values are in millicores (mC): 1,000mC is one core, the same unit as a
-`100m` CPU request in Kubernetes. Memory is working set (the in-use memory the
-OS will not reclaim, the value `kubectl top` reports).
+`100m` CPU request in Kubernetes. Memory is container working set (the in-use memory the
+OS will not reclaim, as kubelet reports it per container).
 
 ## Summary
 
 - What separates the conditions is memory usage, not CPU. Idle CPU stayed
   under 0.13 cores (cluster total) in every condition, but memory usage spans
   an 8x range between the lightest and heaviest configurations.
-- eBPF-based CNIs consume additional eBPF map kernel memory that process
-  metrics do not capture. Comparisons based on `kubectl top`-style tools alone
-  leave this share out.
+- Where eBPF map memory is counted depends on the CNI. Cilium's maps are
+  charged to the cilium-agent container and are already in its working set,
+  while Calico eBPF's maps sit at the pod level, outside container metrics, so
+  a comparison on container working set alone leaves out Calico eBPF's maps.
 - Just switching kube-proxy from iptables mode to nftables mode cut
   kube-proxy memory usage by 70%. Official material covers the latency
   improvement of nftables mode; the resident-memory saving had not been
@@ -47,6 +51,10 @@ OS will not reclaim, the value `kubectl top` reports).
   shuffling endpoint order. I reported it upstream and the maintainer opened a
   fix PR (not merged as of 2026-09). With the fix applied, CPU after churn
   drops from 3,158mC to 59mC.
+- On the same dataplane, installing Calico through the operator uses 533MiB
+  more memory than the manifest install. Switching to the eBPF dataplane changes
+  container memory by only 85MiB but adds 521MiB of eBPF maps at the pod level,
+  so counting those maps the two choices change memory usage by a similar amount.
 - Turning on observability features such as Hubble or FlowExporter added very
   little: +5 to 22MiB of agent memory.
 - In 2026-09 I measured the three CNIs with new minor versions again. Cilium
@@ -82,7 +90,7 @@ only in what this measurement covered.
 | Small nodes, no need for NetworkPolicy | Flannel + kube-proxy nftables (Fl1n) | Lowest memory of all conditions (209MiB), and the smallest extra CPU during pod replacement (churn 147mC) |
 | NetworkPolicy required, memory tight | Calico manifest install (Ca3) | Lowest memory among policy-capable conditions (472MiB) |
 | Calico managed via operator | Calico operator (Ca1) | Same features as Ca3 with 533MiB more memory; that is the price of the management convenience |
-| Heading toward eBPF dataplane, observability, kube-proxy replacement | Cilium (Ci1~Ci4) | Budget about 530~800MiB per node (maps included); CPU stays flat even during pod replacement (churn 131mC in the KPR configuration) |
+| Heading toward eBPF dataplane, observability, kube-proxy replacement | Cilium (Ci1~Ci4) | Budget about 520~570MiB per node (container working set, which on Ci1 already includes the maps); CPU stays flat even during pod replacement (churn 131mC in the KPR configuration) |
 | OVS required, or already in the Antrea ecosystem | Antrea (An1) | Mid-range on both memory (758MiB) and pod-replacement CPU (churn 285mC) |
 | BGP routing without an overlay, minimal footprint | kube-router CNI only + kube-proxy (Ku2) | Light at 369MiB idle. All-features mode (Ku1) is hard to recommend for clusters with frequent pod replacement, because of the churn behavior in finding 3 below. Worth revisiting once the fix is released |
 
@@ -107,7 +115,7 @@ measurement that did not involve changing the CNI.
 | An1 | Antrea defaults (OVS, Open vSwitch based) | Antrea baseline |
 | An2 | An1 + FlowExporter on | observability |
 | Ku1 | kube-router all-features: pod networking + NetworkPolicy + IPVS (IP Virtual Server, the kernel L4 load balancer) service proxy, kube-proxy removed | integrated |
-| Ku2 | kube-router pod networking only, Services stay on kube-proxy | split |
+| Ku2 | kube-router pod networking and NetworkPolicy, Services stay on kube-proxy | split |
 
 Versions are pinned: Calico 3.32, Cilium 1.19, Flannel 0.28.7, Antrea 2.6.2,
 kube-router 2.10.0, Kubernetes 1.36.2. kube-proxy runs in iptables mode in
@@ -148,7 +156,10 @@ Services in place, churn is continuous pod replacement, node is draining and
 rejoining one node. Of the 6 phases, density (60 pods) and policy (100
 NetworkPolicies) differed little from idle and are omitted here; full-phase
 values are in the detailed tables linked below. The last column is eBPF map
-memory at idle, node total, in MiB.
+memory at idle, node total, in MiB (bpftool). It is not an amount to add on
+top: the totals already include Cilium's maps, which are charged to the
+cilium-agent container, and leave out Calico eBPF's maps, which are charged at
+the pod level (see the section below).
 
 | Condition | idle | service | churn | node | eBPF maps |
 |---|---|---|---|---|---|
@@ -176,13 +187,23 @@ These are not CNI comparison results; they are things you need to know to
 interpret the table above, or to compare these numbers with other sources.
 They apply equally if you run a measurement like this yourself.
 
-### eBPF maps do not show up in kubectl top
+### Where eBPF map memory is counted depends on the CNI
 
-The map kernel memory that eBPF-based CNIs use lives outside process metrics.
-Measured node totals: Cilium default 412MiB, Cilium KPR 712MiB, Calico eBPF
-521MiB. Calico eBPF actually has a smaller process working set than the
-iptables configuration (920 vs 1005MiB), so leaving maps out can flip the
-comparison. Memory comparisons of eBPF CNIs need bpftool accounting included.
+eBPF-based CNIs keep state in map kernel memory. Measured node totals at idle
+(bpftool): Cilium default 412MiB, Cilium KPR 712MiB, Calico eBPF 521MiB. Which
+metric this memory shows up in depends on the CNI. On Cilium (Ci1) the maps are
+charged to the cilium-agent container, so they are already part of its
+container working set: about 412MiB of cilium-agent's 1,137MiB working set at
+idle is maps. On Calico eBPF (Ca2) the maps are charged at the pod level,
+outside the calico-node container, so container working set leaves them out
+and pod-level working set includes them. Calico eBPF has a smaller container
+working set than the iptables configuration (920 vs 1005MiB), so leaving its
+maps out can flip the comparison.
+
+This was checked on 2026-10-06, once each for Ci1 and Ca2, on one worker with
+kernel 6.8 (`harness/bpf_memcg_probe.sh`). The other eBPF conditions and a
+direct comparison with `kubectl top` (through metrics-server) will be checked
+in the next re-measurement.
 
 ### working set and RSS differ by up to 5x per component
 
@@ -210,8 +231,8 @@ condition-to-condition comparisons are not affected by this drift.
 Idle CPU topped out at 127mC (0.13 cores, cluster total) even in the heaviest
 condition, so day-to-day CPU is unlikely to be a problem whichever CNI you
 pick. Memory is different: while Flannel with nftables uses 209MiB, Cilium's
-kube-proxy-replacement configuration uses 1,705MiB, and adding eBPF maps
-widens the gap further. On 4GB nodes, whether the networking stack occupies
+kube-proxy-replacement configuration uses 1,705MiB, a container working set
+that already includes Cilium's eBPF maps. On 4GB nodes, whether the networking stack occupies
 100MiB or 800MiB changes how much memory is left for workloads.
 
 ### 2. Switching kube-proxy to nftables mode alone cut memory usage by 70%
@@ -275,14 +296,16 @@ is not merged as of 2026-09-28. Reproducing the PR with the same procedure, CPU
 also returned to zero within two minutes after churn. The full campaign measured
 with the fix applied is in the round comparison section below.
 
-### 4. For Calico, the install method changes memory usage more than the dataplane does
+### 4. For Calico, both the install method and the dataplane change memory usage
 
 On the same iptables dataplane, the operator install (Ca1) uses 533MiB more
 idle memory than the manifest install (Ca3), because two Typha replicas, two
 calico-apiservers, csi-node-driver, tigera-operator, and kube-controllers all
 stay resident. By contrast, switching the dataplane to eBPF (Ca2 vs Ca1)
-changes process memory by only 85MiB. How you install weighs more on resident
-memory usage than which dataplane you run. Turning BGP on (Ca4) added 72MiB
+changes container memory by only 85MiB, but Ca2 also keeps 521MiB of eBPF maps
+at the pod level, outside container metrics. Counting those maps, the
+dataplane switch (about 436MiB) is close to the install-method difference
+(533MiB), so both choices weigh on resident memory usage. Turning BGP on (Ca4) added 72MiB
 over Ca1.
 
 ### 5. Using observability features adds very little
@@ -369,7 +392,7 @@ harness/          measurement automation (runner, load, collector, aggregation, 
 ```
 
 ```bash
-# measurement over 9 days (about 4.5h per condition per repetition)
+# main campaign over 9 days (about 4.5h per condition per repetition)
 ./harness/launch_campaign.sh 9
 
 # 2026-09 round comparison (versions overridden by env; base snapshot has the new images preloaded)

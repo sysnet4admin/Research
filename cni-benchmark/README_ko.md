@@ -8,8 +8,9 @@ CNI(Container Network Interface, 파드에 네트워크를 연결해 주는 구�
 클러스터를 만들 때 한 번 고르고 나면 다시 들여다볼 일이 거의 없다. 그러다 보니 CNI의 에이전트와 컨트롤러가 평소에 CPU와 메모리를 얼마나
 쓰는지를 정리한 자료를 찾기 어렵다. 처리량 벤치마크는 많지만 상시 비용을 같은
 조건에서 비교한 공개 자료는 확인하지 못했고 벤더 문서에도 이 값은 나와 있지
-않다. Cilium은 helm 차트에 자원 요청값을 넣지 않았고 Calico 메인테이너는
-권장치를 공표해 달라는 요청을 거절했다. 그래서 이 값을 검색하면 출처가
+않다. Cilium은 helm 차트에 자원 요청값을 넣지 않았고 Calico의 #5418에서는
+한 메인테이너가 휴리스틱 기본값은 누군가에게는 틀리게 된다고 설명했으며 다른
+메인테이너는 클러스터별 오버라이드를 안내했다. 그래서 이 값을 검색하면 출처가
 불분명한 수치가 먼저 나오는 경우가 많다.
 
 이 저장소는 그 상시 비용을 같은 절차와 같은 도구로 측정한 결과다. Calico Open
@@ -18,19 +19,23 @@ Source, Cilium, Flannel, Antrea, kube-router 5종을 14개 조건으로 나누�
 잦은 배포나 장애 복구에서 일어난다)까지 6개 구간에서 CPU, 메모리, eBPF
 map(커널 안에서 동작하는 eBPF 프로그램이 상태를 저장하는 커널 메모리 영역)을
 수집했다. 조건마다 5~6회씩 전체 구간을 반복해서 유효 측정
-73회분을 모았고 9일 동안 사람의 개입 없이 진행했다.
+73회분을 모았다. 본 캠페인은 9일 동안(2026-07-21~07-30) 사람의 개입 없이
+진행했고 추가 회차가 08-02까지 이어졌으며 An2는 설치 스크립트를 고친 뒤
+08-03에 다시 측정했다.
 
 CPU 값은 밀리코어(mC) 단위로 적는다. 1,000mC가 1코어이고 쿠버네티스에서 CPU
-요청량을 `100m`으로 쓸 때의 그 단위다. 메모리는 working set(운영체제가 회수
-대상으로 보지 않는 실사용 메모리. `kubectl top`이 보여주는 값) 기준이다.
+요청량을 `100m`으로 쓸 때의 그 단위다. 메모리는 컨테이너 working set(운영체제가 회수
+대상으로 보지 않는 실사용 메모리. kubelet이 컨테이너마다 보고하는 값) 기준이다.
 
 ## 요약
 
 - 조건 간 차이는 CPU가 아니라 메모리 사용량에서 났다. idle CPU는 전 조건에서
   클러스터 합 0.13코어 이하라 어느 CNI를 골라도 부담이 되지 않지만 메모리
   사용량은 가장 가벼운 구성과 가장 무거운 구성이 8배 차이 난다.
-- eBPF 계열 CNI는 프로세스 메트릭에 잡히지 않는 eBPF map 커널 메모리를
-  추가로 쓴다. `kubectl top` 계열 도구만 보면 이 부분을 빼고 비교하게 된다.
+- eBPF map 메모리가 어디에 잡히는지는 CNI마다 다르다. Cilium의 map은
+  cilium-agent 컨테이너에 매겨져 이미 그 working set 안에 있고 Calico eBPF의
+  map은 컨테이너 지표 밖인 파드 단위에 매겨진다. 그래서 컨테이너 working set만
+  비교하면 Calico eBPF의 map이 빠진다.
 - kube-proxy를 iptables 모드에서 nftables 모드로 바꾸기만 해도 kube-proxy
   메모리 사용량이 70% 줄었다. 공식 자료는 nftables 모드의 지연 개선을 다루는데,
   상주 메모리 절감은 수치로 알려져 있지 않던 부분이다.
@@ -41,8 +46,9 @@ CPU 값은 밀리코어(mC) 단위로 적는다. 1,000mC가 1코어이고 쿠버
   생성 방식이었고 업스트림에 제보해 메인테이너가 수정 PR을 올렸다(2026-09 기준
   머지 전). 수정을 얹어 다시 재면 churn 뒤 CPU가 3,158mC에서 59mC로 내려간다.
 - Calico는 같은 데이터플레인이라도 operator 방식으로 설치하면 manifest 방식
-  보다 메모리를 533MiB 더 쓴다. 설치 방식이 데이터플레인 선택보다 메모리
-  사용량을 더 크게 바꾼다.
+  보다 메모리를 533MiB 더 쓴다. eBPF 데이터플레인으로 바꾸면 컨테이너 메모리는
+  85MiB만 달라지지만 파드 단위에 eBPF map 521MiB를 따로 써서 이 map까지 세면
+  두 선택이 메모리 사용량을 비슷한 크기로 바꾼다.
 - Hubble이나 FlowExporter 같은 관측 기능은 사용해도 추가로 드는 자원이
   에이전트 메모리 기준 +5~22MiB로 매우 작았다.
 - 2026-09에 버전이 올라간 셋을 다시 측정했다. Cilium 1.20.2는 1.19와 같았고 Antrea
@@ -73,7 +79,7 @@ churn이 끝난 뒤(3,158mC에서 59mC)에 나타나서 이 그림의 축에는 
 | 소형 노드이고 NetworkPolicy가 필요 없다 | Flannel + kube-proxy nftables (Fl1n) | 전 조건 최소 메모리(209MiB)이고 파드 교체 시 추가 CPU도 가장 작다(churn 147mC) |
 | NetworkPolicy는 필요하고 메모리는 아껴야 한다 | Calico manifest 설치 (Ca3) | 정책을 지원하는 조건 중 메모리가 가장 작다(472MiB) |
 | Calico를 operator로 관리하고 싶다 | Calico operator (Ca1) | 기능은 Ca3와 같고 메모리를 533MiB 더 쓴다. 관리 편의를 위해 추가로 쓰는 메모리가 이만큼이라는 뜻이다 |
-| eBPF 데이터플레인과 관측, kube-proxy 대체까지 갈 계획이다 | Cilium (Ci1~Ci4) | 메모리를 노드당 약 530~800MiB(map 포함)로 계획하면, 파드 교체 구간에서도 CPU가 크게 뛰지 않는다(KPR 구성 기준 churn 131mC) |
+| eBPF 데이터플레인과 관측, kube-proxy 대체까지 갈 계획이다 | Cilium (Ci1~Ci4) | 메모리를 노드당 약 520~570MiB(컨테이너 working set. Ci1에서는 map이 이미 이 안에 있다)로 계획하면, 파드 교체 구간에서도 CPU가 크게 뛰지 않는다(KPR 구성 기준 churn 131mC) |
 | OVS 기반이 필요하거나 Antrea 생태계를 쓴다 | Antrea (An1) | 메모리(758MiB)와 파드 교체 시 CPU(churn 285mC) 모두 중간 수준이다 |
 | 오버레이 없이 BGP(Border Gateway Protocol) 라우팅을 최소 자원으로 쓰고 싶다 | kube-router CNI만 + kube-proxy (Ku2) | idle 메모리 369MiB로 가볍다. 전기능(Ku1)은 아래 조사 결과 3의 churn 문제 때문에 파드 교체가 잦은 클러스터에는 권하기 어렵다. 이 문제의 수정이 릴리스되면 다시 판단할 만하다 |
 
@@ -97,7 +103,7 @@ churn이 끝난 뒤(3,158mC에서 59mC)에 나타나서 이 그림의 축에는 
 | An1 | Antrea 기본(OVS, Open vSwitch 기반) | Antrea 기준점 |
 | An2 | An1 + FlowExporter on | 관측 기능 |
 | Ku1 | kube-router 전기능: 파드 네트워킹 + NetworkPolicy + IPVS(IP Virtual Server, 커널 L4 로드밸런서) 서비스 프록시(kube-proxy 제거) | 통합형 |
-| Ku2 | kube-router는 파드 네트워킹만, 서비스는 kube-proxy 유지 | 분리형 |
+| Ku2 | kube-router는 파드 네트워킹과 NetworkPolicy, 서비스는 kube-proxy 유지 | 분리형 |
 
 버전은 Calico 3.32, Cilium 1.19, Flannel 0.28.7, Antrea 2.6.2, kube-router
 2.10.0, Kubernetes 1.36.2로 고정했다. kube-proxy는 Fl1n을 제외한 전 조건에서
@@ -135,7 +141,9 @@ idle 칸 84 / 1005는 평상시에 CPU 84mC(0.08코어)와 메모리 1,005MiB를
 churn은 파드 교체가 계속되는 구간, node는 노드 1개를 뺐다가 다시 넣는
 구간이다. 6개 구간 중 density(파드 60개)와 policy(NetworkPolicy 100개)는
 idle과 차이가 작아서 표에서 뺐고 전체 구간 값은 아래 상세 표에 있다.
-마지막 eBPF map 열은 idle 기준 노드 합 메모리(MiB)다.
+마지막 eBPF map 열은 idle 기준 노드 합 메모리(MiB, bpftool)다. 이 열은 합계에
+따로 더할 값이 아니다. 합계에는 cilium-agent 컨테이너에 매겨지는 Cilium의 map이
+이미 들어 있고 파드 단위에 매겨지는 Calico eBPF의 map은 빠져 있다(아래 절).
 
 | 조건 | idle | service | churn | node | eBPF map |
 |---|---|---|---|---|---|
@@ -162,13 +170,21 @@ idle과 차이가 작아서 표에서 뺐고 전체 구간 값은 아래 상세 
 CNI별 비교 결과가 아니라, 위 표의 숫자를 해석하거나 다른 자료의 수치와 비교할
 때 알고 있어야 하는 것들이다. 직접 측정할 때도 같은 함정이 적용된다.
 
-### eBPF map은 kubectl top에 잡히지 않는다
+### eBPF map 메모리가 어디에 잡히는지는 CNI마다 다르다
 
-eBPF 계열 CNI가 쓰는 map 커널 메모리는 프로세스 메트릭 바깥에 있다. 실측값은
-노드 합 기준으로 Cilium 기본 412MiB, Cilium KPR 712MiB, Calico eBPF 521MiB였다.
-Calico eBPF는 process working set만 보면 iptables 구성보다 오히려 작기 때문에
-(920 대 1005MiB) map을 빼고 비교하면 판단이 반대로 나올 수 있다. 따라서 eBPF
-CNI의 메모리를 비교할 때는 bpftool 계측까지 포함해야 한다.
+eBPF 계열 CNI는 상태를 map 커널 메모리에 저장한다. idle 기준 노드 합 실측값
+(bpftool)은 Cilium 기본 412MiB, Cilium KPR 712MiB, Calico eBPF 521MiB였다. 이
+메모리가 어느 지표에 잡히는지는 CNI마다 다르다. Cilium(Ci1)은 map이
+cilium-agent 컨테이너에 매겨져 이미 그 컨테이너 working set 안에 있다. idle에서
+cilium-agent working set 1,137MiB 중 약 412MiB가 map이다. Calico eBPF(Ca2)는
+map이 calico-node 컨테이너 밖인 파드 단위에 매겨져 컨테이너 working set에는
+빠지고 파드 단위 working set에는 들어간다. Calico eBPF는 컨테이너 working set만
+보면 iptables 구성보다 오히려 작기 때문에(920 대 1005MiB) map을 빼고 비교하면
+판단이 반대로 나올 수 있다.
+
+이 내용은 2026-10-06에 Ci1과 Ca2를 각 1회, 커널 6.8 워커 1대에서 확인했다
+(`harness/bpf_memcg_probe.sh`). 다른 eBPF 조건과 `kubectl top`(metrics-server
+경유) 값과의 직접 비교는 다음 재측정에서 확인한다.
 
 ### working set과 RSS는 구성 요소에 따라 5배까지 다르다
 
@@ -195,8 +211,8 @@ kube-proxy는 157.5 대 33.4MiB로 4.7배였다. 다른 자료의 수치와 비�
 
 idle CPU는 가장 무거운 조건도 클러스터 합 127mC(0.13코어)에 그쳤다. 어떤 CNI를
 고르든 평소 CPU가 문제가 될 가능성은 낮다. 하지만 메모리는 Flannel과 nftables
-조합이 209MiB를 쓰는 동안 Cilium의 kube-proxy 대체 구성은 1,705MiB를 쓰고
-eBPF map까지 더하면 차이는 더 커진다. 노드당 메모리가 4GB인 환경이라면
+조합이 209MiB를 쓰는 동안 Cilium의 kube-proxy 대체 구성은 1,705MiB를 쓰며
+이 컨테이너 working set에는 Cilium의 eBPF map이 이미 들어 있다. 노드당 메모리가 4GB인 환경이라면
 네트워킹 스택이 100MiB를 쓰는지 800MiB를 쓰는지에 따라 워크로드에 남는
 메모리가 달라지게 된다.
 
@@ -259,14 +275,15 @@ churn 뒤 CPU가 사라졌다. 최신 릴리스(2.11.1)와 개발 브랜치에�
 2분 안에 0으로 내려왔다. 수정을 얹어 전체 캠페인을 다시 측정한 수치는 아래 회차 비교
 절에 있다.
 
-### 4. Calico는 데이터플레인보다 설치 방식에 따라 메모리 사용량이 더 크게 달라진다
+### 4. Calico는 설치 방식과 데이터플레인 모두 메모리 사용량을 크게 바꾼다
 
 같은 iptables 데이터플레인이라도 operator 방식(Ca1)은 manifest 방식(Ca3)보다
 idle 메모리를 533MiB 더 쓴다. Typha 2개, calico-apiserver 2개, csi-node-driver,
 tigera-operator, kube-controllers가 추가로 상주하기 때문이다. 그에 반해
-데이터플레인을 eBPF로 바꾼 Ca2와 Ca1의 process 메모리 차이는 85MiB에 그친다.
-어느 데이터플레인을 쓰는지보다 어떤 방식으로 설치하는지가 상주 메모리
-사용량에 더 크게 작용한다. BGP를 켠 Ca4는 Ca1보다 72MiB를 더 썼다.
+데이터플레인을 eBPF로 바꾼 Ca2와 Ca1의 컨테이너 메모리 차이는 85MiB에 그치지만
+Ca2는 컨테이너 지표 밖인 파드 단위에 eBPF map 521MiB를 따로 쓴다. 이 map까지
+세면 데이터플레인 전환(약 436MiB)과 설치 방식 차이(533MiB)가 비슷해서 두 선택
+모두 상주 메모리 사용량에 크게 작용한다. BGP를 켠 Ca4는 Ca1보다 72MiB를 더 썼다.
 
 ### 5. 관측 기능을 사용해도 추가로 드는 자원은 매우 작다
 
@@ -343,7 +360,7 @@ harness/          측정 자동화 스크립트 (실행, 부하, 수집, 집계,
 ```
 
 ```bash
-# 9일에 걸친 측정 (조건당 약 4.5시간 x 반복)
+# 9일에 걸친 본 캠페인 (조건당 약 4.5시간 x 반복)
 ./harness/launch_campaign.sh 9
 
 # 2026-09 회차 비교 (버전은 환경변수로 덮어쓴다. 베이스는 새 이미지를 미리 넣은 스냅샷)
