@@ -25,7 +25,7 @@
 <line x1="70" y1="40.0" x2="610" y2="40.0" stroke="#e8e8e8"/>
 <text x="62" y="44.0" font-size="11" fill="#666" text-anchor="end">4000</text>
 <rect x="70" y="40" width="540" height="370" fill="none" stroke="#999"/>
-<text x="340.0" y="454" font-size="12" fill="#333" text-anchor="middle">idle 메모리 (클러스터 합, working set + eBPF map, MiB)</text>
+<text x="340.0" y="454" font-size="12" fill="#333" text-anchor="middle">idle 메모리 (클러스터 합, 컨테이너 working set + 그 밖의 eBPF map, MiB)</text>
 <text x="20" y="225.0" font-size="12" fill="#333" text-anchor="middle" transform="rotate(-90 20 225.0)">churn CPU (클러스터 합, mC, 1000mC=1코어, 로그 축)</text>
 <circle cx="227.4" cy="305.0" r="6" fill="#3a7d44" fill-opacity="0.85"/>
 <text x="237.4" y="301.0" font-size="11" fill="#222" text-anchor="start">An1 기본</text>
@@ -47,14 +47,14 @@
 <text x="124.6" y="61.6" font-size="11" fill="#222" text-anchor="start">Ku1 전기능</text>
 <circle cx="146.7" cy="269.5" r="6" fill="#a07419" fill-opacity="0.85"/>
 <text x="156.7" y="281.5" font-size="11" fill="#222" text-anchor="start">Ku2 CNI만</text>
-<circle cx="482.5" cy="307.2" r="6" fill="#6b5b95" fill-opacity="0.85"/>
-<text x="492.5" y="303.2" font-size="11" fill="#222" text-anchor="start">Ci1 기본</text>
-<circle cx="477.7" cy="306.6" r="6" fill="#6b5b95" fill-opacity="0.85"/>
-<text x="487.7" y="320.6" font-size="11" fill="#222" text-anchor="start">Ci2 Hubble off</text>
-<circle cx="571.9" cy="382.7" r="6" fill="#6b5b95" fill-opacity="0.85"/>
-<text x="561.9" y="378.7" font-size="11" fill="#222" text-anchor="end">Ci3 +KPR</text>
-<circle cx="572.0" cy="381.7" r="6" fill="#6b5b95" fill-opacity="0.85"/>
-<text x="562.0" y="393.7" font-size="11" fill="#222" text-anchor="end">Ci4 +netkit</text>
+<circle cx="396.9" cy="307.2" r="6" fill="#6b5b95" fill-opacity="0.85"/>
+<text x="406.9" y="303.2" font-size="11" fill="#222" text-anchor="start">Ci1 기본</text>
+<circle cx="392.2" cy="306.6" r="6" fill="#6b5b95" fill-opacity="0.85"/>
+<text x="402.2" y="320.6" font-size="11" fill="#222" text-anchor="start">Ci2 Hubble off</text>
+<circle cx="424.1" cy="382.7" r="6" fill="#6b5b95" fill-opacity="0.85"/>
+<text x="414.1" y="378.7" font-size="11" fill="#222" text-anchor="end">Ci3 +KPR</text>
+<circle cx="424.2" cy="381.7" r="6" fill="#6b5b95" fill-opacity="0.85"/>
+<text x="414.2" y="393.7" font-size="11" fill="#222" text-anchor="end">Ci4 +netkit</text>
 <line x1="114.6" y1="65.6" x2="114.6" y2="87.9" stroke="#a07419" stroke-width="1.5" stroke-dasharray="4 3"/>
 <path d="M110.6,83.9 L114.6,88.9 L118.6,83.9" fill="none" stroke="#a07419" stroke-width="1.5"/>
 <circle cx="114.6" cy="96.9" r="6" fill="white" stroke="#a07419" stroke-width="2"/>

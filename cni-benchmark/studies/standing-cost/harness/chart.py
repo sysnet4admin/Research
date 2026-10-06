@@ -2,7 +2,9 @@
 """상시 비용 지도 SVG 생성: idle 메모리(x) 대 churn CPU(y, 로그) 산점도.
 
 analysis/summary.json에서 스택 총합을 계산해 그린다 (AIOps 점도표 선례를 따라
-재생성 가능한 스크립트로 유지). x축 메모리는 process working set + eBPF map.
+재생성 가능한 스크립트로 유지). x축 메모리는 컨테이너 working set + 그 밖에 매겨지는 eBPF map.
+2026-10-06: Cilium 의 map 은 cilium-agent 컨테이너 working set 에 이미 들어 있어(runs/bpfmemcg-1006/VERDICT.md)
+더하지 않는다. 그 전 그림은 Cilium 네 점에 map 을 한 번 더 더해 412~712MiB 오른쪽에 그렸다.
 
 사용: python3 harness/chart.py analysis/summary.json [en|ko] [analysis/rev-0923-summary.json]
       > assets/standing-cost-map.svg
@@ -44,15 +46,18 @@ LABELS = {
   },
 }
 TEXT = {
-  "ko": {"x": "idle 메모리 (클러스터 합, working set + eBPF map, MiB)",
+  "ko": {"x": "idle 메모리 (클러스터 합, 컨테이너 working set + 그 밖의 eBPF map, MiB)",
          "y": "churn CPU (클러스터 합, mC, 1000mC=1코어, 로그 축)",
          "note1": "왼쪽 아래일수록", "note2": "상시 비용이 낮다",
          "fix": "Ku1 + 업스트림 수정 (2026-09)", "leg_fix1": "속 빈 원: 2026-09", "leg_fix2": "수정 반영 재측정"},
-  "en": {"x": "idle memory (cluster total, working set + eBPF maps, MiB)",
+  "en": {"x": "idle memory (cluster total, container working set + eBPF maps outside it, MiB)",
          "y": "churn CPU (cluster total, mC, 1000mC = 1 core, log scale)",
          "note1": "lower-left =", "note2": "cheaper to run",
          "fix": "Ku1 + upstream fix (2026-09)", "leg_fix1": "hollow: 2026-09", "leg_fix2": "re-run with fix"},
 }
+
+# eBPF map 이 이미 컨테이너 working set 에 들어 있는 조건(2026-10-06 Ci1 확인, Ci2~Ci4 는 같은 cilium-agent)
+MAPS_IN_WS = {"X1", "X2", "X3", "X4"}
 
 # 라벨 배치 미세조정 (겹침 방지: dx, dy, anchor)
 NUDGE = {
@@ -76,7 +81,8 @@ def main(path, lang="en", after=None):
         churn = d["phases"].get("churn")
         if not idle or not churn:
             continue
-        mem = totals(idle)["stack"][1] + idle.get("_bpf_mib", 0)
+        # Cilium(X*) 은 map 이 컨테이너 working set 안에 있다. 나머지는 map 이 컨테이너 지표 밖이거나 0 이다
+        mem = totals(idle)["stack"][1] + (0 if cond in MAPS_IN_WS else idle.get("_bpf_mib", 0))
         cpu = totals(churn)["stack"][0]
         pts.append((cond, mem, cpu))
 

@@ -59,7 +59,10 @@ CPU 값은 밀리코어(mC) 단위로 적는다. 1,000mC가 1코어이고 쿠버
 측정한 14개 조건을 두 축으로 놓으면 다음 그림과 같다. 가로축은 idle 메모리로
 평소에 계속 차지하는 메모리이고 세로축은 churn 구간 CPU로 파드 교체가 계속될
 때 추가로 쓰는 CPU다(1,000mC = 1코어). 왼쪽 아래로 갈수록 평소에도 부하
-중에도 자원을 적게 쓰는 구성이다.
+중에도 자원을 적게 쓰는 구성이다. idle 메모리는 컨테이너 working set에 그 밖에
+매겨지는 eBPF map(Calico eBPF)을 더한 값이다. Cilium의 map은 이미 working set
+안에 있어서 다시 더하지 않았다. 2026-10-06 이전 그림은 이 map을 한 번 더 더해서
+Cilium 네 점이 412~712MiB 오른쪽에 그려져 있었다.
 
 ![상시 비용 지도: idle 메모리 대 churn CPU](studies/standing-cost/assets/standing-cost-map.ko.svg)
 

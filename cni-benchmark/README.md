@@ -67,7 +67,10 @@ Plotting the 14 conditions on two axes gives the picture below. The x-axis is
 idle memory, what the stack occupies all the time; the y-axis is churn-phase
 CPU, what it additionally burns while pods keep getting replaced (1,000mC =
 1 core). The further toward the lower left, the less a configuration consumes
-both at rest and under load.
+both at rest and under load. Idle memory is container working set plus the
+eBPF maps that sit outside it (Calico eBPF); Cilium's maps are already inside
+its working set and are not added again. The figure before 2026-10-06 added
+them, which placed the four Cilium points 412 to 712MiB further right.
 
 ![Standing-cost map: idle memory vs churn CPU](studies/standing-cost/assets/standing-cost-map.svg)
 
