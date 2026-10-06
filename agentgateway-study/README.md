@@ -164,7 +164,8 @@ call has confirmed it.
    passed a=1, denied a=2, and passed unrelated tools; the gateway ships the
    tool arguments to the gRPC server verbatim. Unlike the authorization
    path, the denial comes back as HTTP 200 with a JSON-RPC error carrying
-   the server's own reason string, and when the policy server is down the
+   the server's own reason string (v1.5.0; on v1.6.0 the same reason comes
+   back as an `isError` tool result), and when the policy server is down the
    FailClosed default blocks every tools/call while FailOpen lets calls
    through, both as documented. The guardrail hop costs under 1 ms at p50
    per call, 0.1 to 0.7 ms across the measured loads and both connection
@@ -207,6 +208,9 @@ The error codes in the figure follow the JSON-RPC standard. -32602 (invalid
 params) and -32603 (internal error) are standard codes; -32001 sits in the
 band the standard leaves to implementations (-32000 to -32099), a value
 agentgateway chose, so generic JSON-RPC knowledge alone does not decode it.
+Shape 2 changed in the v1.6.0 release: the same reason string now comes back
+as a tool result with `isError: true` instead of a JSON-RPC error
+([v1.6.0 release](#v160-release-measured-2026-10-06)).
 
 Most of the time these responses are read by an agent loop, not a person:
 the LLM consumes the denial text as a tool result and decides its next
@@ -462,14 +466,14 @@ Span parenting was checked separately with three traces through the MCP route
 and three through a plain HTTP route. In all six the outgoing span was nested
 under the incoming one.
 
-### The three argument-control paths (2026-09-09)
+### The three argument-control paths (2026-09-09, v1.5.0)
 
 The same rule ("get-sum only when a == 1") enforced three ways. Cost is 100 rps,
 30-second cells, policy on and off alternating five times per path, zero errors.
 
 | Path | Denial shape | Check server down | New connection | Reuse |
 |---|---|---|---|---|
-| mcpGuardrails | 200 + JSON-RPC error with reason | FailClosed blocks all calls | +0.1 to 0.7 | +0.1 to 0.7 |
+| mcpGuardrails | 200 + JSON-RPC error with reason (from v1.6.0, a tool result with `isError`) | FailClosed blocks all calls | +0.1 to 0.7 | +0.1 to 0.7 |
 | extAuth (HTTP) | 403 + check server's body verbatim | 403 under FailClosed, passes under FailOpen | +0.5 | +0.4 |
 | extProc (gRPC) | 403 + `denied by ext_proc:` | 500 under FailClosed | +0.4 | +0.5 |
 
@@ -583,6 +587,46 @@ run had swapped only the proxy image). Results matched: with either route form, 
 Scripts `harness/cfp_0928.sh`, `harness/kmcp_probe.py` and `harness/sdk_reject_probe.py`;
 manifests `k8s/kmcp/`. Per-run records are kept privately; the tables above carry every
 verdict. The cluster was restored to v1.5.0 from a VM snapshot afterwards.
+
+### v1.6.0 release (measured 2026-10-06)
+
+agentgateway v1.6.0 was released on 2026-10-02. The cells of the two sections above and the
+deterministic probes of the v1.5.0 round were re-measured on the same cluster with the release
+tag charts (CRD and control plane both at v1.6.0). The runners of the earlier rounds were reused
+with only the install version changed.
+
+**The 9/28 cells are unchanged.** The real Kubernetes MCP server cells (both `mcpAuthorization`
+forms, route authorization Deny and Allow) and the #3301 cells gave the same verdicts as alpha.2
+in 5 of 5 rounds, and the official SDK's reaction to 403 in 3 of 3. The `!has(mcp.tool.arguments)` guard
+form still deleted the prod pod on the release.
+
+**One deterministic probe changed behavior, and one changed only its error text.** The whitelist, argument-condition policy (#3092),
+prefixMode, traceparent, guardrail FailClosed and FailOpen, and extAuth and extProc enforcement
+match v1.4.1 and v1.5.0. What changed is the response a client receives when the guardrail
+server denies (rule "get-sum only when a == 1", call with a=2):
+
+```text
+v1.5.0  HTTP 200  {"jsonrpc":"2.0","id":1,"error":{"code":-32001,
+                   "message":"get-sum is allowed only with a == 1"}}
+v1.6.0  HTTP 200  {"jsonrpc":"2.0","id":1,"result":{"resultType":"complete",
+                   "content":[{"type":"text","text":"get-sum is allowed only with a == 1"}],
+                   "isError":true}}
+```
+
+The HTTP code and the reason string are the same; the reason moved from a JSON-RPC error into a
+tool result. In the MCP spec an `isError` result reports a tool execution error. This holds for a
+`tools/call` denial sent with protocol header 2026-07-28. The shape a client on another protocol
+version receives, and how clients and agents handle this response, were not measured on v1.6.0. The change comes from #3526 in the release notes ("iterate on mcp errors from gateway on
+tool call response"): it turns a guardrail denial of a tool call into an `isError` result and
+replaces the existing test's `-32001` check with an `isError` check (confirmed in the diff). With the
+extProc check server down, the 500 response changed only its error text (from `no more response
+messages` to `failed to send request`).
+
+Policy rule count (0, 1, 21) still made no latency difference. Host use was not controlled
+during this round, so its latency numbers are not compared with earlier rounds. The A2A surface,
+the LLM token and cost accounting changes, and RBAC on `mcp.methodName` were not measured in
+this round. Scripts `harness/cfp_1006.sh` and `harness/chain_q10.sh`; the cluster was restored
+to v1.5.0 from a VM snapshot afterwards.
 
 ## What was measured
 

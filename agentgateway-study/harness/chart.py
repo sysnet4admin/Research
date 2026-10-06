@@ -70,7 +70,7 @@ TEXT = {
         "p_cap": "세 형태 모두 요청이 MCP 서버에 닿기 전에 멈춘다.",
         "r1h": "mcpAuthorization 거부", "r1b": "HTTP 400\n-32602 \"Unknown tool\"",
         "r1n": "도구 부재와 구분되지 않는 응답.\ntools/list에서도 숨겨진다",
-        "r2h": "mcpGuardrails 거부", "r2b": "HTTP 200\n-32001 + 서버가 정한 사유",
+        "r2h": "mcpGuardrails 거부", "r2chg": "v1.6.0에서 바뀜", "r2b": "HTTP 200\nv1.5.0: -32001 + 사유\nv1.6.0: isError + 사유",
         "r2n": "사유가 그대로 나간다\n(\"a == 1일 때만 허용\")",
         "r3h": "FailClosed (서버 다운)", "r3b": "HTTP 200\n-32603 내부 오류 문구",
         "r3n": "guardrail 죽으면 전부 차단.\n내부 상태가 노출된다",
@@ -116,7 +116,7 @@ TEXT = {
         "p_cap": "In all three shapes the request stops before reaching the MCP server.",
         "r1h": "mcpAuthorization deny", "r1b": "HTTP 400\n-32602 \"Unknown tool\"",
         "r1n": "Indistinguishable from no-such-tool;\nhidden from tools/list",
-        "r2h": "mcpGuardrails deny", "r2b": "HTTP 200\n-32001 + server reason",
+        "r2h": "mcpGuardrails deny", "r2chg": "Changed in v1.6.0", "r2b": "HTTP 200\nv1.5.0: -32001 + reason\nv1.6.0: isError + reason",
         "r2n": "The reason string passes through\n(\"allowed only with a == 1\")",
         "r3h": "FailClosed (server down)", "r3b": "HTTP 200\n-32603 internal error text",
         "r3n": "Guardrail down blocks all calls;\ninternal state leaks in the message",
@@ -478,9 +478,18 @@ def reject(T):
         s.append(f'<text x="{x + cw / 2}" y="{cy + 24}" font-size="12.5" fill="white" '
                  f'text-anchor="middle" font-weight="bold">{num}. {head}</text>')
         for li, line in enumerate(body.split("\n")):
+            new_ver = line.startswith("v1.6.0")
             s.append(f'<text x="{x + cw / 2}" y="{cy + 70 + li * 20}" font-size="12.5" '
-                     f'fill="#222" text-anchor="middle" '
+                     f'fill="{color if new_ver else "#222"}" text-anchor="middle" '
+                     f'{"font-weight=\"bold\" " if new_ver else ""}'
                      f'font-family="Menlo, monospace">{line}</text>')
+        if num == "2" and T.get("r2chg"):
+            # v1.6.0 에서 바뀐 카드 표시(2026-10-06). 카드 아래 테두리 위에 배지를 얹는다
+            bw = 120
+            s.append(f'<rect x="{x + cw / 2 - bw / 2}" y="{cy + 200 - 13}" width="{bw}" height="26" rx="13" '
+                     f'fill="white" stroke="{color}" stroke-width="1.5"/>')
+            s.append(f'<text x="{x + cw / 2}" y="{cy + 200 + 4}" font-size="11" fill="{color}" '
+                     f'text-anchor="middle" font-weight="bold">{T["r2chg"]}</text>')
         for li, line in enumerate(note.split("\n")):
             s.append(f'<text x="{x + cw / 2}" y="{cy + 136 + li * 17}" font-size="11" '
                      f'fill="#555" text-anchor="middle">{line}</text>')

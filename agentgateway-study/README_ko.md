@@ -143,7 +143,7 @@ CRD(`AgentgatewayBackend`는 대상 서버, `AgentgatewayPolicy`는 거기에 �
    "get-sum은 a==1일 때만 허용"을 강제하는 최소 서버로 a=1 통과, a=2 거부,
    무관 도구 통과를 확인했다. 게이트웨이가 인자를 gRPC 요청에 그대로 실어
    보낸다. 거부는 인가와 달리 HTTP 200 + JSON-RPC 오류에 서버가 정한 사유가
-   그대로 나가고 검사 서버가 멈추면 FailClosed 기본값이 tools/call을 전부 막는다.
+   그대로 나가고(v1.5.0. v1.6.0에서는 같은 사유가 `isError` 도구 결과로 나간다) 검사 서버가 멈추면 FailClosed 기본값이 tools/call을 전부 막는다.
    FailOpen이면 문서대로 통과한다. guardrail 홉의 비용은 p50 호출당 1ms
    아래로, 측정한 부하와 두 연결 방식 전반에서 +0.1~0.7ms다(전 셀
    게이트웨이 오류 0, 아래 표). `Full` 페이즈 설정은 요청과 응답 본문을
@@ -180,7 +180,8 @@ CRD(`AgentgatewayBackend`는 대상 서버, `AgentgatewayPolicy`는 거기에 �
 그림의 오류 코드는 JSON-RPC 표준 체계다. -32602(잘못된 인자)와
 -32603(내부 오류)은 표준 코드이고 -32001은 표준이 구현체 몫으로 비워 둔
 대역(-32000~-32099)에서 agentgateway가 정한 값이라 범용 JSON-RPC 지식만으로는
-해석되지 않는다.
+해석되지 않는다. 형태 2는 정식 v1.6.0에서 바뀌었다. 같은 사유 문자열이 JSON-RPC
+오류가 아니라 `isError: true`인 도구 결과로 돌아온다([정식 v1.6.0](#정식-v160-2026-10-06-측정)).
 
 이 응답을 읽는 쪽은 대부분 사람이 아니라 에이전트 루프다. LLM이 거부
 텍스트를 도구 호출 결과로 읽고 다음 행동을 정하므로, 도구 부재와 구분되지
@@ -406,14 +407,14 @@ OTLP gRPC 4317에 100% 샘플링으로 보냈다. 100rps, 30초 셀, 켬과 끔 
 스팬 부모 관계는 MCP 경로와 일반 HTTP 경로에서 각각 3트레이스를 보내 확인했다.
 여섯 건 모두 나가는 스팬이 받은 스팬 아래로 중첩됐다.
 
-### 인자 통제 세 경로 (2026-09-09)
+### 인자 통제 세 경로 (2026-09-09, v1.5.0)
 
 같은 규칙("get-sum은 a==1일 때만")을 세 경로로 강제했을 때의 거부 형태와 비용이다.
 비용은 100rps, 30초 셀, 켬과 끔 5회 교대(경로당 20셀), 오류 0.
 
 | 경로 | 거부 형태 | 검사 서버 정지 시 | 매번 새 연결 | 연결 재사용 |
 |---|---|---|---|---|
-| mcpGuardrails | 200 + JSON-RPC 오류에 사유 | FailClosed에서 전량 차단 | +0.1~0.7 | +0.1~0.7 |
+| mcpGuardrails | 200 + JSON-RPC 오류에 사유 (v1.6.0부터 `isError` 결과에 사유) | FailClosed에서 전량 차단 | +0.1~0.7 | +0.1~0.7 |
 | extAuth (HTTP) | 403 + 검사 서버 본문 그대로 | FailClosed 403, FailOpen 통과 | +0.5 | +0.4 |
 | extProc (gRPC) | 403 + `denied by ext_proc:` | FailClosed 500 | +0.4 | +0.5 |
 
@@ -520,6 +521,45 @@ v1.5.0에서 라우트 형태가 수용되고 아무 효과가 없는 것도 같
 스크립트는 `harness/cfp_0928.sh`, `harness/kmcp_probe.py`, `harness/sdk_reject_probe.py`이고
 매니페스트는 `k8s/kmcp/`에 있다. 회차별 기록은 공개하지 않으며 판정은 위 표에 모두 있다.
 측정 뒤 클러스터는 VM 스냅샷으로 v1.5.0에 되돌렸다.
+
+### 정식 v1.6.0 (2026-10-06 측정)
+
+agentgateway v1.6.0이 2026-10-02에 정식 릴리스됐다. 위 두 절의 셀과 v1.5.0 회차의 결정론
+프로브를 같은 클러스터에서 정식 태그 차트(CRD와 컨트롤 플레인 모두 v1.6.0)로 다시 측정했다.
+러너는 앞 회차의 것을 설치 버전만 바꿔 그대로 썼다.
+
+**9/28 셀은 전부 같다.** 실제 쿠버네티스 MCP 서버 셀(`mcpAuthorization` 두 형태, 라우트
+authorization Deny와 Allow)과 #3301 셀은 5회 모두, 공식 SDK의 403 반응은 3회 모두 alpha.2와
+같은 판정이다.
+`!has(mcp.tool.arguments)` 가드 형태는 정식판에서도 prod 파드를 지웠다.
+
+**결정론 프로브 중 동작이 바뀐 것은 1개이고 오류 문구만 바뀐 것이 1개다.** 화이트리스트, 인자 조건 정책(#3092), prefixMode,
+traceparent, guardrail의 FailClosed와 FailOpen, extAuth와 extProc의 강제는 v1.4.1, v1.5.0과
+같다. 바뀐 것은 guardrail 서버가 거부할 때 클라이언트가 받는 응답이다(규칙은 "get-sum은
+a == 1일 때만", a=2 호출):
+
+```text
+v1.5.0  HTTP 200  {"jsonrpc":"2.0","id":1,"error":{"code":-32001,
+                   "message":"get-sum is allowed only with a == 1"}}
+v1.6.0  HTTP 200  {"jsonrpc":"2.0","id":1,"result":{"resultType":"complete",
+                   "content":[{"type":"text","text":"get-sum is allowed only with a == 1"}],
+                   "isError":true}}
+```
+
+HTTP 코드와 사유 문자열은 그대로이고 담기는 자리가 JSON-RPC 오류에서 도구 결과로 옮겨졌다.
+MCP 스펙에서 `isError` 결과는 도구 실행 오류를 나타낸다. 이 결과는 `tools/call` 거부에
+프로토콜 헤더 2026-07-28을 보낸 조건이다. 다른 프로토콜 버전의 클라이언트가 받는 형태와
+클라이언트와 에이전트가 이 응답을 처리하는 방식은 v1.6.0에서 재지 않았다. 변화의 출처는 릴리스 노트의 #3526("iterate on mcp errors from gateway on tool call
+response")이다. 이 PR은 tool call에 대한 guardrail 거부를 `isError` 결과로 바꾸고 기존 테스트의
+`-32001` 확인을 `isError` 확인으로 교체했다(diff에서 확인). extProc 검사 서버가
+없을 때의 500 응답은 오류 문구만 바뀌었다(`no more response messages`에서 `failed to send
+request`로).
+
+정책 규칙 수(0, 1, 21개)에 따른 지연 차이가 없다는 결과는 같았다. 이 회차는 측정 중 호스트
+사용을 통제하지 않아 지연 수치는 앞 회차와 비교하지 않는다. A2A 표면, LLM 토큰과 비용
+집계 변경, `mcp.methodName`을 쓰는 RBAC은 이 회차에서 재지 않았다. 스크립트는
+`harness/cfp_1006.sh`, `harness/chain_q10.sh`이고 측정 뒤 클러스터는 VM 스냅샷으로 v1.5.0에
+되돌렸다.
 
 ## 무엇을 측정했나
 

@@ -40,7 +40,10 @@
 <rect x="268" y="372" width="224" height="14" fill="#6a4b9e"/>
 <text x="380.0" y="372" font-size="12.5" fill="white" text-anchor="middle" font-weight="bold">2. mcpGuardrails deny</text>
 <text x="380.0" y="418" font-size="12.5" fill="#222" text-anchor="middle" font-family="Menlo, monospace">HTTP 200</text>
-<text x="380.0" y="438" font-size="12.5" fill="#222" text-anchor="middle" font-family="Menlo, monospace">-32001 + server reason</text>
+<text x="380.0" y="438" font-size="12.5" fill="#222" text-anchor="middle" font-family="Menlo, monospace">v1.5.0: -32001 + reason</text>
+<text x="380.0" y="458" font-size="12.5" fill="#6a4b9e" text-anchor="middle" font-weight="bold" font-family="Menlo, monospace">v1.6.0: isError + reason</text>
+<rect x="320.0" y="535" width="120" height="26" rx="13" fill="white" stroke="#6a4b9e" stroke-width="1.5"/>
+<text x="380.0" y="552" font-size="11" fill="#6a4b9e" text-anchor="middle" font-weight="bold">Changed in v1.6.0</text>
 <text x="380.0" y="484" font-size="11" fill="#555" text-anchor="middle">The reason string passes through</text>
 <text x="380.0" y="501" font-size="11" fill="#555" text-anchor="middle">("allowed only with a == 1")</text>
 <rect x="512" y="348" width="224" height="200" rx="8" fill="none" stroke="#8a6d1f" stroke-width="2"/>
