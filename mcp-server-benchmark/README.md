@@ -2,6 +2,8 @@
 
 [한국어](README_ko.md)
 
+> **This README is a reference sheet for numbers, conditions, and reproduction.** The motivation and the narrative walk-through, including which server to pick in which situation, live in the [blog post](https://kuberneteslab.dev/en/blog/mcp-server-benchmark/).
+
 Two questions, in order. **Is an MCP server better than plain shell tools at
 all?** And if so, **which one should you use?** Both have so far been answered
 by star counts and README feature tables; nobody had put them on the same
@@ -388,6 +390,10 @@ Both numbers are as measured; neither is normalised to the other.
 
 ## Limits
 
+- **Measured in August 2026.** MCP servers and models change quickly, so these
+  results are a reference for the versions of that time, not a verdict on current
+  versions. Before adopting a server, check it with the version you will use. The
+  measured versions are noted further down in this section.
 - **`007-evict` ran under different conditions from the other nine.** On
   2026-08-15 a model under test (north-mini-code-1.0) read the scenario's setup
   script, found the fix hint printed in its own output, and edited the script

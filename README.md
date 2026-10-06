@@ -63,7 +63,7 @@ Measures what the MCP 2026-07-28 stateless revision changes for a server running
 
 Compares six Kubernetes MCP servers on one scale: the probe model, the ten incident scenarios, the harness, the cluster, and the scoring are held fixed and only the MCP server is swapped, over 240 runs. Key findings: plugging in an MCP server is not free quality, since four of the six score below the plain-shell baseline (0.9167), and every general-purpose server costs more tokens than shell because tool definitions ship into the context window. The top two are close enough that cost, not score, should decide.
 
-→ [README (EN)](./mcp-server-benchmark/README.md) | [README (KO)](./mcp-server-benchmark/README_ko.md)
+→ [Blog post](https://kuberneteslab.dev/en/blog/mcp-server-benchmark/) | [README (EN)](./mcp-server-benchmark/README.md) | [README (KO)](./mcp-server-benchmark/README_ko.md)
 
 ---
 

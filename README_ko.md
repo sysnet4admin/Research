@@ -63,7 +63,7 @@ MCP 2026-07-28 스테이트리스 개정이 쿠버네티스 위의 서버에 무
 
 K8s용 MCP 서버 6종을 한 자에 올려 비교합니다. 프로브 모델, 장애 시나리오 10개, 하네스, 클러스터, 채점기를 전부 고정하고 MCP 서버만 교체해 240런을 돌렸습니다. MCP 서버를 꽂는 것이 공짜 품질이 아니라는 것(6종 중 4종이 셸 기준선 0.9167보다 낮습니다), 범용 서버는 예외 없이 셸보다 토큰을 더 쓴다는 것(도구 정의가 컨텍스트에 실립니다)이 대표 결과입니다. 상위 두 종은 접전이라 점수가 아니라 비용으로 고르는 편이 낫습니다.
 
-→ [README (EN)](./mcp-server-benchmark/README.md) | [README (KO)](./mcp-server-benchmark/README_ko.md)
+→ [블로그 포스트](https://kuberneteslab.dev/ko/blog/mcp-server-benchmark/) | [README (EN)](./mcp-server-benchmark/README.md) | [README (KO)](./mcp-server-benchmark/README_ko.md)
 
 ---
 

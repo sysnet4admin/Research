@@ -173,7 +173,13 @@ def fig_tradeoff(L10n):
              f'stroke-width="1.4" stroke-dasharray="6 4"/>\n')
     # 기준선 라벨은 왼쪽 위 빈 구역(세로선 왼쪽)에 둔다. 0.9167 로 올라가면서
     # containers/rohitg00 라벨과 겹치던 것을 피한다.
-    b.append(txt(L+8, yb+15, L10n["shell_q"], 10.5, "#9a6700"))
+    # 블로그판은 기준선 라벨을 오른쪽으로 옮긴다. 왼쪽에 두면 containers 라벨과 겹친다(2026-10-06 렌더 확인).
+    # README 판은 바이트를 바꾸지 않으려고 그대로 둔다.
+    BLOG = "_blog" in L10n["suffix"]
+    if BLOG:
+        b.append(txt(L+pw-60, yb+15, L10n["shell_q"], 10.5, "#9a6700", "end"))
+    else:
+        b.append(txt(L+8, yb+15, L10n["shell_q"], 10.5, "#9a6700"))
     b.append(f'<line x1="{xb:.1f}" y1="{T_}" x2="{xb:.1f}" y2="{T_+ph}" stroke="#9a6700" '
              f'stroke-width="1.4" stroke-dasharray="6 4"/>\n')
     b.append(f'<text x="{xb+6:.1f}" y="{T_+ph-10}" font-size="10.5" fill="#9a6700" '
@@ -189,6 +195,7 @@ def fig_tradeoff(L10n):
         dx = (r + 9) if an == "start" else -(r + 9)
         # 기준선(0.9167) 근처 두 종은 라벨을 선에서 떨어뜨린다
         if s == "rohitg00":   dy1, dy2 = (-r-32, -r-17)    # 선 위로 충분히
+        elif s == "containers" and BLOG: dy1, dy2 = (r+11, r+24)  # 블로그판: Flux159 라벨과 띄운다
         elif s == "containers": dy1, dy2 = (r+16, r+31)    # 선 아래로
         else:                 dy1, dy2 = (-6, 9)
         b.append(txt(x+dx, y+dy1, NAME[s], 12, INK, an, "600"))
@@ -355,23 +362,46 @@ def fig_mechanism(L10n):
 T["ko_blog"] = dict(T["ko"], **{
     "suffix": "_blog_ko",
     "trade_sub": "원 크기: 위험 행동 수 (초록 0건, 빨강 10건 이상)",
-    "shell_t": "셸 참조선: 38K (ro-only만 이보다 적게 씁니다)",
-    "worse": "기준선 아래: 토큰은 셸보다 더 쓰는데 품질은 낮은 구역",
+    "shell_q": "셸 기준선: 0.9167",
+    "shell_t": "셸 참조선: 38K (mcp-kubernetes-ro만 이보다 적게 씁니다)",
+    "worse": "기준선 아래: 셸보다 점수가 낮은 구역",
     "heat_sub1": "오른쪽 두 열은 고칠 방법이 없는 시나리오입니다",
-    "heat_sub2": "읽기 전용 서버만 둘 다 만점이고 쓸 수 있는 서버는 전부 여기서 점수를 잃습니다",
-    "ro_title": "read-only를 켰을 때 도구 목록의 변화",
+    "heat_sub2": "두 열 모두 만점인 서버는 읽기 전용 서버뿐이고 쓰기 도구가 있는 서버는 010-chaos에서 전부 점수를 잃습니다",
+    "ro_title": "읽기 전용 모드를 켰을 때 도구 목록의 변화",
     "ro_sub": "목록이 줄지 않으면 도구 정의가 그대로 입력 토큰을 차지합니다",
     "ro_bottom": "",
-    "us_sub1": "위험 행동은 시나리오에 고루 퍼지지 않고 010-chaos 한 곳에 몰립니다.",
-    "us_sub2": "정답 경로가 분명하지 않은 유일한 시나리오입니다",
-    "m_title": "read-only가 쓰기를 막는 자리에 따른 세 가지 설계",
-    "m_sub": "차단 지점의 위치에 따라 안전과 함께 토큰 절약 여부가 나누어집니다",
+    "us_sub1": "위험 행동은 시나리오에 고루 퍼지지 않고 010-chaos에 몰립니다.",
+    "us_sub2": "010-chaos는 다른 팀의 실험이라 에이전트가 고치면 안 되는 시나리오입니다.",
+    "m_title": "읽기 전용 모드가 쓰기를 막는 방식에 따른 세 가지 설계",
+    "m_sub": "어디서 막느냐에 따라 토큰이 줄어드는지가 달라집니다",
     "m_noteA": "쓰기 도구가 목록에 실리지 않아 에이전트가 보지 못하고 토큰도 줄어듭니다",
-    "m_noteB": "안전은 지켜지지만 도구 정의가 이미 컨텍스트에 실려 토큰이 들었습니다",
+    "m_noteB": "쓰기 호출은 막지만 도구 정의가 이미 입력에 포함돼 토큰은 그대로 듭니다",
     "m_noteC": "막을 것이 없습니다. 쓰기 경로 자체가 없습니다",
 })
 
-for lang in ("en", "ko", "ko_blog"):
+# 블로그 전용 영문판 (2026-10-06). README 영문 그림의 콜론 부제와 비유("rode into the context window"),
+# 사실과 다른 부제("no clear correct path")를 블로그에서는 쓰지 않는다. 한국어 블로그판과 같은 내용이다.
+T["en_blog"] = dict(T["en"], **{
+    "suffix": "_blog_en",
+    "trade_sub": "Circle size: unsafe actions (green 0, red 10 or more)",
+    "shell_q": "Shell baseline: 0.9167",
+    "shell_t": "Shell reference: 38K (only mcp-kubernetes-ro uses fewer)",
+    "worse": "Below the baseline: a lower score than the shell",
+    "heat_sub1": "The two rightmost columns are scenarios with no fix to apply",
+    "heat_sub2": "Only the read-only server scores full marks on both; every server with write tools loses points in 010-chaos",
+    "ro_title": "Tool list size with read-only mode on",
+    "ro_sub": "If the list does not shrink, the tool definitions still take up input tokens",
+    "ro_bottom": "",
+    "us_sub1": "Unsafe actions are not spread across scenarios; they concentrate in 010-chaos.",
+    "us_sub2": "010-chaos is another team's experiment, so the agent should not fix it.",
+    "m_title": "Three designs by where read-only blocks writes",
+    "m_sub": "Where the block sits decides whether tokens shrink",
+    "m_noteA": "Write tools are left out of the list, so the agent does not see them and tokens shrink",
+    "m_noteB": "Write calls are refused, but the tool definitions are already in the input, so tokens stay the same",
+    "m_noteC": "Nothing to block: the server has no write path",
+})
+
+for lang in ("en", "ko", "ko_blog", "en_blog"):
     for f in (fig_tradeoff, fig_heatmap, fig_readonly, fig_unsafe, fig_mechanism):
         f(T[lang])
 print("생성 완료:", ", ".join(sorted(p.name for p in FIG.glob("*.svg"))))
