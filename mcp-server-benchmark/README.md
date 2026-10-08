@@ -368,6 +368,14 @@ The entire harness is reused from the AIOps benchmark. Swapping a server is a
 change to `GOOSE_MCP_CMD` and nothing else, which is what makes the comparison
 clean.
 
+The runner, the scorer (`score_phase1.py` and the code it calls), and the
+scenario answer keys are not published. The same scenarios are used for
+ongoing measurements, and publishing the answer keys would let models or tools
+be tuned to them, so the benchmark would stop measuring what it is meant to.
+What is public: the scenario prompts and fault-injection scripts and the
+cluster setup (under `AIOps-Agent-Benchmark/`), `harness/safety_probe.py`,
+and the per-run records for all 240 runs in `MCP_SCORES_FINAL.json`.
+
 The six were chosen to cover six design classes rather than to rank popular
 projects:
 
@@ -490,5 +498,5 @@ bootstrap figure (81%) can be recomputed from those records.
 
 ## Related
 
-- `AIOps-Agent-Benchmark/` supplies the harness, the scenarios, and the scorer
+- `AIOps-Agent-Benchmark/` supplies the scenario prompts, the fault-injection scripts, and the cluster setup; the runner, the scorer, and the answer keys are private (see [What was measured, and how](#what-was-measured-and-how))
 - `mcp-migration/` measures the 2026-07-28 stateless revision itself
