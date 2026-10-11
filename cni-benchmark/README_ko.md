@@ -82,7 +82,7 @@ churn이 끝난 뒤(3,158mC에서 59mC)에 나타나서 이 그림의 축에는 
 | 소형 노드이고 NetworkPolicy가 필요 없다 | Flannel + kube-proxy nftables (Fl1n) | 전 조건 최소 메모리(209MiB)이고 파드 교체 시 추가 CPU도 가장 작다(churn 147mC) |
 | NetworkPolicy는 필요하고 메모리는 아껴야 한다 | Calico manifest 설치 (Ca3) | 정책을 지원하는 조건 중 메모리가 가장 작다(472MiB) |
 | Calico를 operator로 관리하고 싶다 | Calico operator (Ca1) | 기능은 Ca3와 같고 메모리를 533MiB 더 쓴다. 관리 편의를 위해 추가로 쓰는 메모리가 이만큼이라는 뜻이다 |
-| eBPF 데이터플레인과 관측, kube-proxy 대체까지 갈 계획이다 | Cilium (Ci1~Ci4) | 메모리를 노드당 약 520~570MiB(컨테이너 working set. Ci1에서는 map이 이미 이 안에 있다)로 계획하면, 파드 교체 구간에서도 CPU가 크게 뛰지 않는다(KPR 구성 기준 churn 131mC) |
+| eBPF 데이터플레인과 관측, kube-proxy 대체까지 갈 계획이다 | Cilium (Ci1~Ci4) | 메모리를 노드당 약 520~570MiB(컨테이너 working set. map이 이미 이 안에 있다)로 계획하면, 파드 교체 구간에서도 CPU가 크게 뛰지 않는다(KPR 구성 기준 churn 131mC) |
 | OVS 기반이 필요하거나 Antrea 생태계를 쓴다 | Antrea (An1) | 메모리(758MiB)와 파드 교체 시 CPU(churn 285mC) 모두 중간 수준이다 |
 | 오버레이 없이 BGP(Border Gateway Protocol) 라우팅을 최소 자원으로 쓰고 싶다 | kube-router CNI만 + kube-proxy (Ku2) | idle 메모리 369MiB로 가볍다. 전기능(Ku1)은 아래 조사 결과 3의 churn 문제 때문에 파드 교체가 잦은 클러스터에는 권하기 어렵다. 이 문제의 수정이 릴리스되면 다시 판단할 만하다 |
 
@@ -185,9 +185,12 @@ map이 calico-node 컨테이너 밖인 파드 단위에 매겨져 컨테이너 w
 보면 iptables 구성보다 오히려 작기 때문에(920 대 1005MiB) map을 빼고 비교하면
 판단이 반대로 나올 수 있다.
 
-이 내용은 2026-10-06에 Ci1과 Ca2를 각 1회, 커널 6.8 워커 1대에서 확인했다
-(`harness/bpf_memcg_probe.sh`). 다른 eBPF 조건과 `kubectl top`(metrics-server
-경유) 값과의 직접 비교는 다음 재측정에서 확인한다.
+`kubectl top`(metrics-server)은 컨테이너 working set의 합을 보여 주므로 Cilium의
+map은 여기에 나오고 Calico eBPF의 map은 나오지 않는다. calico-node는 `kubectl top`이
+87~92Mi였는데 파드 단위 working set은 360MB였다. 이 내용은 커널 6.8 워커 1대에서
+조건마다 1회 확인했다. 2026-10-06에 Ci1과 Ca2를, 2026-10-09에 metrics-server와 함께
+Ci1, Ci3, Ci4, Ca2를 봤다(`harness/bpf_memcg_probe.sh`, `harness/chain_bpfmemcg_1008.sh`).
+Ci3과 Ci4도 map이 cilium-agent 컨테이너 안에 있다.
 
 ### working set과 RSS는 구성 요소에 따라 5배까지 다르다
 

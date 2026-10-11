@@ -56,7 +56,7 @@ TEXT = {
          "fix": "Ku1 + upstream fix (2026-09)", "leg_fix1": "hollow: 2026-09", "leg_fix2": "re-run with fix"},
 }
 
-# eBPF map 이 이미 컨테이너 working set 에 들어 있는 조건(2026-10-06 Ci1 확인, Ci2~Ci4 는 같은 cilium-agent)
+# eBPF map 이 이미 컨테이너 working set 에 들어 있는 조건(2026-10-06 Ci1, 2026-10-09 Ci3/Ci4 확인. Ci2 는 Ci1 에서 Hubble 만 끈 것. 같은 cilium-agent)
 MAPS_IN_WS = {"X1", "X2", "X3", "X4"}
 
 # 라벨 배치 미세조정 (겹침 방지: dx, dy, anchor)

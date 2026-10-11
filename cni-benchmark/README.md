@@ -93,7 +93,7 @@ only in what this measurement covered.
 | Small nodes, no need for NetworkPolicy | Flannel + kube-proxy nftables (Fl1n) | Lowest memory of all conditions (209MiB), and the smallest extra CPU during pod replacement (churn 147mC) |
 | NetworkPolicy required, memory tight | Calico manifest install (Ca3) | Lowest memory among policy-capable conditions (472MiB) |
 | Calico managed via operator | Calico operator (Ca1) | Same features as Ca3 with 533MiB more memory; that is the price of the management convenience |
-| Heading toward eBPF dataplane, observability, kube-proxy replacement | Cilium (Ci1~Ci4) | Budget about 520~570MiB per node (container working set, which on Ci1 already includes the maps); CPU stays flat even during pod replacement (churn 131mC in the KPR configuration) |
+| Heading toward eBPF dataplane, observability, kube-proxy replacement | Cilium (Ci1~Ci4) | Budget about 520~570MiB per node (container working set, which already includes the maps); CPU stays flat even during pod replacement (churn 131mC in the KPR configuration) |
 | OVS required, or already in the Antrea ecosystem | Antrea (An1) | Mid-range on both memory (758MiB) and pod-replacement CPU (churn 285mC) |
 | BGP routing without an overlay, minimal footprint | kube-router CNI only + kube-proxy (Ku2) | Light at 369MiB idle. All-features mode (Ku1) is hard to recommend for clusters with frequent pod replacement, because of the churn behavior in finding 3 below. Worth revisiting once the fix is released |
 
@@ -203,10 +203,13 @@ and pod-level working set includes them. Calico eBPF has a smaller container
 working set than the iptables configuration (920 vs 1005MiB), so leaving its
 maps out can flip the comparison.
 
-This was checked on 2026-10-06, once each for Ci1 and Ca2, on one worker with
-kernel 6.8 (`harness/bpf_memcg_probe.sh`). The other eBPF conditions and a
-direct comparison with `kubectl top` (through metrics-server) will be checked
-in the next re-measurement.
+`kubectl top` (metrics-server) shows the sum of container working sets, so
+Cilium's maps appear in it and Calico eBPF's maps do not: for calico-node,
+`kubectl top` showed 87 to 92Mi while the pod-level working set was 360MB.
+This was checked on one worker with kernel 6.8, once per condition: Ci1 and
+Ca2 on 2026-10-06, and Ci1, Ci3, Ci4, and Ca2 with metrics-server on
+2026-10-09 (`harness/bpf_memcg_probe.sh`, `harness/chain_bpfmemcg_1008.sh`).
+Ci3 and Ci4 also keep their maps inside the cilium-agent container.
 
 ### working set and RSS differ by up to 5x per component
 
