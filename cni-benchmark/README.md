@@ -49,7 +49,7 @@ OS will not reclaim, as kubelet reports it per container).
   about one core per node even though the number of Services and pods was
   unchanged. The cause turned out to be how random numbers are generated when
   shuffling endpoint order. I reported it upstream and the maintainer opened a
-  fix PR (not merged as of 2026-09). With the fix applied, CPU after churn
+  fix PR, merged on 2026-10-11 and not yet in a release. With the fix applied, CPU after churn
   drops from 3,158mC to 59mC.
 - On the same dataplane, installing Calico through the operator uses 533MiB
   more memory than the manifest install. Switching to the eBPF dataplane changes
@@ -295,7 +295,7 @@ release (2.11.1) and the development branch, then reported it upstream as
 [#2165](https://github.com/cloudnativelabs/kube-router/issues/2165). The
 maintainer opened [PR #2175](https://github.com/cloudnativelabs/kube-router/pull/2175)
 with the same change plus a fix to endpoint ordering for hashing schedulers; it
-is not merged as of 2026-09-28. Reproducing the PR with the same procedure, CPU
+it was merged into main on 2026-10-11 (4eb7df43eb) and is not yet in a release. Reproducing the PR with the same procedure, CPU
 also returned to zero within two minutes after churn. The full campaign measured
 with the fix applied is in the round comparison section below.
 
