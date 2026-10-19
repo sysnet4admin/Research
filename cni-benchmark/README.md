@@ -298,7 +298,7 @@ release (2.11.1) and the development branch, then reported it upstream as
 [#2165](https://github.com/cloudnativelabs/kube-router/issues/2165). The
 maintainer opened [PR #2175](https://github.com/cloudnativelabs/kube-router/pull/2175)
 with the same change plus a fix to endpoint ordering for hashing schedulers; it
-it was merged into main on 2026-10-11 (4eb7df43eb) and is not yet in a release. Reproducing the PR with the same procedure, CPU
+it was merged into the default branch (master) on 2026-10-11 (4eb7df43eb) and is not yet in a release. Reproducing the PR with the same procedure, CPU
 also returned to zero within two minutes after churn. The full campaign measured
 with the fix applied is in the round comparison section below.
 

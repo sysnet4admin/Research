@@ -277,7 +277,7 @@ churn 뒤 CPU가 사라졌다. 최신 릴리스(2.11.1)와 개발 브랜치에�
 [#2165](https://github.com/cloudnativelabs/kube-router/issues/2165)로 제보했다.
 메인테이너가 같은 방향의 수정에 해싱 스케줄러 정렬 수정을 더해
 [PR #2175](https://github.com/cloudnativelabs/kube-router/pull/2175)를 올렸고
-2026-10-11에 main에 머지됐고(4eb7df43eb) 아직 릴리스 전이다. 이 PR을 같은 절차로 재현했을 때도 churn 뒤 CPU가
+2026-10-11에 기본 브랜치(master)에 머지됐고(4eb7df43eb) 아직 릴리스 전이다. 이 PR을 같은 절차로 재현했을 때도 churn 뒤 CPU가
 2분 안에 0으로 내려왔다. 수정을 얹어 전체 캠페인을 다시 측정한 수치는 아래 회차 비교
 절에 있다.
 
