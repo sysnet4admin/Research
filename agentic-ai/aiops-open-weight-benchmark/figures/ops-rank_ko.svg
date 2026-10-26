@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="460" viewBox="0 0 900 460" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', Helvetica, Arial, sans-serif" role="img" aria-label="모델별 종합 점수 (운영 기준)">
+<rect width="900" height="460" fill="#ffffff"/>
+<line x1="190.0" y1="84.0" x2="190.0" y2="420.0" stroke="#d8dee4" stroke-width="1" />
+<text x="190.0" y="436.0" font-size="10.5" fill="#59636e" text-anchor="middle" font-weight="normal">0.0</text>
+<line x1="320.0" y1="84.0" x2="320.0" y2="420.0" stroke="#d8dee4" stroke-width="1" />
+<text x="320.0" y="436.0" font-size="10.5" fill="#59636e" text-anchor="middle" font-weight="normal">0.2</text>
+<line x1="450.0" y1="84.0" x2="450.0" y2="420.0" stroke="#d8dee4" stroke-width="1" />
+<text x="450.0" y="436.0" font-size="10.5" fill="#59636e" text-anchor="middle" font-weight="normal">0.4</text>
+<line x1="580.0" y1="84.0" x2="580.0" y2="420.0" stroke="#d8dee4" stroke-width="1" />
+<text x="580.0" y="436.0" font-size="10.5" fill="#59636e" text-anchor="middle" font-weight="normal">0.6</text>
+<line x1="710.0" y1="84.0" x2="710.0" y2="420.0" stroke="#d8dee4" stroke-width="1" />
+<text x="710.0" y="436.0" font-size="10.5" fill="#59636e" text-anchor="middle" font-weight="normal">0.8</text>
+<line x1="840.0" y1="84.0" x2="840.0" y2="420.0" stroke="#d8dee4" stroke-width="1" />
+<text x="840.0" y="436.0" font-size="10.5" fill="#59636e" text-anchor="middle" font-weight="normal">1.0</text>
+<text x="180.0" y="100.0" font-size="11.5" fill="#0969da" text-anchor="end" font-weight="600">gpt-6-luna</text>
+<rect x="190.0" y="88.0" width="647.3" height="16.0" fill="#0969da" fill-opacity="0.85"/>
+<text x="843.3" y="100.0" font-size="10.5" fill="#1f2328" text-anchor="start" font-weight="normal">0.996</text>
+<text x="180.0" y="124.0" font-size="11.5" fill="#0969da" text-anchor="end" font-weight="600">gpt-6-sol</text>
+<rect x="190.0" y="112.0" width="645.9" height="16.0" fill="#0969da" fill-opacity="0.85"/>
+<text x="841.9" y="124.0" font-size="10.5" fill="#1f2328" text-anchor="start" font-weight="normal">0.994</text>
+<text x="180.0" y="148.0" font-size="11.5" fill="#0969da" text-anchor="end" font-weight="600">gpt-5.6-luna</text>
+<rect x="190.0" y="136.0" width="637.1" height="16.0" fill="#0969da" fill-opacity="0.85"/>
+<text x="833.1" y="148.0" font-size="10.5" fill="#1f2328" text-anchor="start" font-weight="normal">0.980</text>
+<text x="180.0" y="172.0" font-size="11.5" fill="#0969da" text-anchor="end" font-weight="600">gpt-5.6-terra</text>
+<rect x="190.0" y="160.0" width="632.4" height="16.0" fill="#0969da" fill-opacity="0.85"/>
+<text x="828.4" y="172.0" font-size="10.5" fill="#1f2328" text-anchor="start" font-weight="normal">0.973</text>
+<text x="180.0" y="196.0" font-size="11.5" fill="#0969da" text-anchor="end" font-weight="600">gpt-5.6-sol</text>
+<rect x="190.0" y="184.0" width="619.4" height="16.0" fill="#0969da" fill-opacity="0.85"/>
+<text x="815.4" y="196.0" font-size="10.5" fill="#1f2328" text-anchor="start" font-weight="normal">0.953</text>
+<text x="180.0" y="220.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">qwen3.8:27b-q8_0</text>
+<rect x="190.0" y="208.0" width="608.1" height="16.0" fill="#bc4c00" fill-opacity="0.85"/>
+<text x="804.1" y="220.0" font-size="10.5" fill="#1f2328" text-anchor="start" font-weight="normal">0.935</text>
+<text x="180.0" y="244.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">qwen3.8:27b</text>
+<rect x="190.0" y="232.0" width="606.2" height="16.0" fill="#bc4c00" fill-opacity="0.85"/>
+<text x="802.2" y="244.0" font-size="10.5" fill="#1f2328" text-anchor="start" font-weight="normal">0.933</text>
+<text x="180.0" y="268.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">gemma4:31b</text>
+<rect x="190.0" y="256.0" width="602.4" height="16.0" fill="#bc4c00" fill-opacity="0.85"/>
+<text x="798.4" y="268.0" font-size="10.5" fill="#1f2328" text-anchor="start" font-weight="normal">0.927</text>
+<text x="180.0" y="292.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">qwen3.6:35b-a3b</text>
+<rect x="190.0" y="280.0" width="572.0" height="16.0" fill="#bc4c00" fill-opacity="0.85"/>
+<text x="768.0" y="292.0" font-size="10.5" fill="#1f2328" text-anchor="start" font-weight="normal">0.880</text>
+<text x="180.0" y="316.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">qwen3.6:27b-q8_0</text>
+<rect x="190.0" y="304.0" width="570.8" height="16.0" fill="#bc4c00" fill-opacity="0.85"/>
+<text x="766.8" y="316.0" font-size="10.5" fill="#1f2328" text-anchor="start" font-weight="normal">0.878</text>
+<text x="180.0" y="340.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">gemma4:26b</text>
+<rect x="190.0" y="328.0" width="549.9" height="16.0" fill="#bc4c00" fill-opacity="0.85"/>
+<text x="745.9" y="340.0" font-size="10.5" fill="#1f2328" text-anchor="start" font-weight="normal">0.846</text>
+<text x="180.0" y="364.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">gpt-oss:20b</text>
+<rect x="190.0" y="352.0" width="382.6" height="16.0" fill="#bc4c00" fill-opacity="0.85"/>
+<text x="578.6" y="364.0" font-size="10.5" fill="#1f2328" text-anchor="start" font-weight="normal">0.589</text>
+<text x="180.0" y="388.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">qwen3-next:80b</text>
+<rect x="190.0" y="376.0" width="320.6" height="16.0" fill="#bc4c00" fill-opacity="0.85"/>
+<text x="516.6" y="388.0" font-size="10.5" fill="#1f2328" text-anchor="start" font-weight="normal">0.493</text>
+<text x="180.0" y="412.0" font-size="11.5" fill="#1f2328" text-anchor="end" font-weight="normal">granite4.1:30b</text>
+<rect x="190.0" y="400.0" width="318.8" height="16.0" fill="#bc4c00" fill-opacity="0.85"/>
+<text x="514.8" y="412.0" font-size="10.5" fill="#1f2328" text-anchor="start" font-weight="normal">0.490</text>
+<text x="24.0" y="28.0" font-size="14.5" fill="#1f2328" text-anchor="start" font-weight="600">모델별 종합 점수 (운영 기준)</text>
+<text x="24.0" y="48.0" font-size="10.5" fill="#59636e" text-anchor="start" font-weight="normal">Ops, 모델이 측정된 하네스의 평균. 높은 모델이 위</text>
+<rect x="24.0" y="60.0" width="12.0" height="12.0" fill="#0969da" />
+<text x="42.0" y="70.0" font-size="11" fill="#59636e" text-anchor="start" font-weight="normal">상용</text>
+<rect x="130.0" y="60.0" width="12.0" height="12.0" fill="#bc4c00" />
+<text x="148.0" y="70.0" font-size="11" fill="#59636e" text-anchor="start" font-weight="normal">오픈 웨이트</text>
+</svg>

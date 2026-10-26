@@ -27,6 +27,14 @@ Kubernetes, 클라우드 네이티브, AI에 대한 벤치마크 및 PoC 연구 
 
 ---
 
+### [agentic-ai/aiops-open-weight-benchmark](./agentic-ai/aiops-open-weight-benchmark)
+
+AIOps-Agent-Benchmark와 같은 쿠버네티스 장애 시나리오 10개와 클러스터에서 오픈 웨이트 모델 9종과 상용 모델 5종을 에이전트 하네스 3개(opencode, Codex CLI, goose)로 2,970회 측정했습니다. 상용 모델 5종(0.953\~0.996)이 오픈 웨이트 모델 9종(0.490\~0.935)보다 모두 높았고 일상 장애 7개에서는 상위 오픈 웨이트 모델 3종도 상용 모델과 점수가 같았으며 차이는 원인을 끝까지 따라가야 하거나 다른 팀에 넘겨야 하는 장애에서 생겼다는 것이 대표 결과입니다.
+
+→ [블로그 포스트](https://kuberneteslab.dev/ko/blog/aiops-open-weight-benchmark/) | [README (EN)](./agentic-ai/aiops-open-weight-benchmark/README.md) | [README (KO)](./agentic-ai/aiops-open-weight-benchmark/README_ko.md)
+
+---
+
 ### [gateway-PoC](./gateway-PoC)
 
 7개 Kubernetes Gateway API 구현체를 라우팅, TLS, 트래픽 관리 등 17개 항목으로 100 라운드 반복 검증합니다.

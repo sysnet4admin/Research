@@ -27,6 +27,14 @@ Compares nine AI coding agents (Claude, Gemini, Codex) on identical Kubernetes i
 
 ---
 
+### [agentic-ai/aiops-open-weight-benchmark](./agentic-ai/aiops-open-weight-benchmark)
+
+Runs 9 open-weight models and 5 commercial models through 3 agent harnesses (opencode, Codex CLI, goose) on the same 10 Kubernetes incident scenarios and cluster as AIOps-Agent-Benchmark, over 2,970 runs. Key findings: all 5 commercial models (0.953 to 0.996) score above all 9 open-weight models (0.490 to 0.935), the top 3 open-weight models match the commercial models on the 7 routine incidents, and the gap comes from incidents where the agent has to trace the cause to the end or leave the fix to another team.
+
+→ [Blog post](https://kuberneteslab.dev/en/blog/aiops-open-weight-benchmark/) | [README (EN)](./agentic-ai/aiops-open-weight-benchmark/README.md) | [README (KO)](./agentic-ai/aiops-open-weight-benchmark/README_ko.md)
+
+---
+
 ### [gateway-PoC](./gateway-PoC)
 
 Validates seven Kubernetes Gateway API implementations across 17 test cases (routing, TLS, traffic management) with 100 rounds each.
