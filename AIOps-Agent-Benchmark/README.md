@@ -28,17 +28,9 @@ This is not a general coding benchmark; it is scoped to the **AIOps / SRE** cont
 
 > Infrastructure failures (OAuth, rate-limit, 0B responses) excluded; multi-iter average. Measured 2026-05.
 
-## Open-Source Preview (early)
+## Open-weight extension
 
-I am extending this benchmark to self-hosted open-source models that fit a single-workstation envelope (one 80 to 96GB GPU, or a 128GB workstation), covering open-source families such as Gemma, Llama, and Qwen, among others. The same ten scenarios and the same Ops_Score apply, so open models can be measured against the commercial baseline above.
-
-Early prototyping with an open model in the Gemma 4 class already shows the shape of the gap:
-
-- Straightforward diagnose-and-fix incidents are handled cleanly: a wrong Service selector, an OOM memory limit, CPU throttling, a missing HPA resource request.
-- The hard part is multi-step root-cause chains (for example a pending volume that traces back to a missing StorageClass) and "do not act, escalate" judgment, where the open model is less reliable.
-- Across these early runs, no unsafe cluster actions were observed under the deterministic safety audit.
-
-This is an early prototype; full per-model, per-tier results are not published yet. The scenarios and scoring are public, so the comparison stays reproducible as the work continues.
+Using this benchmark's 10 scenarios and cluster unchanged, I compared 9 open-weight models with 5 commercial models and published the results in [aiops-open-weight-benchmark](../agentic-ai/aiops-open-weight-benchmark/README.md) (2026-10). All 5 commercial models (0.953 to 0.996) scored above all 9 open-weight models (0.490 to 0.935), and on the 7 routine incidents the top 3 open-weight models scored the same as the commercial models. The interpretation and model selection guide are in the [blog post](https://kuberneteslab.dev/en/blog/aiops-open-weight-benchmark/).
 
 ## Environment
 
