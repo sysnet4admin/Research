@@ -243,6 +243,11 @@ Total parameters and quantization come from `ollama show`. Active parameters are
 MoE models use only some experts, so I took the A3B and A4B in the model names and the official gpt-oss value
 (3.6B).
 
+Dense here means not MoE. Some dense models still mix attention types. qwen3.8:27b, qwen3.8:27b-q8_0, and
+qwen3.6:27b-q8_0 use Gated DeltaNet, a linear attention, in 48 of their 64 main layers. gemma4:31b uses
+sliding-window attention (1,024 tokens) in 50 of its 60 layers. granite4.1:30b uses regular attention in every
+layer. The layer counts come from the GGUF metadata of each model file.
+
 What these 9 models show:
 
 - **Total size does not decide the score.** The largest, qwen3-next:80b (79.7B), is near the bottom (0.493).
