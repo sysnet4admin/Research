@@ -401,9 +401,12 @@ Codex 는 gpt-6 를 재려고 0.158.0 으로 올려야 했다. 올리기 전에 
 - 크기 효과는 줄이는 쪽만 측정했고 gemma4 한 계열뿐이다.
 - 하위 모델(gpt-oss:20b, qwen3-next:80b)의 점수는 하네스에 따라 0.2 에서 0.8 까지 달라진다. 평균으로
   낸 이 두 모델의 점수를 모델의 능력으로만 읽지 않는다.
-- 하네스 비호환이 셋 있다. granite4.1 은 Codex 가 요구하는 추론(reasoning)을 지원하지 않아 Codex 칸이
-  없다. Azure 의 gpt-6 는 goose 가 쓰는 chat/completions API 에서 추론 설정과 도구 호출을 함께 받지 않아
-  goose 칸이 없다. qwen3-next 는 opencode 에서 도구를 거의 부르지 못해 8라운드 중 2라운드만 끝까지 갔다.
+- 하네스 비호환은 2건이다. granite4.1 은 Codex 가 요구하는 추론(reasoning)을 지원하지 않아 Codex 칸이
+  없다. qwen3-next 는 opencode 에서 도구를 거의 부르지 못해 8라운드 중 2라운드만 끝까지 갔다.
+- gpt-6 는 goose 칸이 없다. 하네스 비호환이 아니라 측정 설정 때문에 빠진 칸이다. 측정 러너가 goose 를
+  Azure 의 chat/completions API 에 연결했는데, gpt-6 는 기본으로 추론이 켜져 있어 이 API 에서 도구 호출을
+  받지 않는다. goose 1.41.0 은 Responses API 도 지원하고 그 경로로는 gpt-6 가 돈다(2026-10-30 확인).
+  gpt-5.6 은 같은 chat/completions API 에서 기본 추론으로 도구 호출을 받으므로 goose 칸이 그대로 측정됐다.
 - 오픈 모델은 M5 Max 1대와 ollama 기본값으로 돌렸다. 다른 런타임과 양자화에서는 다를 수 있다.
 - 에이전트는 샌드박스 없이 돈다. 정답지와 채점기 접근은 명령 기록 8,639개를 검사해 0건임을
   확인했지만 접근 자체를 막지는 않았다.

@@ -425,10 +425,12 @@ things I actually fixed in this measurement.
 - The size effect was measured only downward and only for the gemma4 family.
 - The weaker models (gpt-oss:20b, qwen3-next:80b) vary from 0.2 to 0.8 depending on the harness. Do not read their
   averaged scores as the model's capability alone.
-- There are three harness incompatibilities. granite4.1 does not support the reasoning Codex requires, so it has
-  no Codex cell. Azure's gpt-6 does not accept reasoning settings and tool calls together on the
-  chat/completions API that goose uses, so it has no goose cell. qwen3-next barely called tools on opencode and
-  finished only 2 of 8 rounds.
+- There are two harness incompatibilities. granite4.1 does not support the reasoning Codex requires, so it has
+  no Codex cell. qwen3-next barely called tools on opencode and finished only 2 of 8 rounds.
+- gpt-6 has no goose cell because of how I set up goose, not because goose cannot run it. The runner connected
+  goose to Azure's chat/completions API, where gpt-6, which reasons by default, does not accept tool calls.
+  goose 1.41.0 also supports the Responses API, and gpt-6 runs on it (checked on 2026-10-30). gpt-5.6 accepts
+  tool calls with its default reasoning on the same chat/completions API, so its goose cells ran as designed.
 - The open models ran on one M5 Max with ollama defaults. Other runtimes and quantizations may differ.
 - The agents run without a sandbox. Checking 8,639 recorded commands found no access to the answer keys or the
   scorer, but access itself was not blocked.
