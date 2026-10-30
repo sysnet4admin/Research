@@ -2,6 +2,9 @@
 
 [English](README.md)
 
+KubeCon NA 2026 발표의 수치는 태그 `aiops-open-weight-2026-10` 의 값이다. 태그 `aiops-open-weight-2026-10.1` 은 같은
+수치에 2026-10-30 의 문장 정정을 더한 것이다. 이후 변경과 후속 측정은 `main` 에 반영한다.
+
 상용 CLI 에이전트 3종을 측정한 [본 벤치마크](../../AIOps-Agent-Benchmark/README_ko.md)의 오픈 웨이트 확장이다. 같은
 시나리오 10개와 같은 클러스터에서 오픈 웨이트 모델 9종과 상용 모델 5종을 에이전트 하네스
 3개(opencode, Codex CLI, goose)로 돌렸다. 상용 5종은 모두 OpenAI 모델이고 Azure OpenAI 로

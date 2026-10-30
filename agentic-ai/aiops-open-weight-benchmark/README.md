@@ -2,6 +2,10 @@
 
 [한국어](README_ko.md)
 
+The numbers in the KubeCon NA 2026 talk are those of tag `aiops-open-weight-2026-10`. Tag
+`aiops-open-weight-2026-10.1` has the same numbers plus the text corrections of 2026-10-30. Later changes,
+including follow-up measurements, are made on `main`.
+
 This is the open-weight extension of the [AIOps Agent Benchmark](../../AIOps-Agent-Benchmark/README.md),
 which measured three commercial CLI agents. On the same 10 scenarios and the same cluster, I ran 9 open-weight
 models and 5 commercial models through 3 agent harnesses (opencode, Codex CLI, goose). All 5 commercial models
