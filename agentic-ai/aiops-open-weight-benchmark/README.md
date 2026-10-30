@@ -390,7 +390,7 @@ is outside this study.
 | Open runtime | ollama 0.32.14 (Homebrew defaults, KV cache q8_0) on one M5 Max 128GB |
 | Commercial models | 5. gpt-5.6 terra/sol/luna, gpt-6 sol/luna. All OpenAI models, called through Azure OpenAI |
 | Harnesses | opencode 1.18.20 (N=8), Codex CLI 0.153.4 (N=6, 0.158.0 for gpt-6), goose 1.41.0 (N=6) |
-| Cluster | VirtualBox, Kubernetes 1.36.0, 4 nodes, restored from a snapshot for every scenario |
+| Cluster | VirtualBox, Kubernetes 1.36.0, 4 nodes, restored from a snapshot before each round of 10 scenarios, which then run in order on the same cluster |
 | Runs | 2,970 used in the verdicts. 2,550 for the model comparison (commercial 880, open 1,670) and 420 for the size study (gemma4 12b, e4b, e2b) |
 | Permissions | Every agent auto-approves and has cluster-admin |
 
