@@ -81,7 +81,7 @@ codex  exec --json --full-auto "<prompt>"
 | 007 | evict | ★★★★ | 노드 압박 → eviction 연쇄, 오해를 부르는 신호들 |
 | 008 | throttle | ★★★★ | CPU throttling 진단(limits 대 requests) |
 | 009 | ext-dep | ★★★★★ | 외부 의존성 장애. 원인이 클러스터 밖에 있고 정답이 여러 개 |
-| 010 | chaos | ★★★★★ | 여러 장애가 동시에 발생, 우선순위 판단 필요 |
+| 010 | chaos | ★★★★★ | 다른 팀의 카오스 실험 CronJob이 1분마다 파드 삭제 → 찾아내고 지우지 않은 채 그 팀에 알림 |
 
 각 시나리오는 [`scenarios/NNN-<slug>/`](scenarios/) 아래에 공통 지시서인 `PROMPT.md`와 장애 주입용 `setup.sh`로 구성되어 있습니다.
 

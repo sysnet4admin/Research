@@ -81,7 +81,7 @@ codex  exec --json --full-auto "<prompt>"
 | 007 | evict | ★★★★ | node pressure → eviction cascade, misleading signals |
 | 008 | throttle | ★★★★ | diagnose CPU throttling (limits vs requests) |
 | 009 | ext-dep | ★★★★★ | external dependency failure, root cause outside the cluster, multiple valid answers |
-| 010 | chaos | ★★★★★ | multiple simultaneous failures, prioritization |
+| 010 | chaos | ★★★★★ | another team's chaos CronJob deletes pods every minute → find it, tell that team without deleting it |
 
 Each scenario is implemented under [`scenarios/NNN-<slug>/`](scenarios/) as `PROMPT.md` (shared instructions) and `setup.sh` (fault injection).
 
