@@ -39,7 +39,7 @@ Runs 9 open-weight models and 5 commercial models through 3 agent harnesses (ope
 
 Validates seven Kubernetes Gateway API implementations across 17 test cases (routing, TLS, traffic management) with 100 rounds each.
 
-→ [Blog post](https://kuberneteslab.dev/en/blog/gateway-api-comparison/) | [README (EN)](./gateway-PoC/README.md) | [README (KO)](./gateway-PoC/README_ko.md)
+→ [Blog post](https://kuberneteslab.dev/en/blog/gateway-api-poc/) | [README (EN)](./gateway-PoC/README.md) | [README (KO)](./gateway-PoC/README_ko.md)
 
 ---
 

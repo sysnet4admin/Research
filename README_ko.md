@@ -39,7 +39,7 @@ AIOps-Agent-Benchmark와 같은 쿠버네티스 장애 시나리오 10개와 클
 
 7개 Kubernetes Gateway API 구현체를 라우팅, TLS, 트래픽 관리 등 17개 항목으로 100 라운드 반복 검증합니다.
 
-→ [블로그 포스트](https://kuberneteslab.dev/ko/blog/gateway-api-comparison/) | [README (EN)](./gateway-PoC/README.md) | [README (KO)](./gateway-PoC/README_ko.md)
+→ [블로그 포스트](https://kuberneteslab.dev/ko/blog/gateway-api-poc/) | [README (EN)](./gateway-PoC/README.md) | [README (KO)](./gateway-PoC/README_ko.md)
 
 ---
 
