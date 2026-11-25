@@ -27,7 +27,7 @@ That question is where this study started.
 
 - **All three delivery methods load.** A canary check confirmed Claude Code follows both the `@AGENTS.md` import and the symlink (a no-context control did not respond to the canary).
 - **No systematic slowdown.** Across 5 model configurations (Haiku 4.5, Sonnet 4.6, Sonnet 5, Opus 4.8, Fable 5), wall-time deltas flip sign between conditions and do not track token deltas, which is the signature of LLM run-to-run variance, not context-loading overhead.
-- **No token-cost penalty.** Cache-write token deltas between conditions stay within ±6% and move together with the symlink condition, which is mechanically identical to native and therefore acts as a built-in control. On four models the import measured 3 to 4% lower than native; on Sonnet 5 both the import and the symlink measured 6% higher, which marks that delta as run-to-run noise rather than a delivery cost.
+- **No token-cost penalty.** Cache-write token deltas between conditions stay within ±5% and move together with the symlink condition, which is mechanically identical to native and therefore acts as a built-in control. On three models the import measured about 3% lower than native and on Fable 5 1% lower; on Sonnet 5 both the import and the symlink measured about 5% higher, which marks that delta as run-to-run noise rather than a delivery cost.
 - **Reproduced on a native AGENTS.md reader.** On OpenCode with two local models (gemma4:12b, qwen3.8:27b, 80 runs), the fallback path (CLAUDE.md) and the native path (AGENTS.md) showed no speed or task-outcome difference either. See the [extension section](#extension-a-native-agentsmd-reader-opencode).
 
 ## Conditions
@@ -52,15 +52,19 @@ If the import or symlink inflated what gets loaded, condition B would show more 
 
 | Model | A (native) | B (import) vs A | C (symlink, control) vs A |
 |---|---|---|---|
-| Haiku 4.5 | 22,049 | -3% | +1% |
-| Sonnet 4.6 | 14,357 | -3% | -1% |
-| Sonnet 5 | 17,252 | +6% | +6% |
-| Opus 4.8 | 15,542 | -4% | -1% |
-| Fable 5 | 16,357 | -3% | -1% |
+| Haiku 4.5 | 22,049 | -3.1% | +1.3% |
+| Sonnet 4.6 | 14,357 | -2.7% | -1.2% |
+| Sonnet 5 | 17,482 | +4.9% | +4.6% |
+| Opus 4.8 | 15,542 | -3.6% | -1.0% |
+| Fable 5 | 16,357 | -1.0% | -1.2% |
 
-No row shows B systematically above the control. On four models the import measured 3 to 4% lower than native; on Sonnet 5 it measured 6% higher, but the symlink control moved by the same +6% in the same runs, and a symlink cannot mechanically differ from native. So the Sonnet 5 delta is run-to-run noise (its output tokens also rose about 20% in those conditions), not an indirection cost.
+The table was corrected on 2026-11-25. In two runs (one Sonnet 5 A run, one Fable 5 B run) Claude Code emitted two usage reports, and reading only the last one undercounted the run. The table now sums all reports. Before the correction it showed +6% and +6% for Sonnet 5 and -3% for Fable 5 B.
 
-Two caveats about this metric surfaced in the data. Cache-write totals accumulate across turns, so longer solution paths write more cache. And adjacent runs with an identical assembled context can hit the server-side prompt cache within its TTL, sharply reducing the write (observed once). The per-run cluster snapshot guarantees a cold start at the cluster level, not at the API cache level.
+No row shows B systematically above the control. On Sonnet 5 the import measured 4.9% higher than native, but the symlink control moved by 4.6% in the same runs, and a symlink cannot mechanically differ from native. So the Sonnet 5 delta is run-to-run noise (its output tokens also rose 16 to 17% in those conditions), not an indirection cost.
+
+The 1 to 4% lower import on the other models is run-to-run noise as well. Split into 16 cells (the 4 scenarios on each of the 4 models other than Sonnet 5), B is below A in 8 cells and the control C is below A in 8 cells too. On the first request alone the import is actually 50 to 65 tokens larger, because it adds the `@AGENTS.md` line and a header for the AGENTS.md file entry.
+
+Two caveats about this metric surfaced in the data. Cache-write totals accumulate across turns, so longer solution paths write more cache. And Claude Code emits a new usage report (a result event) each time a background task finishes, with each report covering only its own segment, so reading only the last report undercounts the run. That happened in two runs here (one Sonnet 5 A run: 1,901 instead of 41,104; one Fable 5 B run: 983 instead of 18,752). The first release read the 1,901 as a server-side prompt-cache hit; that reading was wrong and was corrected on 2026-11-25. No run directly followed a run with the same condition and scenario, so such a hit could not have happened.
 
 ### Speed: wall time
 

@@ -2,6 +2,7 @@
 """aggregate.py: runs/ 아래 회차들을 집계해 CSV와 조건별 요약을 출력한다.
 
 토큰/툴콜 파싱은 AIOps collect.py의 parse_claude_raw를 import해 그대로 쓴다(복제 없음).
+토큰 합계는 modelUsage 에서 다시 읽는다(2026-11-25 보정, report_sweep.model_usage_totals).
 사용: python3 aggregate.py [--csv out.csv]
 """
 
@@ -17,6 +18,7 @@ AIOPS_SCRIPTS = HERE.parents[2] / "AIOps-Agent-Benchmark" / "scripts"
 sys.path.insert(0, str(AIOPS_SCRIPTS))
 
 from collect import parse_claude_raw  # noqa: E402
+from report_sweep import model_usage_totals  # noqa: E402
 
 RUNS = HERE / "runs"
 
@@ -37,6 +39,9 @@ def collect_rows():
             continue
         meta = json.loads(meta_p.read_text())
         m = parse_claude_raw(raw_p, timing_p)
+        tot = model_usage_totals(raw_p)
+        if tot:
+            m.input_tokens, m.cache_creation_input_tokens, m.cache_read_input_tokens, m.output_tokens = tot
         rows.append({
             "iter": d.name,
             "cond": meta.get("cond"),

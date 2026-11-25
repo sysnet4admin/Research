@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # report_sweep.py: model sweep aggregation (001-004 x A/B/C x 4 models x N=3).
-# Token parsing reuses AIOps collect.py parse_claude_raw.
+# Token parsing reuses AIOps collect.py parse_claude_raw, with token totals taken from modelUsage (2026-11-25).
 import json
 import statistics
 import sys
@@ -15,6 +15,28 @@ MODELS = ["haiku-4-5", "sonnet-4-6", "sonnet-5", "opus-4-8", "fable-5"]
 PREFIXES = ("haiku-r", "sonnet-r", "sonnet5-r", "opus-r", "fable-r")
 
 
+def model_usage_totals(raw_path):
+    """마지막 result 이벤트의 modelUsage 합계(입력, 캐시 쓰기, 캐시 읽기, 출력). 없으면 None.
+
+    Claude Code 는 백그라운드 작업이 끝날 때마다 result 이벤트를 새로 내고 각 이벤트의 usage 는 그 구간만 담는다.
+    parse_claude_raw 는 마지막 이벤트의 usage 만 남기므로 이런 실행에서 적게 집계된다. modelUsage 는 실행 전체의
+    누적이라 이 값을 사용한다(2026-11-25 보정, 스윕 180회 가운데 2회가 해당).
+    """
+    last = None
+    for line in Path(raw_path).read_text(encoding="utf-8", errors="ignore").splitlines():
+        try:
+            ev = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if ev.get("type") == "result":
+            last = ev
+    mu = (last or {}).get("modelUsage") or {}
+    if not mu:
+        return None
+    s = lambda k: sum(v.get(k, 0) for v in mu.values())
+    return s("inputTokens"), s("cacheCreationInputTokens"), s("cacheReadInputTokens"), s("outputTokens")
+
+
 def load():
     rows = []
     for d in sorted(RUNS.glob("agentsmd-*")):
@@ -26,6 +48,9 @@ def load():
         if not any(tag.startswith(p) for p in PREFIXES):
             continue
         m = parse_claude_raw(rp, tp)
+        tot = model_usage_totals(rp)
+        if tot:
+            m.input_tokens, m.cache_creation_input_tokens, m.cache_read_input_tokens, m.output_tokens = tot
         rows.append({
             "cond": meta["cond"],
             "scenario": meta["scenario"],
@@ -50,7 +75,7 @@ def med(rows, model, cond, field):
 def pct(b, a):
     if not a:
         return "-"
-    return str(round((b - a) / a * 100)) + "%"
+    return f"{(b - a) / a * 100:+.1f}%"
 
 
 def table(rows, field, unit):
